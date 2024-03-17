@@ -41,10 +41,10 @@ int(timer_test_read_config)(uint8_t timer, enum timer_status_field field) {
 }
 
 int(timer_test_time_base)(uint8_t timer, uint32_t freq) {
-  /* To be implemented by the students */
-  printf("%s is not yet implemented!\n", __func__);
-
-  return 1;
+  if (timer_set_frequency(timer, freq) != 0) { // We test the function that will set a new frequency "freq" to a timer "timer"
+    return 1;
+  };
+  return 0;
 }
 
 int(timer_test_int)(uint8_t time) {
