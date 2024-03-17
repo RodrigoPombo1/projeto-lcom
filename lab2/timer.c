@@ -5,6 +5,9 @@
 
 #include "i8254.h"
 
+int hook_id = 0; // We want to mask Timer 0 interruptions
+int counter = 0; // Counter to be incremented on every Timer 0 interrupt 
+
 int (timer_set_frequency)(uint8_t timer, uint32_t freq) {
   uint8_t controlWord; // This variable will store the control word
   timer_get_conf(timer, &controlWord); // We extract the control word of the timer "timer" and pass it by reference to the previous variable
@@ -30,22 +33,22 @@ int (timer_set_frequency)(uint8_t timer, uint32_t freq) {
 }
 
 int (timer_subscribe_int)(uint8_t *bit_no) {
-    /* To be implemented by the students */
-  printf("%s is not yet implemented!\n", __func__);
-
-  return 1;
+  *bit_no = BIT(hook_id); // We prepare to mask the Timer 0 interrupt
+  if (sys_irqsetpolicy(TIMER0_IRQ, IRQ_REENABLE, &hook_id) != 0) { // Interruption masked, can go to (C)arnival now
+    return 1;
+  } 
+  return 0;
 }
 
 int (timer_unsubscribe_int)() {
-  /* To be implemented by the students */
-  printf("%s is not yet implemented!\n", __func__);
-
-  return 1;
+  if (sys_irqrmpolicy(&hook_id) != 0) { // (C)arnival is over, let's take off the mask
+    return 1;
+  }
+  return 0;
 }
 
-void (timer_int_handler)() {
-  /* To be implemented by the students */
-  printf("%s is not yet implemented!\n", __func__);
+void (timer_int_handler)() { // Yes, this function was created only to do this...
+  counter++;
 }
 
 int (timer_get_conf)(uint8_t timer, uint8_t *st) {

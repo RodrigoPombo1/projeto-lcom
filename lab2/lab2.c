@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+extern int counter;
 
 int main(int argc, char *argv[]) {
   // sets the language of LCF messages (can be either EN-US or PT-PT)
@@ -48,8 +49,42 @@ int(timer_test_time_base)(uint8_t timer, uint32_t freq) {
 }
 
 int(timer_test_int)(uint8_t time) {
-  /* To be implemented by the students */
-  printf("%s is not yet implemented!\n", __func__);
+  int r, ipc_status; // To receive a notification and store its status
+  message msg; // To store the notification message
+  uint8_t irq_set; // To choose a IRQ
 
-  return 1;
+  if (timer_subscribe_int(&irq_set) != 0) { // We test the function that makes a subscription on  "irq_set", that simulates PIC 1
+    return 1;
+  }
+
+  while (counter < time * 60) {  // As the system frequency is 60 Hz (3600 BPM), we need to increase the test time 60 times
+    if ((r = driver_receive(ANY, &msg, &ipc_status)) != 0) { // We test the function that allows us to receive request messages
+      printf("driver_receive failed with: %d", r);
+      continue;
+    }
+
+    if (is_ipc_notify(ipc_status)) { // This will evaluate if the message received was a notification or a standard message
+      switch (_ENDPOINT_P(msg.m_source)) { // We'll extract the process identifier from "msg" endpoint
+        case HARDWARE: // If the interrupt notification is a HW one...
+          if (msg.m_notify.interrupts & irq_set) { // Let's see if the interruption notification is masked...
+            timer_int_handler(); // Increase the counter
+            if (counter % (int) sys_hz() == 0) { // We'll call the timer_print_elapsed_time() function when counter % sys_hz(), which is 60 Hz, is 0
+              timer_print_elapsed_time();
+            }
+          }
+          break;
+
+        default: // To avoid bugs
+          break;
+      }
+    }
+    else { // Again, to avoid bugs... this is tricky
+     
+    }
+  }
+
+  if (timer_unsubscribe_int() != 0) { // We test the function that undoes a subscription on  "irq_set", that simulates PIC 1
+    return 1;
+  }
+  return 0;
 }
