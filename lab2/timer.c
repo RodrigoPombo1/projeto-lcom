@@ -49,7 +49,7 @@ void (timer_int_handler)() {
 }
 
 int (timer_get_conf)(uint8_t timer, uint8_t *st) {
-  u_int8_t RBC = (TIMER_RB_CMD | TIMER_RB_COUNT_ | TIMER_RB_SEL(timer)); //The read-back command specifies itself. Reads the programmed mode and makes the selection of Counter 0
+  u_int8_t RBC = (TIMER_RB_CMD | TIMER_RB_COUNT_ | TIMER_RB_SEL(timer)); //The read-back command specifies itself. Reads the programmed mode and makes the selection of the counter 'timer'
   if (sys_outb(TIMER_CTRL, RBC) != 0) { // We send the RBC value to the timer control register
     return 1;
   }
