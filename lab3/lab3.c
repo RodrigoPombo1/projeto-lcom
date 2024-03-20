@@ -6,6 +6,7 @@
 #include <stdint.h>
 
 #include "keyboard.h"
+#include "KBC.h"
 
 extern uint8_t scancode; // Scancode is defined on keyboard.c
 extern uint32_t INB_counter; // INB_counter is defined on utils.c
@@ -75,10 +76,12 @@ int(kbd_test_scan)() {
 }
 
 int(kbd_test_poll)() {
-  /* To be completed by the students */
-  printf("%s is not yet implemented!\n", __func__);
-
-  return 1;
+  while (scancode != ESC_BREAK_CODE) {
+    if (kbc_read_output(KBC_OUT_CMD, &scancode) == 0) {
+        kbd_print_scancode(!(scancode & BIT(7)), scancode == TWO_BYTES ? 2 : 1, &scancode);
+    }
+  }
+  return restore_keyboard();
 }
 
 int(kbd_test_timed_scan)(uint8_t n) {

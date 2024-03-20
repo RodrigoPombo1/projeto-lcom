@@ -9,4 +9,6 @@ int (keyboard_unsubscribe)();
 
 void (kbc_ih)();
 
+int (restore_keyboard)();
+
 #endif
