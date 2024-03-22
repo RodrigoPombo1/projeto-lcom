@@ -20,23 +20,23 @@ void (kbc_ih)() { // We test the function that invokes the Interrupt Handler (it
 }
 
 int (restore_keyboard)() {
-    uint8_t cmdByte;
+    uint8_t cmdByte; // Command byte
 
-    if (kbc_write_command(KBC_IN_CMD, KBC_READ_CMD) != 0) {
+    if (kbc_write_command(KBC_IN_CMD, KBC_READ_CMD) != 0) { // We tell the KBC that we want to read the command byte
         return 1;
     }
 
-    if (kbc_read_output(KBC_OUT_CMD, &cmdByte) != 0) {
+    if (kbc_read_output(KBC_OUT_CMD, &cmdByte) != 0) { // We read the command byte
         return 1;
     }
 
-    cmdByte |= ENABLE_INT;
+    cmdByte |= ENABLE_INT; // We change the command byte to enable interruptions
 
-    if (kbc_write_command(KBC_IN_CMD, KBC_WRITE_CMD) != 0) {
+    if (kbc_write_command(KBC_IN_CMD, KBC_WRITE_CMD) != 0) {  // We tell the KBC that we want to write a new command byte
         return 1;
     }
 
-    if (kbc_write_command(KBC_WRITE_CMD, cmdByte) != 0) {
+    if (kbc_write_command(KBC_WRITE_CMD, cmdByte) != 0) { // We put the new command byte on the KBC
         return 1;
     }
     return 0;
