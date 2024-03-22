@@ -2,8 +2,10 @@
 
 int (kbc_read_output)(uint8_t port, uint8_t* output) {
   extern uint8_t status; // Status is defined on lab3.c
-
-  if ((status & FULL_OUT_BUFFER) != 0) { // Let's check if the output buffer is full (ready to be read)
+  uint8_t attempts = 10;
+  
+  while (attempts) {
+    if ((status & FULL_OUT_BUFFER) != 0) { // Let's check if the output buffer is full (ready to be read)
     // Let's check if everything's alright with the status
     if ((status & TIMEOUT_ERROR) != 0){  // Timeout error?
       printf("Error: Parity error!\n");           
@@ -19,8 +21,10 @@ int (kbc_read_output)(uint8_t port, uint8_t* output) {
       return 1;
     }
     return 0;
+    }
+    tickdelay(micros_to_ticks(20000)); // To avoid miscoordinations, we interrupt the process for 20 ms
+    attempts--;
   }
-  tickdelay(micros_to_ticks(20000)); // To avoid miscoordinations, we interrupt the process for 20 ms
   return 1;
 }
 

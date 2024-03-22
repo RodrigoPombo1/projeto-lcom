@@ -90,11 +90,25 @@ int(kbd_test_scan)() {
 int(kbd_test_poll)() {
   uint8_t* full_scancode = (uint8_t*)malloc(2 * sizeof(uint8_t));
   while (scancode != ESC_BREAK_CODE) {
+    if (util_sys_inb(KBC_STATUS_REG, &status) != 0) { // We test the function that reads the status from the status register, to check if we didn't have a communication error
+      return 1;
+    }
     if (kbc_read_output(KBC_OUT_CMD, &scancode) == 0) {
-        kbd_print_scancode(!(scancode & BIT(7)), full_scancode[0] == TWO_BYTES ? 2 : 1, full_scancode);
+      if (scancode == TWO_BYTES) { // Let's evaluate if the first byte of the scancode is 0xE0 (which would mean that the scancode has 2 bytes to be read)
+        full_scancode[0] = TWO_BYTES; // Then the first byte is 0xE0
+        continue; // we restart the cicle to read the second byte
+      }
+      else if (full_scancode[0] == TWO_BYTES) { // This condition is only true in the interruption immediatly after the scancode is 0xE0
+        full_scancode[1] = scancode; // We know the full 2 byte scancode
+      }
+      else { // When the scancode is not 0xE0 and 0xE0 is not the first byte, we know that the scancode only has 1 byte
+        full_scancode[0] = scancode;
+      }
+      kbd_print_scancode(!(scancode & BIT(7)), full_scancode[0] == TWO_BYTES ? 2 : 1, full_scancode);// This function prints the scancode, by checking if it is a make or a break code, checking its size and its value
+      memset(full_scancode, 0, 2 * sizeof(uint8_t)); // We reset the scancode array
     }
   }
-  return restore_keyboard();
+  return restore_keyboard(); // After 
 }
 
 int(kbd_test_timed_scan)(uint8_t n) {
