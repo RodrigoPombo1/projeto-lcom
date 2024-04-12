@@ -1,7 +1,7 @@
 #include "KBC.h"
 
 uint8_t scancode = 0; // We'll extract the scancode 
-int keyboard_hook_id = 0; // hook_id will identify a policy
+int keyboard_hook_id = 1; // We'll mask the keyboard IRQ
 
 int (kbc_subscribe)(uint8_t *bit_no) { // Put the mask on, it's (C)arnival time!
     *bit_no = BIT(KEYBOARD_IRQ);
@@ -10,12 +10,6 @@ int (kbc_subscribe)(uint8_t *bit_no) { // Put the mask on, it's (C)arnival time!
 
 int (kbc_unsubscribe)() { // (C)arnival is over
     return sys_irqrmpolicy(&keyboard_hook_id);
-}
-
-void (kbc_ih)() { // We test the function that invokes the Interrupt Handler (it will only read the scancode from the output buffer, in this implementation)
-    if (kbc_read_output(KBC_OUT_BUFFER, &scancode) != 0) {
-        printf("Error: Could not read scancode!\n");
-    }
 }
 
 int (kbc_read_output)(uint8_t port, uint8_t* output) {
@@ -46,8 +40,14 @@ int (kbc_read_output)(uint8_t port, uint8_t* output) {
   return 1;
 }
 
+void (kbc_ih)() { // We test the function that invokes the Interrupt Handler (it will only read the scancode from the output buffer, in this implementation)
+    if (kbc_read_output(KBC_OUT_BUFFER, &scancode) != 0) {
+        printf("Error: Could not read scancode!\n");
+    }
+}
+
 int (kbc_write_command)(uint8_t port, uint8_t commandByte) {
-  extern uint8_t status; // Status is defined on lab3.c~
+  extern uint8_t status; // Status is defined on lab3.c
 
   if ((status & FULL_IN_BUFFER) == 0) { // Let's check if the output buffer is full (ready to be read)
     if (sys_outb(port, commandByte) != 0) { // We test the function that reads the output
