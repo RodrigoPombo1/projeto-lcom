@@ -8,6 +8,8 @@
 
 // Any header files included below this line should have been created by you
 
+#include "graphics.h"
+
 int main(int argc, char *argv[]) {
   // sets the language of LCF messages (can be either EN-US or PT-PT)
   lcf_set_language("EN-US");
@@ -33,13 +35,7 @@ int main(int argc, char *argv[]) {
 }
 
 int(video_test_init)(uint16_t mode, uint8_t delay) {
-  struct reg86 reg;
-  memset(&reg, 0, sizeof(reg));
-  reg.intno = 0x10;
-  reg.ax = 0x4F02;
-  reg.bx = mode | BIT(14);
-  if (sys_int86(&reg) != 0) {
-    printf("Graphic mode error");
+  if (set_video_mode(mode) != 0) {
     return 1;
   }
 
