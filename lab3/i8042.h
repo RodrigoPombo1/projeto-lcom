@@ -7,15 +7,15 @@
 #define KEYBOARD_IRQ 1
 
 // Scancode / Command Byte
-#define ESC_MAKE_CODE 0x01
 #define ESC_BREAK_CODE 0x81
-#define TWO_BYTES 0xE0
-#define ENABLE_INT BIT(0)
+#define FIRST_BYTE 0xE0
 
 // KBC
 #define KBC_STATUS_REG 0x64
-#define KBC_IN_CMD 0x64
-#define KBC_OUT_CMD 0x60
+#define KBC_IN_BUFFER 0x64
+#define KBC_OUT_BUFFER 0x60
+
+// Command Byte
 #define KBC_READ_CMD 0x20
 #define KBC_WRITE_CMD 0x60
 

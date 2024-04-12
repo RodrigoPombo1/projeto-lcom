@@ -5,12 +5,13 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "keyboard.h"
 #include "KBC.h"
 
 extern uint8_t scancode; // Scancode is defined on keyboard.c
 extern uint32_t INB_counter; // INB_counter is defined on utils.c
 extern int counter;
+
+bool two_byte_scancode = false;
 
 uint8_t status = 0; // We'll read the status from the status register
 
@@ -39,7 +40,7 @@ int main(int argc, char *argv[]) {
 }
 
 int(kbd_test_scan)() {
-  int r, ipc_status;
+  int ipc_status;
   message msg;
   uint8_t irq_set;
   uint8_t* full_scancode = (uint8_t*)malloc(2 * sizeof(uint8_t));
@@ -49,8 +50,7 @@ int(kbd_test_scan)() {
   }
 
   while (scancode != ESC_BREAK_CODE) {  // The release of the ESC key terminates the program
-    if ((r = driver_receive(ANY, &msg, &ipc_status)) != 0) { // We test the function that allows us to receive request messages
-      printf("driver_receive failed with: %d", r);
+    if (driver_receive(ANY, &msg, &ipc_status) != 0) { // We test the function that allows us to receive request messages
       continue;
     }
 
@@ -62,17 +62,23 @@ int(kbd_test_scan)() {
               return 1;
             }
             kbc_ih(); // We call the KBC interrupt handler, that is going to read the output from the output buffer
-            if (scancode == TWO_BYTES) { // Let's evaluate if the first byte of the scancode is 0xE0 (which would mean that the scancode has 2 bytes to be read)
-              full_scancode[0] = TWO_BYTES; // Then the first byte is 0xE0
+            if (scancode == FIRST_BYTE) { // Let's evaluate if the first byte of the scancode is 0xE0 (which would mean that the scancode has 2 bytes to be read)
+              full_scancode[0] = FIRST_BYTE; // Then the first byte is 0xE0
               break; // We wait for the next interrupt to know what will the second byte be
             }
-            else if (full_scancode[0] == TWO_BYTES) { // This condition is only true in the interruption immediatly after the scancode is 0xE0
+            else if (full_scancode[0] == FIRST_BYTE) { // This condition is only true in the interruption immediatly after the scancode is 0xE0
               full_scancode[1] = scancode; // We know the full 2 byte scancode
             }
             else { // When the scancode is not 0xE0 and 0xE0 is not the first byte, we know that the scancode only has 1 byte
               full_scancode[0] = scancode;
             }
-            kbd_print_scancode(!(scancode & BIT(7)), full_scancode[0] == TWO_BYTES ? 2 : 1, full_scancode); // This function prints the scancode, by checking if it is a make or a break code, checking its size and its value 
+            if (full_scancode[0] == FIRST_BYTE) {
+              two_byte_scancode = true;
+            }
+            else {
+              two_byte_scancode = false;
+            }
+            kbd_print_scancode(!(scancode & BIT(7)), two_byte_scancode, full_scancode); // This function prints the scancode, by checking if it is a make or a break code, checking its size and its value 
             memset(full_scancode, 0, 2 * sizeof(uint8_t)); // We reset the scancode array
           }
       }
@@ -93,18 +99,24 @@ int(kbd_test_poll)() {
     if (util_sys_inb(KBC_STATUS_REG, &status) != 0) { // We test the function that reads the status from the status register, to check if we didn't have a communication error
       return 1;
     }
-    if (kbc_read_output(KBC_OUT_CMD, &scancode) == 0) {
-      if (scancode == TWO_BYTES) { // Let's evaluate if the first byte of the scancode is 0xE0 (which would mean that the scancode has 2 bytes to be read)
-        full_scancode[0] = TWO_BYTES; // Then the first byte is 0xE0
+    if (kbc_read_output(KBC_OUT_BUFFER, &scancode) == 0) {
+      if (scancode == FIRST_BYTE) { // Let's evaluate if the first byte of the scancode is 0xE0 (which would mean that the scancode has 2 bytes to be read)
+        full_scancode[0] = FIRST_BYTE; // Then the first byte is 0xE0
         continue; // we restart the cicle to read the second byte
       }
-      else if (full_scancode[0] == TWO_BYTES) { // This condition is only true in the interruption immediatly after the scancode is 0xE0
+      else if (full_scancode[0] == FIRST_BYTE) { // This condition is only true in the interruption immediatly after the scancode is 0xE0
         full_scancode[1] = scancode; // We know the full 2 byte scancode
       }
       else { // When the scancode is not 0xE0 and 0xE0 is not the first byte, we know that the scancode only has 1 byte
         full_scancode[0] = scancode;
       }
-      kbd_print_scancode(!(scancode & BIT(7)), full_scancode[0] == TWO_BYTES ? 2 : 1, full_scancode);// This function prints the scancode, by checking if it is a make or a break code, checking its size and its value
+      if (full_scancode[0] == FIRST_BYTE) {
+        two_byte_scancode = true;
+      }
+      else {
+        two_byte_scancode = false;
+      }
+      kbd_print_scancode(!(scancode & BIT(7)), two_byte_scancode, full_scancode);// This function prints the scancode, by checking if it is a make or a break code, checking its size and its value
       memset(full_scancode, 0, 2 * sizeof(uint8_t)); // We reset the scancode array
     }
   }
@@ -112,7 +124,7 @@ int(kbd_test_poll)() {
 }
 
 int(kbd_test_timed_scan)(uint8_t n) {
-  int r, ipc_status, seconds = 0;
+  int ipc_status, seconds = 0;
   message msg;
   uint8_t irq_set_KBC, irq_set_TIMER;
   uint8_t* full_scancode = (uint8_t*)malloc(2 * sizeof(uint8_t));
@@ -126,8 +138,7 @@ int(kbd_test_timed_scan)(uint8_t n) {
   }
 
   while (scancode != ESC_BREAK_CODE && seconds < n) {  // The release of the ESC key terminates the program
-    if ((r = driver_receive(ANY, &msg, &ipc_status)) != 0) { // We test the function that allows us to receive request messages
-      printf("driver_receive failed with: %d", r);
+    if (driver_receive(ANY, &msg, &ipc_status) != 0) { // We test the function that allows us to receive request messages
       continue;
     }
 
@@ -139,17 +150,23 @@ int(kbd_test_timed_scan)(uint8_t n) {
               return 1;
             }
             kbc_ih(); // We call the KBC interrupt handler, that is going to read the output from the output buffer
-            if (scancode == TWO_BYTES) { // Let's evaluate if the first byte of the scancode is 0xE0 (which would mean that the scancode has 2 bytes to be read)
-              full_scancode[0] = TWO_BYTES; // Then the first byte is 0xE0
+            if (scancode == FIRST_BYTE) { // Let's evaluate if the first byte of the scancode is 0xE0 (which would mean that the scancode has 2 bytes to be read)
+              full_scancode[0] = FIRST_BYTE; // Then the first byte is 0xE0
               break; // We wait for the next interrupt to know what will the second byte be
             }
-            else if (full_scancode[0] == TWO_BYTES) { // This condition is only true in the interruption immediatly after the scancode is 0xE0
+            else if (full_scancode[0] == FIRST_BYTE) { // This condition is only true in the interruption immediatly after the scancode is 0xE0
               full_scancode[1] = scancode; // We know the full 2 byte scancode
             }
             else { // When the scancode is not 0xE0 and 0xE0 is not the first byte, we know that the scancode only has 1 byte
               full_scancode[0] = scancode;
             }
-            kbd_print_scancode(!(scancode & BIT(7)), full_scancode[0] == TWO_BYTES ? 2 : 1, full_scancode); // This function prints the scancode, by checking if it is a make or a break code, checking its size and its value 
+            if (full_scancode[0] == FIRST_BYTE) {
+              two_byte_scancode = true;
+            }     
+            else {
+              two_byte_scancode = false;
+            }
+            kbd_print_scancode(!(scancode & BIT(7)),two_byte_scancode, full_scancode); // This function prints the scancode, by checking if it is a make or a break code, checking its size and its value 
             memset(full_scancode, 0, 2 * sizeof(uint8_t)); // We reset the scancode array
             // We reset the timer
             seconds = 0; 

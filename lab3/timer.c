@@ -5,7 +5,7 @@
 
 #include "i8254.h"
 
-int hook_id = 0; // We want to mask Timer 0 interruptions
+int hook_id = 0; // hook_id will identify a policy
 int counter = 0; // Counter to be incremented on every Timer 0 interrupt 
 
 int (timer_set_frequency)(uint8_t timer, uint32_t freq) {
