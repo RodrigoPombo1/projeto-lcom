@@ -4,6 +4,7 @@ static char* video_mem;
 
 static unsigned h_res;	        
 static unsigned v_res;	        
+static unsigned bits_per_pixel;
 static unsigned bytes_per_pixel;
 static unsigned vram_size; 
 
@@ -29,7 +30,8 @@ int (build_frame_buffer)(uint16_t mode) {
 
   h_res = mode_info.XResolution;
   v_res = mode_info.YResolution;
-  bytes_per_pixel = (mode_info.BitsPerPixel + 7) / 8;
+  bits_per_pixel = mode_info.BitsPerPixel;
+  bytes_per_pixel = (bits_per_pixel + 7) / 8;
 
   vram_size = h_res * v_res * bytes_per_pixel;
 
@@ -66,6 +68,38 @@ int (vg_draw_hline)(uint16_t x, uint16_t y, uint16_t len, uint32_t color) {
 int (vg_draw_rectangle)(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint32_t color) {
   for (uint16_t i = 0; i < height && y + i < v_res; i++) {
     vg_draw_hline(x, y + i, width, color);
+  }
+
+  return 0;
+}
+
+int(vg_draw_matrix)(uint16_t mode, uint8_t no_rectangles, uint32_t first, uint8_t step) {
+  unsigned h_size = h_res / no_rectangles;
+  unsigned v_size = v_res / no_rectangles;
+
+  uint32_t color;
+
+  uint32_t red_mask = 0xFF << mode_info.RedFieldPosition;
+  uint32_t green_mask = 0xFF << mode_info.GreenFieldPosition;
+  uint32_t blue_mask = 0xFF << mode_info.BlueFieldPosition;
+
+  uint8_t red_first = (first & red_mask) >> mode_info.RedFieldPosition;
+  uint8_t green_first = (first & green_mask) >> mode_info.GreenFieldPosition;
+  uint8_t blue_first = (first & blue_mask) >> mode_info.BlueFieldPosition;
+
+  for (uint8_t i = 0; i < no_rectangles; i++) {
+    for (uint8_t j = 0; j < no_rectangles; j++) {
+      if (mode == 0x105) {
+        color = (first + (i * no_rectangles + j) * step) % (1 << bits_per_pixel);
+      }
+      else {
+        uint8_t red = red_first + j * step;
+        uint8_t green = green_first + i * step;
+        uint8_t blue = blue_first + (i + j) * step;
+        color = (red << mode_info.RedFieldPosition) | (green << mode_info.GreenFieldPosition) | (blue << mode_info.BlueFieldPosition);
+      }
+      vg_draw_rectangle(j * h_size, i * v_size, h_size, v_size, color);
+    }
   }
 
   return 0;
