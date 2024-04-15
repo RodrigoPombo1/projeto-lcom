@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "KBC.h"
+#include "KBC_keyboard.h"
 
 extern uint8_t scancode; // Scancode is defined on KBC.c
 extern uint32_t INB_counter; // INB_counter is defined on utils.c
@@ -45,7 +45,7 @@ int(kbd_test_scan)() {
   uint8_t irq_set;
   uint8_t* full_scancode = (uint8_t*)malloc(2 * sizeof(uint8_t));
 
-  if (kbc_subscribe(&irq_set) != 0) { // We'll mask the IRQ keyboard line to enable interruptions
+  if (keyboard_subscribe(&irq_set) != 0) { // We'll mask the IRQ keyboard line to enable interruptions
     return 1;
   }
 
@@ -79,7 +79,7 @@ int(kbd_test_scan)() {
       }
     }
   }
-  if (kbc_unsubscribe() != 0) { // Again, (C)arnival is over...
+  if (keyboard_unsubscribe() != 0) { // Again, (C)arnival is over...
     return 1;
   }
   if (kbd_print_no_sysinb(INB_counter) != 0) { // We print how many calls to sys_inb() the program did
@@ -110,7 +110,8 @@ int(kbd_test_poll)() {
       memset(full_scancode, 0, 2 * sizeof(uint8_t)); // We reset the scancode array
     }
   }
-  return restore_keyboard(); // After 
+  restore_keyboard();
+  return 0; // After 
 }
 
 int(kbd_test_timed_scan)(uint8_t n) {
@@ -123,7 +124,7 @@ int(kbd_test_timed_scan)(uint8_t n) {
     return 1;
   }
 
-  if (kbc_subscribe(&irq_set_KBC) != 0) { // We'll mask the IRQ keyboard line to enable interruptions
+  if (keyboard_subscribe(&irq_set_KBC) != 0) { // We'll mask the IRQ keyboard line to enable interruptions
     return 1;
   }
 
@@ -171,7 +172,7 @@ int(kbd_test_timed_scan)(uint8_t n) {
   if (timer_unsubscribe_int() != 0) {
     return 1;
   }
-  if (kbc_unsubscribe() != 0) { // Again, (C)arnival is over...
+  if (keyboard_unsubscribe() != 0) { // Again, (C)arnival is over...
     return 1;
   }
   if (kbd_print_no_sysinb(INB_counter) != 0) { // We print how many calls to sys_inb() the program did

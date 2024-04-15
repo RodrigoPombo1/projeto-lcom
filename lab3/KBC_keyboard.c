@@ -1,14 +1,14 @@
-#include "KBC.h"
+#include "KBC_keyboard.h"
 
 uint8_t scancode = 0; // We'll extract the scancode 
 int keyboard_hook_id = 1; // We'll mask the keyboard IRQ
 
-int (kbc_subscribe)(uint8_t *bit_no) { // Put the mask on, it's (C)arnival time!
+int (keyboard_subscribe)(uint8_t *bit_no) { // Put the mask on, it's (C)arnival time!
     *bit_no = BIT(KEYBOARD_IRQ);
     return sys_irqsetpolicy(KEYBOARD_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &keyboard_hook_id);
 }
 
-int (kbc_unsubscribe)() { // (C)arnival is over
+int (keyboard_unsubscribe)() { // (C)arnival is over
     return sys_irqrmpolicy(&keyboard_hook_id);
 }
 
