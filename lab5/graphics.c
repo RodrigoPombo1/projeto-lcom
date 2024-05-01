@@ -104,3 +104,20 @@ int(vg_draw_matrix)(uint16_t mode, uint8_t no_rectangles, uint32_t first, uint8_
 
   return 0;
 }
+
+int (xpm_print)(xpm_map_t xpm, uint16_t x, uint16_t y) {
+  xpm_image_t img;
+
+  uint8_t* pixels = xpm_load(xpm, XPM_INDEXED, &img);
+
+  for (int i = 0; i < img.height; i++) {
+    for (int j = 0; j < img.width; j++) {
+      if (vg_draw_pixel(x + j, y + i, *pixels) != 0) {
+        return 1;
+      }
+      pixels++;
+    }
+  }
+
+  return 0;
+}
