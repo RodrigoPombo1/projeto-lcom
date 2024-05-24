@@ -58,13 +58,12 @@ int (setup_game)() {
     return 1;
   }
 
-  // Close video mode
-  if (vg_exit() != 0) {
-    return 1;
-  }
+  return 0;
+}
 
-  // Run the game
-  if (run() != 0) {
+int (close_game)() {
+    // Close video mode
+  if (vg_exit() != 0) {
     return 1;
   }
 
@@ -89,7 +88,12 @@ int (setup_game)() {
   return 0;
 }
 
-int (run)() {
+int (proj_main_loop)(int argc, char *argv[]) {
+  if (setup_game() != 0) {
+    printf("Game could not be opened");
+    return close_game();
+  }
+
   int ipc_status;
   message msg;
 
@@ -116,6 +120,11 @@ int (run)() {
           // }
       }
     }
+  }
+
+  if (close_game() != 0) {
+    printf("Error in closing the game");
+    return 1;
   }
 
   return 0;

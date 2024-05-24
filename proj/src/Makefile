@@ -2,7 +2,7 @@
 PROG=proj
 
 # source code files to be compiled
-SRCS = main.c
+SRCS = main.c devices/keyboard/KBC_keyboard.c devices/mouse/KBC_mouse.c devices/graphics/graphics.c
 
 # additional compilation flags
 # "-Wall -Wextra -Werror -I . -std=c11 -Wno-unused-parameter" are already set
