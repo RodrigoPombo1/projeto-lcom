@@ -10,6 +10,8 @@ uint8_t irq_set_keyboard;
 uint8_t irq_set_mouse;
 // uint8_t irq_set_rtc;
 
+uint8_t status = 0;
+
 int main(int argc, char *argv[]) {
   // sets the language of LCF messages (can be either EN-US or PT-PT)
   lcf_set_language("EN-US");
