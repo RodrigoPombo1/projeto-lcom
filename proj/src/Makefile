@@ -2,13 +2,14 @@
 PROG=proj
 
 .PATH: ${.CURDIR}/devices/
+.PATH: ${.CURDIR}/devices/common_keyboard_and_mouse
 .PATH: ${.CURDIR}/devices/graphics
 .PATH: ${.CURDIR}/devices/keyboard
 .PATH: ${.CURDIR}/devices/mouse
 .PATH: ${.CURDIR}/utils
 
 # source code files to be compiled
-SRCS = main.c KBC_keyboard.c KBC_mouse.c graphics.c utils.c
+SRCS = main.c KBC_keyboard.c KBC_mouse.c graphics.c utils.c keyboard_and_mouse.c
 
 # additional compilation flags
 # "-Wall -Wextra -Werror -I . -std=c11 -Wno-unused-parameter" are already set
