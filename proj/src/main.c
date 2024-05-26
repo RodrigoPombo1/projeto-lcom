@@ -98,7 +98,7 @@ enum game_state {
 };
 
 enum letter_pressed {
-    NONE,
+    NO_LETTER_PRESSED,
     W,
     A,
     S,
@@ -123,19 +123,19 @@ int (proj_main_loop)(int argc, char *argv[]) {
   message msg;
 
   uint8_t timer_counter = 0;
-  enum letter_pressed last_key_pressed = NONE;
-  bool is_key_being_pressed = false;
-  bool is_mouse_button_being_pressed = false;
+//  enum letter_pressed last_key_pressed = NO_LETTER_PRESSED;
+//  bool is_key_being_pressed = false;
+//  bool is_mouse_button_being_pressed = false;
   bool interrupt_received = false;
   enum interrupt_type interrupt_received_type;
-  int mouse_position_x = 0;
-  int mouse_position_y = 0;
+//  int mouse_position_x = 0;
+//  int mouse_position_y = 0;
 
 //   [TODO] initialize all arrays for every element in the game with memset
 //   [TODO] load xpm images into those array of colors
 
 //   [TODO] build the real frame buffer and make it so it is the real frame buffer
-  uint8_t *frame_buffer;
+  uint8_t *frame_buffer = NULL;
   if (build_frame_buffer(0x14C, frame_buffer) != 0) {
     printf("Error while building the main frame buffer");
     return 1;
