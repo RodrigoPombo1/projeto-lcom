@@ -1,6 +1,6 @@
 #include "graphics.h"
 
-static char* video_mem;
+//static char* video_mem;
 
 static unsigned h_res;	        
 static unsigned v_res;	        
@@ -22,7 +22,7 @@ int (set_video_mode)(uint16_t mode) {
   return 0;
 }
 
-int (build_frame_buffer)(uint16_t mode) {
+int (build_frame_buffer)(uint16_t mode, uint8_t* video_mem) {
   memset(&mode_info, 0, sizeof(mode_info));
   if (vbe_get_mode_info(mode, &mode_info) != 0) {
     return 1;
@@ -46,6 +46,10 @@ int (build_frame_buffer)(uint16_t mode) {
   video_mem = vm_map_phys(SELF, (void*) address.mr_base, vram_size);
 
   return 0;
+}
+
+uint32_t (get_length_frame_buffer)(void) {
+    return vram_size;
 }
 
 int (vg_draw_pixel)(uint16_t x, uint16_t y, uint32_t color) {

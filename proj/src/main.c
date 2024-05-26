@@ -135,11 +135,20 @@ int (proj_main_loop)(int argc, char *argv[]) {
 //   [TODO] load xpm images into those array of colors
 
 //   [TODO] build the real frame buffer and make it so it is the real frame buffer
-//    uint8_t *frame_buffer =
+  uint8_t *frame_buffer;
+  if (build_frame_buffer(0x14C, frame_buffer) != 0) {
+    printf("Error while building the main frame buffer");
+    return 1;
+  }
+  uint32_t length_frame_buffer = get_length_frame_buffer();
+  memset(frame_buffer, 0, get_length_frame_buffer());
+
 //   [TODO] build the frame buffer for the game state (will store either the main menu, the game, or the highscore)
-//   uint8_t *game_frame_buffer =
+  uint8_t *game_frame_buffer[length_frame_buffer];
+  memset(game_frame_buffer, 0, length_frame_buffer);
 //   [TODO] build the frame buffer for the mouse on top of the game state
-//   uint8_t *mouse_frame_buffer =
+  uint8_t *mouse_frame_buffer[length_frame_buffer];
+  memset(mouse_frame_buffer, 0, length_frame_buffer);
 
 //   [TODO] load the main menu state array into game_frame_buffer
 //   [TODO] memcpy the game_frame_buffer to the mouse_frame_buffer
@@ -187,7 +196,7 @@ int (proj_main_loop)(int argc, char *argv[]) {
     if (interrupt_received) {
 //        bool was_game_frame_buffer_changed = false; // pointer will be passed in the following functions inside the switch statement
 //        [TODO] probably a switch statement between the different game states // handling each game state will mean a pointer to the game state buffer will be passed in the function
-//        switch(current_game_state) {
+        switch(current_game_state) {
             case MAIN_MENU:
 //              [TODO] function to handle interrupts while in the main menu state
                 break;
@@ -200,7 +209,7 @@ int (proj_main_loop)(int argc, char *argv[]) {
             case HIGH_SCORE:
 //              [TODO] function to handle interrupts while in the the high score state
                 break;
-//        }
+        }
 
 
 //        [TODO] always put the current mouse position on a pointer to the game frame buffer, even if game frame buffer hasn't change

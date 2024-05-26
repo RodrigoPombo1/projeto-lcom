@@ -5,9 +5,11 @@
 
 int (set_video_mode)(uint16_t mode);
 
-int (build_frame_buffer)(uint16_t mode);
+int (build_frame_buffer)(uint16_t mode, uint8_t* video_mem);
 
 int (vg_draw_pixel)(uint16_t x, uint16_t y, uint32_t color);
+
+uint32_t (get_length_frame_buffer)(void);
 
 int (vg_draw_matrix)(uint16_t mode, uint8_t no_rectangles, uint32_t first, uint8_t step);
 
