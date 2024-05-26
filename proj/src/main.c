@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
 
 int (setup_game)() {
   // Initiate 32 bits per pixel video mode
-  if (set_video_mode(0x14C) != 0) {
+  if (set_video_mode(0x115) != 0) {
     return 1;
   }
 
@@ -122,7 +122,7 @@ int (proj_main_loop)(int argc, char *argv[]) {
   int ipc_status;
   message msg;
 
-  uint8_t timer_counter = 0;
+  uint8_t timer_counter = 1; // just so it doesn't immediately update the character positions
 //  enum letter_pressed last_key_pressed = NO_LETTER_PRESSED;
 //  bool is_key_being_pressed = false;
 //  bool is_mouse_button_being_pressed = false;
@@ -136,7 +136,7 @@ int (proj_main_loop)(int argc, char *argv[]) {
 
 //   [TODO] build the real frame buffer and make it so it is the real frame buffer
   uint8_t *frame_buffer = NULL;
-  if (build_frame_buffer(0x14C, frame_buffer) != 0) {
+  if (build_frame_buffer(0x115, frame_buffer) != 0) {
     printf("Error while building the main frame buffer");
     return 1;
   }
@@ -157,7 +157,33 @@ int (proj_main_loop)(int argc, char *argv[]) {
 
 //   [TODO] load the high score from the txt file
 
+  bool is_start_of_screen = true;
+
   while (true) {
+    if (is_start_of_screen) {
+        is_start_of_screen = false;
+        // [TODO] switch statement for what to do in the start of each screen (load xpm to game_frame_buffer, memcpy game_frame_buffer to mouse_frame_buffer, put mouse in its position, memcpy mouse_frame_buffer to real frame buffer)
+        switch (current_game_state) {
+            case MAIN_MENU:
+                // [TODO] load the main menu array into game_frame_buffer
+                break;
+            case GAME:
+                timer_counter = 1; // just so it doesn't immediately update the game
+                // [TODO] load the game array into game_frame_buffer
+                // [TODO] set the game characters to their initial position
+                break;
+            case GAME_OVER:
+                // [TODO] put gameover array over the game array on game_frame_buffer
+                break;
+            case HIGH_SCORE:
+                // [TODO] load the high score array into game_frame_buffer
+                break;
+        }
+        memcpy(game_frame_buffer, mouse_frame_buffer, length_frame_buffer);
+        // [TODO] put the mouse in it's current position on the mouse_frame_buffer
+        memcpy(mouse_frame_buffer, frame_buffer, length_frame_buffer);
+        continue; // skip the rest of the loop
+    }
     if (driver_receive(ANY, &msg, &ipc_status) != 0) {
       printf("Interruption error");
       continue;
