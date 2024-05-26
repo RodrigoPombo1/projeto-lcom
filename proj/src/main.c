@@ -18,11 +18,11 @@ int main(int argc, char *argv[]) {
 
   // enables to log function invocations that are being "wrapped" by LCF
   // [comment this out if you don't want/need it]
-  lcf_trace_calls("/home/lcom/labs/lab5/trace.txt");
+  lcf_trace_calls("/home/lcom/labs/g5/proj/src/trace.txt");
 
   // enables to save the output of printf function calls on a file
   // [comment this out if you don't want/need it]
-  lcf_log_output("/home/lcom/labs/lab5/output.txt");
+  lcf_log_output("/home/lcom/labs/g5/proj/src/output.txt");
 
   // handles control over to LCF
   // [LCF handles command line arguments and invokes the right function]
@@ -37,29 +37,30 @@ int main(int argc, char *argv[]) {
 }
 
 int (setup_game)() {
+  printf("Break point 0\n");
   // Initiate 32 bits per pixel video mode
   if (set_video_mode(0x115) != 0) {
     return 1;
   }
-
+  printf("Break point 1\n");
   // Subscribe interruptions of all necessary devices
   if (timer_subscribe_int(&irq_set_timer) != 0) {
     return 1;
   }
-
+  printf("Break point 2\n");
   if (keyboard_subscribe(&irq_set_keyboard) != 0) {
     return 1;
   }
-
+  printf("Break point 3\n");
   if (mouse_subscribe(&irq_set_mouse) != 0) {
     return 1;
   }
-
+  printf("Break point 4\n");
   // Enable mouse data report 
   if (mouse_write_command(ENABLE_DR) != 0) {
     return 1;
   }
-
+  printf("Break point 5\n");
   return 0;
 }
 
@@ -118,7 +119,7 @@ int (proj_main_loop)(int argc, char *argv[]) {
     printf("Game could not be opened");
     return close_game();
   }
-
+  printf("Break point 6\n");
   int ipc_status;
   message msg;
 
@@ -133,23 +134,26 @@ int (proj_main_loop)(int argc, char *argv[]) {
 
 //   [TODO] initialize all arrays for every element in the game with memset
 //   [TODO] load xpm images into those array of colors
-
+  printf("Break point 7\n");
 //   [TODO] build the real frame buffer and make it so it is the real frame buffer
   uint8_t *frame_buffer = NULL;
   if (build_frame_buffer(0x115, frame_buffer) != 0) {
     printf("Error while building the main frame buffer");
     return 1;
   }
+  printf("Break point 8\n");
   uint32_t length_frame_buffer = get_length_frame_buffer();
-  memset(frame_buffer, 0, get_length_frame_buffer());
-
+  printf("Break point 9\n");
+  printf("Length of frame buffer: %d\n", length_frame_buffer);
+  memset(&frame_buffer, 0, length_frame_buffer);
+  printf("Break point 10\n");
 //   [TODO] build the frame buffer for the game state (will store either the main menu, the game, or the highscore)
   uint8_t *game_frame_buffer[length_frame_buffer];
-  memset(game_frame_buffer, 0, length_frame_buffer);
+  memset(&game_frame_buffer, 0, length_frame_buffer);
+  printf("Break point 11\n");
 //   [TODO] build the frame buffer for the mouse on top of the game state
   uint8_t *mouse_frame_buffer[length_frame_buffer];
-  memset(mouse_frame_buffer, 0, length_frame_buffer);
-
+  memset(&mouse_frame_buffer, 0, length_frame_buffer);
 //   [TODO] load the main menu state array into game_frame_buffer
 //   [TODO] memcpy the game_frame_buffer to the mouse_frame_buffer
 //   [TODO] put the mouse in it's initial position on the mouse_frame_buffer
@@ -160,6 +164,7 @@ int (proj_main_loop)(int argc, char *argv[]) {
   bool is_start_of_screen = true;
 
   while (true) {
+    printf("Breakpoint 12\n");
     if (is_start_of_screen) {
         is_start_of_screen = false;
         // [TODO] switch statement for what to do in the start of each screen (load xpm to game_frame_buffer, memcpy game_frame_buffer to mouse_frame_buffer, put mouse in its position, memcpy mouse_frame_buffer to real frame buffer)
@@ -247,6 +252,10 @@ int (proj_main_loop)(int argc, char *argv[]) {
 
 //        [TODO] always memcpy the mouse frame buffer to the real frame buffer
     }
+
+    // [TODO] REMOVE THIS!!!!!!!!!!!!! ONLY HERE SO IT DOESN'T GET STUCK IN AN INFINITE LOOP
+    break;
+    /////////////
   }
 
   if (close_game() != 0) {

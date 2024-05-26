@@ -48,7 +48,7 @@ int (build_frame_buffer)(uint16_t mode, uint8_t* video_mem) {
   return 0;
 }
 
-uint32_t (get_length_frame_buffer)(void) {
+int (get_length_frame_buffer)(void) {
     return vram_size;
 }
 
