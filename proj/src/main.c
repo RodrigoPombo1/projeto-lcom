@@ -137,7 +137,7 @@ int (proj_main_loop)(int argc, char *argv[]) {
   printf("Break point 7\n");
 //   [TODO] build the real frame buffer and make it so it is the real frame buffer
   uint8_t *frame_buffer = NULL;
-  if (build_frame_buffer(0x115, frame_buffer) != 0) {
+  if (build_frame_buffer(0x115, &frame_buffer) != 0) {
     printf("Error while building the main frame buffer");
     return 1;
   }
@@ -145,15 +145,15 @@ int (proj_main_loop)(int argc, char *argv[]) {
   uint32_t length_frame_buffer = get_length_frame_buffer();
   printf("Break point 9\n");
   printf("Length of frame buffer: %d\n", length_frame_buffer);
-  memset(&frame_buffer, 0, length_frame_buffer);
+  memset(frame_buffer, 0, length_frame_buffer);
   printf("Break point 10\n");
 //   [TODO] build the frame buffer for the game state (will store either the main menu, the game, or the highscore)
-  uint8_t *game_frame_buffer[length_frame_buffer];
-  memset(&game_frame_buffer, 0, length_frame_buffer);
+  uint8_t game_frame_buffer[length_frame_buffer];
+  memset(game_frame_buffer, 0, length_frame_buffer);
   printf("Break point 11\n");
 //   [TODO] build the frame buffer for the mouse on top of the game state
-  uint8_t *mouse_frame_buffer[length_frame_buffer];
-  memset(&mouse_frame_buffer, 0, length_frame_buffer);
+  uint8_t mouse_frame_buffer[length_frame_buffer];
+  memset(mouse_frame_buffer, 0, length_frame_buffer);
 //   [TODO] load the main menu state array into game_frame_buffer
 //   [TODO] memcpy the game_frame_buffer to the mouse_frame_buffer
 //   [TODO] put the mouse in it's initial position on the mouse_frame_buffer

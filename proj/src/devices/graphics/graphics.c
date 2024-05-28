@@ -22,7 +22,7 @@ int (set_video_mode)(uint16_t mode) {
   return 0;
 }
 
-int (build_frame_buffer)(uint16_t mode, uint8_t* video_mem) {
+int (build_frame_buffer)(uint16_t mode, uint8_t** video_mem) {
   memset(&mode_info, 0, sizeof(mode_info));
   if (vbe_get_mode_info(mode, &mode_info) != 0) {
     return 1;
@@ -43,7 +43,7 @@ int (build_frame_buffer)(uint16_t mode, uint8_t* video_mem) {
     return 1;
   }
 
-  video_mem = vm_map_phys(SELF, (void*) address.mr_base, vram_size);
+  *video_mem = vm_map_phys(SELF, (void*) address.mr_base, vram_size);
 
   return 0;
 }
