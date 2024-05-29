@@ -135,7 +135,6 @@ int (proj_main_loop)(int argc, char *argv[]) {
 //   [TODO] initialize all arrays for every element in the game with memset
 //   [TODO] load xpm images into those array of colors
   printf("Break point 7\n");
-//   [TODO] build the real frame buffer and make it so it is the real frame buffer
   uint8_t *frame_buffer = NULL;
   if (build_frame_buffer(0x115, &frame_buffer) != 0) {
     printf("Error while building the main frame buffer");
@@ -147,24 +146,34 @@ int (proj_main_loop)(int argc, char *argv[]) {
   printf("Length of frame buffer: %d\n", length_frame_buffer);
   memset(frame_buffer, 0, length_frame_buffer);
   printf("Break point 10\n");
-//   [TODO] build the frame buffer for the game state (will store either the main menu, the game, or the highscore)
   uint8_t game_frame_buffer[length_frame_buffer];
   memset(game_frame_buffer, 0, length_frame_buffer);
   printf("Break point 11\n");
-//   [TODO] build the frame buffer for the mouse on top of the game state
   uint8_t mouse_frame_buffer[length_frame_buffer];
   memset(mouse_frame_buffer, 0, length_frame_buffer);
 //   [TODO] load the main menu state array into game_frame_buffer
-//   [TODO] memcpy the game_frame_buffer to the mouse_frame_buffer
+  memcpy(game_frame_buffer, mouse_frame_buffer, length_frame_buffer);
 //   [TODO] put the mouse in it's initial position on the mouse_frame_buffer
-//   [TODO] memcpy the mouse_frame_buffer to the real frame buffer
+  memcpy(mouse_frame_buffer, frame_buffer, length_frame_buffer);
 
-//   [TODO] load the high score from the txt file
+//   [TODO] maybe load the high score from the txt file?
 
   bool is_start_of_screen = true;
-
+  bool has_mouse_moved = false;
+  bool was_game_frame_buffer_changed = false;
+  bool close_application = false;
   while (true) {
     printf("Breakpoint 12\n");
+    if (close_application) {
+        break;
+    }
+
+    // [TODO] REMOVE THIS!!!!!!!!!!!!! ONLY HERE SO IT DOESN'T GET STUCK IN AN INFINITE LOOP
+    sleep(3);
+    close_application = true;
+    /////////////
+
+    // checks if it is the start of a screen
     if (is_start_of_screen) {
         is_start_of_screen = false;
         // [TODO] switch statement for what to do in the start of each screen (load xpm to game_frame_buffer, memcpy game_frame_buffer to mouse_frame_buffer, put mouse in its position, memcpy mouse_frame_buffer to real frame buffer)
@@ -194,6 +203,7 @@ int (proj_main_loop)(int argc, char *argv[]) {
       continue;
     }
 
+    // checks if there was an interruption
     interrupt_received = false;
 
     if (is_ipc_notify(ipc_status)) {
@@ -212,8 +222,8 @@ int (proj_main_loop)(int argc, char *argv[]) {
         }
         if (msg.m_notify.interrupts & irq_set_keyboard) {
             interrupt_received = true;
-    //            [TODO] get the key that was pressed and associate it with the last_key_pressed enum
-    //            [TODO] check if the key is being pressed and set is_key_being_pressed to true
+    //          [TODO] get the key that was pressed and associate it with the last_key_pressed enum
+    //          [TODO] check if the key is being pressed and set is_key_being_pressed to true
         }
         if (msg.m_notify.interrupts & irq_set_mouse) {
             interrupt_received = true;
@@ -223,39 +233,37 @@ int (proj_main_loop)(int argc, char *argv[]) {
     }
 
     // [TODO] check if interrupt was useful (depending on gamestate) if not, continue
-
-    if (interrupt_received) {
-//        bool was_game_frame_buffer_changed = false; // pointer will be passed in the following functions inside the switch statement
-//        [TODO] probably a switch statement between the different game states // handling each game state will mean a pointer to the game state buffer will be passed in the function
-        switch(current_game_state) {
-            case MAIN_MENU:
-//              [TODO] function to handle interrupts while in the main menu state
-                break;
-            case GAME:
-//              [TODO] function to handle interrupts while in the game state
-                break;
-            case GAME_OVER:
-//              [TODO] function to handle interrupts while in the game over state (where nothing moves only quit can be pressed)
-                break;
-            case HIGH_SCORE:
-//              [TODO] function to handle interrupts while in the the high score state
-                break;
-        }
-
-
-//        [TODO] always put the current mouse position on a pointer to the game frame buffer, even if game frame buffer hasn't change
-//        if mouse interrupt
-//        [TODO] put the mouse on the mouse frame buffer
-//        else if was_game_frame_buffer_changed
-//        [TODO] memcpy the game frame buffer to the mouse frame buffer
-
-
-//        [TODO] always memcpy the mouse frame buffer to the real frame buffer
+    // in case there wasn't an interruption just continue (happens when it's a timer tick)
+    if (!interrupt_received) {
+        continue;
+    }
+    was_game_frame_buffer_changed = false; // pointer will be passed in the following functions inside the switch statement
+//  [TODO] probably a switch statement between the different game states // handling each game state will mean a pointer to the game state buffer will be passed in the function
+    switch(current_game_state) {
+        case MAIN_MENU:
+//          [TODO] function to handle interrupts while in the main menu state
+            break;
+        case GAME:
+//          [TODO] function to handle interrupts while in the game state
+            break;
+        case GAME_OVER:
+//          [TODO] function to handle interrupts while in the game over state (where nothing moves only quit can be pressed)
+            break;
+        case HIGH_SCORE:
+//          [TODO] function to handle interrupts while in the the high score state
+            break;
     }
 
-    // [TODO] REMOVE THIS!!!!!!!!!!!!! ONLY HERE SO IT DOESN'T GET STUCK IN AN INFINITE LOOP
-    break;
-    /////////////
+    // if nothing has changed
+    if (!was_game_frame_buffer_changed && !has_mouse_moved) {
+        continue;
+    }
+
+    if (was_game_frame_buffer_changed) {
+        memcpy(game_frame_buffer, mouse_frame_buffer, length_frame_buffer);
+    }
+    // [TODO] draw mouse on mouse_frame_buffer from the mouse position
+    memcpy(mouse_frame_buffer, frame_buffer, length_frame_buffer);
   }
 
   if (close_game() != 0) {
