@@ -4,6 +4,7 @@
 #include "devices/keyboard/KBC_keyboard.h"
 #include "devices/mouse/KBC_mouse.h"
 #include "devices/graphics/graphics.h"
+#include "game_state/game_state.h"
 
 uint8_t irq_set_timer; 
 uint8_t irq_set_keyboard;
@@ -91,28 +92,6 @@ int (close_game)() {
   return 0;
 }
 
-enum game_state {
-  MAIN_MENU,
-  GAME,
-  GAME_OVER,
-  HIGH_SCORE,
-};
-
-enum letter_pressed {
-    NO_LETTER_PRESSED,
-    W,
-    A,
-    S,
-    D,
-};
-
-enum interrupt_type {
-    TIMER_SECOND,
-    TIMER_TICK,
-    KEYBOARD,
-    MOUSE,
-};
-
 int (proj_main_loop)(int argc, char *argv[]) {
   enum game_state current_game_state = MAIN_MENU;
   if (setup_game() != 0) {
@@ -151,12 +130,6 @@ int (proj_main_loop)(int argc, char *argv[]) {
   printf("Break point 11\n");
   uint8_t mouse_frame_buffer[length_frame_buffer];
   memset(mouse_frame_buffer, 0, length_frame_buffer);
-//   [TODO] load the main menu state array into game_frame_buffer
-  memcpy(game_frame_buffer, mouse_frame_buffer, length_frame_buffer);
-//   [TODO] put the mouse in it's initial position on the mouse_frame_buffer
-  memcpy(mouse_frame_buffer, frame_buffer, length_frame_buffer);
-
-//   [TODO] maybe load the high score from the txt file?
 
   bool is_start_of_screen = true;
   bool has_mouse_moved = false;
@@ -222,15 +195,16 @@ int (proj_main_loop)(int argc, char *argv[]) {
         }
         if (msg.m_notify.interrupts & irq_set_keyboard) {
             interrupt_received = true;
-    //          [TODO] get the key that was pressed and associate it with the last_key_pressed enum
-    //          [TODO] check if the key is being pressed and set is_key_being_pressed to true
+    //      [TODO] get the key that was pressed and associate it with the last_key_pressed enum
+    //      [TODO] check if the key is being pressed and set is_key_being_pressed to true
         }
         if (msg.m_notify.interrupts & irq_set_mouse) {
             interrupt_received = true;
-    //           [TODO] get the mouse deviation and add it to the mouse position
-    //           [TODO] get if mouse has pressed m1 (check if left mouse button was pressed) update is_mouse_button_being_pressed accordingly
+    //      [TODO] get the mouse deviation and add it to the mouse position
+    //      [TODO] get if mouse has pressed m1 (check if left mouse button was pressed) update is_mouse_button_being_pressed accordingly
         }
     }
+    // if key if key is still being pressed, put interrupt from keyboard to true?
 
     // [TODO] check if interrupt was useful (depending on gamestate) if not, continue
     // in case there wasn't an interruption just continue (happens when it's a timer tick)
