@@ -1,6 +1,27 @@
 #include <lcom/lcf.h>
 #include <lcom/timer.h>
 
+// include the xpm files
+#include "xpm_files/LCOM_0.xpm"
+#include "xpm_files/LCOM_1.xpm"
+#include "xpm_files/LCOM_2.xpm"
+#include "xpm_files/LCOM_3.xpm"
+#include "xpm_files/LCOM_4.xpm"
+#include "xpm_files/LCOM_5.xpm"
+#include "xpm_files/LCOM_6.xpm"
+#include "xpm_files/LCOM_7.xpm"
+#include "xpm_files/LCOM_8.xpm"
+#include "xpm_files/LCOM_9.xpm"
+#include "xpm_files/LCOM_-.xpm"
+#include "xpm_files/LCOM_2_pontos.xpm"
+#include "xpm_files/LCOM_character.xpm"
+#include "xpm_files/LCOM_cursor.xpm"
+#include "xpm_files/LCOM_game_over.xpm"
+#include "xpm_files/LCOM_high_scores.xpm"
+#include "xpm_files/LCOM_mapa.xpm"
+#include "xpm_files/LCOM_menu.xpm"
+#include "xpm_files/LCOM_monster.xpm"
+
 #include "devices/keyboard/KBC_keyboard.h"
 #include "devices/mouse/KBC_mouse.h"
 #include "devices/graphics/graphics.h"
@@ -21,11 +42,11 @@ int main(int argc, char *argv[]) {
 
   // enables to log function invocations that are being "wrapped" by LCF
   // [comment this out if you don't want/need it]
-  lcf_trace_calls("/home/lcom/labs/proj/src/trace.txt");
+  lcf_trace_calls("/home/lcom/labs/g5/proj/src/trace.txt");
 
   // enables to save the output of printf function calls on a file
   // [comment this out if you don't want/need it]
-  lcf_log_output("/home/lcom/labs/proj/src/output.txt");
+  lcf_log_output("/home/lcom/labs/g5/proj/src/output.txt");
 
   // handles control over to LCF
   // [LCF handles command line arguments and invokes the right function]
@@ -97,7 +118,7 @@ int (close_game)() {
 int (proj_main_loop)(int argc, char *argv[]) {
   enum game_state current_game_state = MAIN_MENU;
   if (setup_game() != 0) {
-    printf("Game could not be opened");
+    printf("Game could not be opened\n");
     return close_game();
   }
   printf("Break point 6\n");
@@ -105,10 +126,12 @@ int (proj_main_loop)(int argc, char *argv[]) {
   message msg;
 
   uint8_t scancode = 0;
-  uint8_t* full_scancode = (uint8_t*)malloc(2 * sizeof(uint8_t));
+  uint8_t full_scancode[2];
   int num_bytes = 1;
 
-  uint8_t timer_counter = 1; // just so it doesn't immediately update the character positions
+  struct keyboard_keys_pressed keys_pressed = {false, false, false, false};
+
+  uint8_t timer_counter = 0;
 //  enum letter_pressed last_key_pressed = NO_LETTER_PRESSED;
 //  bool is_key_being_pressed = false;
 //  bool is_mouse_button_being_pressed = false;
@@ -117,8 +140,66 @@ int (proj_main_loop)(int argc, char *argv[]) {
 //  int mouse_position_x = 0;
 //  int mouse_position_y = 0;
 
-//   [TODO] initialize all arrays for every element in the game with memset
-//   [TODO] load xpm images into those array of colors
+// [TODO] initialize all arrays for every element in the game with memset
+// [TODO] load xpm images into those array of colors
+  // load all the xpms into image structs
+  // loading all the numbers to image structs
+  uint32_t number_0_color_array[32 * 16];
+  struct image_struct number_0 = {32, 16, number_0_color_array};
+  xpm_load_to_image((xpm_map_t) xpm_0, &number_0);
+
+  uint32_t number_1_color_array[32 * 16];
+  struct image_struct number_1 = {32, 16, number_1_color_array};
+  xpm_load_to_image((xpm_map_t) xpm_1, &number_1);
+
+  uint32_t number_2_color_array[32 * 16];
+  struct image_struct number_2 = {32, 16, number_2_color_array};
+  xpm_load_to_image((xpm_map_t) xpm_2, &number_2);
+
+  uint32_t number_3_color_array[32 * 16];
+  struct image_struct number_3 = {32, 16, number_3_color_array};
+  xpm_load_to_image((xpm_map_t) xpm_3, &number_3);
+
+  uint32_t number_4_color_array[32 * 16];
+  struct image_struct number_4 = {32, 16, number_4_color_array};
+  xpm_load_to_image((xpm_map_t) xpm_4, &number_4);
+
+  uint32_t number_5_color_array[32 * 16];
+  struct image_struct number_5 = {32, 16, number_5_color_array};
+  xpm_load_to_image((xpm_map_t) xpm_5, &number_5);
+
+  uint32_t number_6_color_array[32 * 16];
+  struct image_struct number_6 = {32, 16, number_6_color_array};
+  xpm_load_to_image((xpm_map_t) xpm_6, &number_6);
+
+  uint32_t number_7_color_array[32 * 16];
+  struct image_struct number_7 = {32, 16, number_7_color_array};
+  xpm_load_to_image((xpm_map_t) xpm_7, &number_7);
+
+  uint32_t number_8_color_array[32 * 16];
+  struct image_struct number_8 = {32, 16, number_8_color_array};
+  xpm_load_to_image((xpm_map_t) xpm_8, &number_8);
+
+  uint32_t number_9_color_array[32 * 16];
+  struct image_struct number_9 = {32, 16, number_9_color_array};
+  xpm_load_to_image((xpm_map_t) xpm_9, &number_9);
+
+  // loading the character 2 pontos to an image struct
+  uint32_t character_2_pontos_color_array[12 * 4];
+  struct image_struct character_2_pontos = {12, 4, character_2_pontos_color_array};
+  xpm_load_to_image((xpm_map_t) xpm_2_pontos, &character_2_pontos);
+
+  // loading the character - to an image struct
+  uint32_t character_tracinho_color_array[4 * 16];
+  struct image_struct character_tracinho = {4, 16, character_tracinho_color_array};
+  xpm_load_to_image((xpm_map_t) xpm_traco, &character_tracinho);
+
+  // loading the cursor to an image struct
+  uint32_t cursor_color_array[32 * 32];
+  struct image_struct cursor = {32, 32, cursor_color_array};
+  xpm_load_to_image((xpm_map_t) cursor_xpm, &cursor);
+
+
   printf("Break point 7\n");
   uint8_t *frame_buffer = NULL;
   if (build_frame_buffer(0x115, &frame_buffer) != 0) {
@@ -141,6 +222,9 @@ int (proj_main_loop)(int argc, char *argv[]) {
   bool has_mouse_moved = false;
   bool was_game_frame_buffer_changed = false;
   bool close_application = false;
+
+  // [TODO] REMOVE !!! FOR TEST PURPOSES ONLY
+  image_load_to_frame_buffer(&number_0, 0, 0, frame_buffer);
   while (scancode != ESC_BREAK_CODE) {
     // printf("Breakpoint 12\n");
     if (close_application) {
@@ -178,7 +262,7 @@ int (proj_main_loop)(int argc, char *argv[]) {
         continue; // skip the rest of the loop
     }
     if (driver_receive(ANY, &msg, &ipc_status) != 0) {
-      printf("Interruption error");
+      printf("Interruption error\n");
       continue;
     }
 
@@ -200,7 +284,7 @@ int (proj_main_loop)(int argc, char *argv[]) {
                 }
                 if (msg.m_notify.interrupts & irq_set_keyboard) {
                     interrupt_received = true;
-            //      [TODO] get the key that was pressed and associate it with the last_key_pressed enum
+                    //  [TODO] get the key that was pressed and associate it with the last_key_pressed enum
                     if (util_sys_inb(KBC_STATUS_REG, &status) != 0) { // We test the function that reads the status from the status register, to check if we didn't have a communication error
                       return 1;
                     }
@@ -221,38 +305,39 @@ int (proj_main_loop)(int argc, char *argv[]) {
                     switch (scancode) {
                       case 0x11:
                         printf("Tecla w pressionada\n");
+                        keys_pressed.W = true;
                         break;
-
                       case 0x91:
                         printf("Tecla w largada\n");
+                        keys_pressed.W = false;
                         break;
-
                       case 0x1e:
                         printf("Tecla a pressionada\n");
+                        keys_pressed.A = true;
                         break;
-
                       case 0x9e:
                         printf("Tecla a largada\n");
+                        keys_pressed.A = false;
                         break;
-
                       case 0x1f:
                         printf("Tecla s pressionada\n");
+                        keys_pressed.S = true;
                         break;
-
                       case 0x9f:
                         printf("Tecla s largada\n");
+                        keys_pressed.S = false;
                         break;
-
                       case 0x20:
                         printf("Tecla d pressionada\n");
+                        keys_pressed.D = true;
                         break;
-
                       case 0xa0:
                         printf("Tecla d largada\n");
+                        keys_pressed.D = false;
                         break;
                     }
                     memset(full_scancode, 0, 2 * sizeof(uint8_t)); // We reset the scancode array
-            //      [TODO] check if the key is being pressed and set is_key_being_pressed to true
+                    //  [TODO] check if the key is being pressed and set is_key_being_pressed to true
                 }
                 if (msg.m_notify.interrupts & irq_set_mouse) {
                     if (util_sys_inb(KBC_STATUS_REG, &status) != 0) { // We test the function that reads the status from the status register, to check if we didn't have a communication error
@@ -281,13 +366,15 @@ int (proj_main_loop)(int argc, char *argv[]) {
                     printf("Delta x: %d", mouse->delta_x);
                     printf("Delta y: %d", mouse->delta_y);
                     interrupt_received = true;
-            //      [TODO] get the mouse deviation and add it to the mouse position
-            //      [TODO] get if mouse has pressed m1 (check if left mouse button was pressed) update is_mouse_button_being_pressed accordingly
+                    //  [TODO] get the mouse deviation and add it to the mouse position
+                    //  [TODO] get if mouse has pressed m1 (check if left mouse button was pressed) update is_mouse_button_being_pressed accordingly
                 }
 
         }
     }
+    // [TODO] remove this continue (only exists for testing purposes)
     continue;
+    //////////////
     // if key if key is still being pressed, put interrupt from keyboard to true?
 
     // [TODO] check if interrupt was useful (depending on gamestate) if not, continue
