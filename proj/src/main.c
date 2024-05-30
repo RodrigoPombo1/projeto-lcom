@@ -125,7 +125,7 @@ int (proj_main_loop)(int argc, char *argv[]) {
   message msg;
 
   uint8_t scancode = 0;
-  uint8_t* full_scancode = (uint8_t*)malloc(2 * sizeof(uint8_t));
+  uint8_t full_scancode[2];
   int num_bytes = 1;
 
   uint8_t timer_counter = 1; // just so it doesn't immediately update the character positions
@@ -137,8 +137,8 @@ int (proj_main_loop)(int argc, char *argv[]) {
 //  int mouse_position_x = 0;
 //  int mouse_position_y = 0;
 
-//   [TODO] initialize all arrays for every element in the game with memset
-//   [TODO] load xpm images into those array of colors
+// [TODO] initialize all arrays for every element in the game with memset
+// [TODO] load xpm images into those array of colors
   printf("Break point 7\n");
   uint8_t *frame_buffer = NULL;
   if (build_frame_buffer(0x115, &frame_buffer) != 0) {
@@ -220,7 +220,7 @@ int (proj_main_loop)(int argc, char *argv[]) {
                 }
                 if (msg.m_notify.interrupts & irq_set_keyboard) {
                     interrupt_received = true;
-            //      [TODO] get the key that was pressed and associate it with the last_key_pressed enum
+                    //  [TODO] get the key that was pressed and associate it with the last_key_pressed enum
                     if (util_sys_inb(KBC_STATUS_REG, &status) != 0) { // We test the function that reads the status from the status register, to check if we didn't have a communication error
                       return 1;
                     }
@@ -272,7 +272,7 @@ int (proj_main_loop)(int argc, char *argv[]) {
                         break;
                     }
                     memset(full_scancode, 0, 2 * sizeof(uint8_t)); // We reset the scancode array
-            //      [TODO] check if the key is being pressed and set is_key_being_pressed to true
+                    //  [TODO] check if the key is being pressed and set is_key_being_pressed to true
                 }
                 if (msg.m_notify.interrupts & irq_set_mouse) {
                     if (util_sys_inb(KBC_STATUS_REG, &status) != 0) { // We test the function that reads the status from the status register, to check if we didn't have a communication error
@@ -301,8 +301,8 @@ int (proj_main_loop)(int argc, char *argv[]) {
                     printf("Delta x: %d", mouse->delta_x);
                     printf("Delta y: %d", mouse->delta_y);
                     interrupt_received = true;
-            //      [TODO] get the mouse deviation and add it to the mouse position
-            //      [TODO] get if mouse has pressed m1 (check if left mouse button was pressed) update is_mouse_button_being_pressed accordingly
+                    //  [TODO] get the mouse deviation and add it to the mouse position
+                    //  [TODO] get if mouse has pressed m1 (check if left mouse button was pressed) update is_mouse_button_being_pressed accordingly
                 }
 
         }
