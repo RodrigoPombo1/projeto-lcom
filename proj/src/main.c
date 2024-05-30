@@ -1,6 +1,26 @@
 #include <lcom/lcf.h>
 #include <lcom/timer.h>
 
+// include the xpm files
+#include "xpm_files/LCOM_0.xpm"
+#include "xpm_files/LCOM_1.xpm"
+#include "xpm_files/LCOM_2.xpm"
+#include "xpm_files/LCOM_3.xpm"
+#include "xpm_files/LCOM_4.xpm"
+#include "xpm_files/LCOM_5.xpm"
+#include "xpm_files/LCOM_6.xpm"
+#include "xpm_files/LCOM_7.xpm"
+#include "xpm_files/LCOM_8.xpm"
+#include "xpm_files/LCOM_9.xpm"
+#include "xpm_files/LCOM_-.xpm"
+#include "xpm_files/LCOM_2_pontos.xpm"
+#include "xpm_files/LCOM_character.xpm"
+#include "xpm_files/LCOM_cursor.xpm"
+#include "xpm_files/LCOM_game_over.xpm"
+#include "xpm_files/LCOM_mapa.xpm"
+#include "xpm_files/LCOM_menu.xpm"
+#include "xpm_files/LCOM_monster.xpm"
+
 #include "devices/keyboard/KBC_keyboard.h"
 #include "devices/mouse/KBC_mouse.h"
 #include "devices/graphics/graphics.h"
@@ -21,11 +41,11 @@ int main(int argc, char *argv[]) {
 
   // enables to log function invocations that are being "wrapped" by LCF
   // [comment this out if you don't want/need it]
-  lcf_trace_calls("/home/lcom/labs/proj/src/trace.txt");
+  lcf_trace_calls("/home/lcom/labs/g5/proj/src/trace.txt");
 
   // enables to save the output of printf function calls on a file
   // [comment this out if you don't want/need it]
-  lcf_log_output("/home/lcom/labs/proj/src/output.txt");
+  lcf_log_output("/home/lcom/labs/g5/proj/src/output.txt");
 
   // handles control over to LCF
   // [LCF handles command line arguments and invokes the right function]

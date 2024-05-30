@@ -10,7 +10,7 @@ enum game_state {
     HIGH_SCORE,
 };
 
-enum letter_pressed {
+enum letter_pressed { // [TODO] remove? no longer used
     NO_LETTER_PRESSED,
     W,
     A,
@@ -18,14 +18,21 @@ enum letter_pressed {
     D,
 };
 
+struct keyboard_keys_pressed {
+    bool W;
+    bool A;
+    bool S;
+    bool D;
+};
 
 struct all_devices_interrupts {
-    bool is_timer_interrupt;
+    bool is_timer_second_interrupt;
+    bool is_timer_tick_interrupt;
     bool is_keyboard_interrupt;
     bool is_mouse_interrupt;
 };
 
-enum interrupt_type {
+enum interrupt_type { // [TODO] remove? no longer used
     TIMER_SECOND,
     TIMER_TICK,
     KEYBOARD,
