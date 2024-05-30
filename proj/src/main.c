@@ -12,6 +12,8 @@ uint8_t irq_set_mouse;
 // uint8_t irq_set_rtc;
 
 uint8_t status = 0;
+extern struct packet final_packet;
+struct mouse_ev* mouse; 
 
 int main(int argc, char *argv[]) {
   // sets the language of LCF messages (can be either EN-US or PT-PT)
@@ -19,11 +21,11 @@ int main(int argc, char *argv[]) {
 
   // enables to log function invocations that are being "wrapped" by LCF
   // [comment this out if you don't want/need it]
-  lcf_trace_calls("/home/lcom/labs/g5/proj/src/trace.txt");
+  lcf_trace_calls("/home/lcom/labs/proj/src/trace.txt");
 
   // enables to save the output of printf function calls on a file
   // [comment this out if you don't want/need it]
-  lcf_log_output("/home/lcom/labs/g5/proj/src/output.txt");
+  lcf_log_output("/home/lcom/labs/proj/src/output.txt");
 
   // handles control over to LCF
   // [LCF handles command line arguments and invokes the right function]
@@ -53,14 +55,14 @@ int (setup_game)() {
     return 1;
   }
   printf("Break point 3\n");
-  if (mouse_subscribe(&irq_set_mouse) != 0) {
-    return 1;
-  }
-  printf("Break point 4\n");
   // Enable mouse data report 
   if (mouse_write_command(ENABLE_DR) != 0) {
     return 1;
   }
+  if (mouse_subscribe(&irq_set_mouse) != 0) {
+    return 1;
+  }
+  printf("Break point 4\n");
   printf("Break point 5\n");
   return 0;
 }
@@ -99,8 +101,12 @@ int (proj_main_loop)(int argc, char *argv[]) {
     return close_game();
   }
   printf("Break point 6\n");
-  int ipc_status;
+  int ipc_status, r;
   message msg;
+
+  uint8_t scancode = 0;
+  uint8_t* full_scancode = (uint8_t*)malloc(2 * sizeof(uint8_t));
+  int num_bytes = 1;
 
   uint8_t timer_counter = 1; // just so it doesn't immediately update the character positions
 //  enum letter_pressed last_key_pressed = NO_LETTER_PRESSED;
@@ -135,15 +141,15 @@ int (proj_main_loop)(int argc, char *argv[]) {
   bool has_mouse_moved = false;
   bool was_game_frame_buffer_changed = false;
   bool close_application = false;
-  while (true) {
-    printf("Breakpoint 12\n");
+  while (scancode != ESC_BREAK_CODE) {
+    // printf("Breakpoint 12\n");
     if (close_application) {
         break;
     }
 
     // [TODO] REMOVE THIS!!!!!!!!!!!!! ONLY HERE SO IT DOESN'T GET STUCK IN AN INFINITE LOOP
-    sleep(3);
-    close_application = true;
+    // sleep(30);
+    // close_application = true;
     /////////////
 
     // checks if it is the start of a screen
@@ -192,18 +198,96 @@ int (proj_main_loop)(int argc, char *argv[]) {
                         interrupt_received_type = TIMER_TICK;
                     }
                 }
-        }
-        if (msg.m_notify.interrupts & irq_set_keyboard) {
-            interrupt_received = true;
-    //      [TODO] get the key that was pressed and associate it with the last_key_pressed enum
-    //      [TODO] check if the key is being pressed and set is_key_being_pressed to true
-        }
-        if (msg.m_notify.interrupts & irq_set_mouse) {
-            interrupt_received = true;
-    //      [TODO] get the mouse deviation and add it to the mouse position
-    //      [TODO] get if mouse has pressed m1 (check if left mouse button was pressed) update is_mouse_button_being_pressed accordingly
+                if (msg.m_notify.interrupts & irq_set_keyboard) {
+                    interrupt_received = true;
+            //      [TODO] get the key that was pressed and associate it with the last_key_pressed enum
+                    if (util_sys_inb(KBC_STATUS_REG, &status) != 0) { // We test the function that reads the status from the status register, to check if we didn't have a communication error
+                      return 1;
+                    }
+                    if (kbc_read_output(KBC_OUT_BUFFER, &scancode) != 0) {
+                      return 1;
+                    }
+                    if (scancode == FIRST_BYTE) { // Let's evaluate if the first byte of the scancode is 0xE0 (which would mean that the scancode has 2 bytes to be read)
+                      full_scancode[0] = FIRST_BYTE; // Then the first byte is 0xE0
+                      num_bytes = 2;
+                      break; // We wait for the next interrupt to know what will the second byte be
+                    }
+                    else if (full_scancode[0] == FIRST_BYTE) { // This condition is only true in the interruption immediatly after the scancode is 0xE0
+                      full_scancode[1] = scancode; // We know the full 2 byte scancode
+                    }
+                    else { // When the scancode is not 0xE0 and 0xE0 is not the first byte, we know that the scancode only has 1 byte
+                      full_scancode[0] = scancode;
+                    }
+                    switch (scancode) {
+                      case 0x11:
+                        printf("Tecla w pressionada\n");
+                        break;
+
+                      case 0x91:
+                        printf("Tecla w largada\n");
+                        break;
+
+                      case 0x1e:
+                        printf("Tecla a pressionada\n");
+                        break;
+
+                      case 0x9e:
+                        printf("Tecla a largada\n");
+                        break;
+
+                      case 0x1f:
+                        printf("Tecla s pressionada\n");
+                        break;
+
+                      case 0x9f:
+                        printf("Tecla s largada\n");
+                        break;
+
+                      case 0x20:
+                        printf("Tecla d pressionada\n");
+                        break;
+
+                      case 0xa0:
+                        printf("Tecla d largada\n");
+                        break;
+                    }
+                    memset(full_scancode, 0, 2 * sizeof(uint8_t)); // We reset the scancode array
+            //      [TODO] check if the key is being pressed and set is_key_being_pressed to true
+                }
+                if (msg.m_notify.interrupts & irq_set_mouse) {
+                    if (util_sys_inb(KBC_STATUS_REG, &status) != 0) { // We test the function that reads the status from the status register, to check if we didn't have a communication error
+                        return 1;
+                    }
+                    mouse_ih();
+                    printf("Status: %d\n", status);
+                    r = mouse_build_packet();
+                    if (r == 0) {
+                      break;
+                    }
+                    else if (r == 1) {
+                      // Seria acabar a execução do programa
+                      printf("Mouse error");
+                    }
+                    printf("Breakpoint 20");
+                    mouse = mouse_detect_events(&final_packet);
+                    printf("Breakpoint 21");
+                    if (mouse->type == LB_PRESSED) {
+                      printf("Botão esquerdo pressionado");
+                    }
+                    else if (mouse->type == LB_RELEASED) {
+                      printf("Botão esquerdo largado");
+                    }
+                    printf("Posição do rato:\n");
+                    printf("Delta x: %d", mouse->delta_x);
+                    printf("Delta y: %d", mouse->delta_y);
+                    interrupt_received = true;
+            //      [TODO] get the mouse deviation and add it to the mouse position
+            //      [TODO] get if mouse has pressed m1 (check if left mouse button was pressed) update is_mouse_button_being_pressed accordingly
+                }
+
         }
     }
+    continue;
     // if key if key is still being pressed, put interrupt from keyboard to true?
 
     // [TODO] check if interrupt was useful (depending on gamestate) if not, continue

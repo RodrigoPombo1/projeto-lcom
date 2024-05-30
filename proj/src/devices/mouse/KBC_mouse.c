@@ -3,8 +3,10 @@
 uint8_t byte, packet[3]; // We'll extract the mouse bytes
 int byte_count = 0, mouse_hook_id = 2; // We'll mask the mouse IRQ
 struct packet final_packet;
+struct mouse_ev mouse_struct;
+struct mouse_ev* mouse = &mouse_struct;
 
-struct mouse_ev* mouse;
+bool was_left_button_pressed = false;
 
 int (mouse_subscribe)(uint8_t *bit_no) { // Put the mask on, it's (C)arnival time!
     *bit_no = BIT(mouse_hook_id);
@@ -16,6 +18,8 @@ int (mouse_unsubscribe)() { // (C)arnival is over
 }
 
 int (mouse_build_packet)() {
+  printf("Byte: %u\n", byte);
+  printf("Byte count: %d\n", byte_count);
   if (byte_count == 0 && ((byte & CONTROL_BIT) == 0)) {
     printf("Build error");
     return 1;
@@ -97,32 +101,29 @@ int (mouse_write_command)(uint8_t command) {
 }
 
 struct mouse_ev *(mouse_detect_events)(struct packet *pp) {
-  if (pp->lb) {
+  printf("Breakpoint 30\n");
+  bool was_type_set;
+  printf("Breakpoint 50\n");
+  if (pp->lb && !was_left_button_pressed) {
+    printf("Breakpoint 40\n");
     mouse->type = LB_PRESSED;
+    was_left_button_pressed = true;
+    was_type_set = true;
   }
-
-  if (!pp->lb) {
+printf("Breakpoint 31\n");
+  if (!pp->lb && was_left_button_pressed) {
+    printf("Breakpoint 41\n");
     mouse->type = LB_RELEASED;
+    was_left_button_pressed = false;
+    was_type_set = true;
   }
-
-  if (pp->rb) {
-    mouse->type = RB_PRESSED;
-  }
-
-  if (!pp->rb) {
-    mouse->type = RB_RELEASED;
-  }
-
-  if (pp->mb) {
-    mouse->type = BUTTON_EV;
-  }
-
+printf("Breakpoint 32\n");
   mouse->delta_x = pp->delta_x;
   mouse->delta_y = pp->delta_y;
-
-  if ((mouse->delta_x != 0 || mouse->delta_y != 0) && (mouse->type == LB_PRESSED || mouse->type == RB_PRESSED)) {
+printf("Breakpoint 36\n");
+  if ((mouse->delta_x != 0 || mouse->delta_y != 0) && !was_type_set) {
     mouse->type = MOUSE_MOV;
+    was_type_set = true;
   }
-
   return mouse;
 }
