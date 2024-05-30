@@ -7,11 +7,12 @@ PROG=proj
 .PATH: ${.CURDIR}/devices/keyboard
 .PATH: ${.CURDIR}/devices/mouse
 .PATH: ${.CURDIR}/devices/timer
+.PATH: ${.CURDIR}/devices/rtc
 .PATH: ${.CURDIR}/utils
 .PATH: ${.CURDIR}/game_state
 .PATH: ${.CURDIR}/xpm_files
 # source code files to be compiled
-SRCS = main.c KBC_keyboard.c KBC_mouse.c graphics.c utils.c keyboard_and_mouse.c timer.c game_state.c
+SRCS = main.c KBC_keyboard.c KBC_mouse.c graphics.c utils.c keyboard_and_mouse.c timer.c game_state.c rtc.c
 
 # additional compilation flags
 # "-Wall -Wextra -Werror -I . -std=c11 -Wno-unused-parameter" are already set

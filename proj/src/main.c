@@ -25,6 +25,7 @@
 #include "devices/keyboard/KBC_keyboard.h"
 #include "devices/mouse/KBC_mouse.h"
 #include "devices/graphics/graphics.h"
+#include "devices/rtc/rtc.h"
 #include "game_state/game_state.h"
 
 uint8_t irq_set_timer; 
@@ -35,6 +36,7 @@ uint8_t irq_set_mouse;
 uint8_t status = 0;
 extern struct packet final_packet;
 struct mouse_ev* mouse; 
+extern rtc_info_t rtc;
 
 int main(int argc, char *argv[]) {
   // sets the language of LCF messages (can be either EN-US or PT-PT)
@@ -116,7 +118,82 @@ int (close_game)() {
 }
 
 int (proj_main_loop)(int argc, char *argv[]) {
+  int decimal = 0;
+  int base = 1;
   enum game_state current_game_state = MAIN_MENU;
+  if (rtc_read_date_time() != 0) {
+    printf("Falhou\n");
+  }
+  while (rtc.seconds > 0) {
+    int rightmost_digit = rtc.seconds & 0xF;
+    decimal += rightmost_digit * base;
+    base *= 10;
+    rtc.seconds >>= 4;
+  }
+  rtc.seconds = decimal;
+
+  decimal = 0;
+  base = 1;
+
+  while (rtc.minutes > 0) {
+    int rightmost_digit = rtc.minutes & 0xF;
+    decimal += rightmost_digit * base;
+    base *= 10;
+    rtc.minutes >>= 4;
+  }
+  rtc.minutes = decimal;
+
+  decimal = 0;
+  base = 1;
+
+  while (rtc.hours > 0) {
+    int rightmost_digit = rtc.hours & 0xF;
+    decimal += rightmost_digit * base;
+    base *= 10;
+    rtc.hours >>= 4;
+  }
+  rtc.hours = decimal;
+
+  decimal = 0;
+  base = 1;
+
+  while (rtc.day > 0) {
+    int rightmost_digit = rtc.day & 0xF;
+    decimal += rightmost_digit * base;
+    base *= 10;
+    rtc.day >>= 4;
+  }
+  rtc.day = decimal;
+
+  decimal = 0;
+  base = 1;
+
+  while (rtc.month > 0) {
+    int rightmost_digit = rtc.month & 0xF;
+    decimal += rightmost_digit * base;
+    base *= 10;
+    rtc.month >>= 4;
+  }
+  rtc.month = decimal;
+
+  decimal = 0;
+  base = 1;
+
+  while (rtc.year > 0) {
+    int rightmost_digit = rtc.year & 0xF;
+    decimal += rightmost_digit * base;
+    base *= 10;
+    rtc.year >>= 4;
+  }
+  rtc.year = decimal;
+
+  printf("Segundos: %u\n", rtc.seconds);
+  printf("Minutos: %u\n", rtc.minutes);
+  printf("Horas: %u\n", rtc.hours);
+  printf("Dia: %u\n", rtc.day);
+  printf("Mes: %u\n", rtc.month);
+  printf("Ano: %u\n", rtc.year);
+  return 0;
   if (setup_game() != 0) {
     printf("Game could not be opened\n");
     return close_game();
