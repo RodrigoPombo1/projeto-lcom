@@ -226,7 +226,7 @@ int (proj_main_loop)(int argc, char *argv[]) {
   struct image_struct number_0 = {16, 32, number_0_color_array};
   xpm_load_to_image((xpm_map_t) xpm_0, &number_0);
 
-  uint32_t number_1_color_array[4 * 32];
+  uint32_t number_1_color_array[16 * 32];
   struct image_struct number_1 = {4, 32, number_1_color_array};
   xpm_load_to_image((xpm_map_t) xpm_1, &number_1);
 
@@ -263,8 +263,8 @@ int (proj_main_loop)(int argc, char *argv[]) {
   xpm_load_to_image((xpm_map_t) xpm_9, &number_9);
 
   // loading the character 2 pontos to an image struct
-  uint32_t character_2_pontos_color_array[12 * 4];
-  struct image_struct character_2_pontos = {12, 4, character_2_pontos_color_array};
+  uint32_t character_2_pontos_color_array[16 * 32];
+  struct image_struct character_2_pontos = {16, 32, character_2_pontos_color_array};
   xpm_load_to_image((xpm_map_t) xpm_2_pontos, &character_2_pontos);
 
   // loading the character - to an image struct
