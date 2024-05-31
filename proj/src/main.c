@@ -347,6 +347,9 @@ int (proj_main_loop)(int argc, char *argv[]) {
                 break;
             case GAME:
                 timer_counter = 0;
+                // [TODO] REMOVE THIS LINE
+                image_load_to_frame_buffer(&game, 0, 0, game_frame_buffer);
+                ////////////
                 // [TODO] set the game characters to their initial position
                 // [TODO] load game state to the game frame buffer
                 break;
