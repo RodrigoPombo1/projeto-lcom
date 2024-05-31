@@ -69,6 +69,9 @@ int (setup_game)() {
   if (set_video_mode(0x115) != 0) {
     return 1;
   }
+  // if (timer_set_frequency(0, 20) != 0) {
+  //   return 1;
+  // }
   printf("Break point 1\n");
   // Subscribe interruptions of all necessary devices
   if (timer_subscribe_int(&irq_set_timer) != 0) {
@@ -376,15 +379,23 @@ int (proj_main_loop)(int argc, char *argv[]) {
     if (is_ipc_notify(ipc_status)) {
         switch (_ENDPOINT_P(msg.m_source)) {
             case HARDWARE:
+                printf("Msg: %u\n", msg.m_notify.interrupts);
                 if (msg.m_notify.interrupts & irq_set_timer) {
                     timer_counter++;
+                    printf("Timer counter: %d\n", timer_counter);
                     if (timer_counter == 60) {
+                        timer_counter = 0;
                         all_received_devices_interrupts.is_timer_second_interrupt = true;
-                    } else if (timer_counter % 20 == 0) {
+                        printf("1 segundo\n");
+                    } 
+                    else if (timer_counter % 30 == 0) {
                         all_received_devices_interrupts.is_timer_tick_interrupt = true;
+                        printf("0.5 segundos\n");
                     }
                 }
+                printf("Breakpoint 70\n");
                 if (msg.m_notify.interrupts & irq_set_keyboard) {
+                    printf("Inside keyboard interrupt\n");
                     if (util_sys_inb(KBC_STATUS_REG, &status) != 0) { // We test the function that reads the status from the status register, to check if we didn't have a communication error
                       return 1;
                     }
@@ -438,7 +449,9 @@ int (proj_main_loop)(int argc, char *argv[]) {
                     }
                     memset(full_scancode, 0, 2 * sizeof(uint8_t)); // We reset the scancode array
                 }
+                printf("Breakpoint 71\n");
                 if (msg.m_notify.interrupts & irq_set_mouse) {
+                    printf("Inside mouse interrupt\n");
                     if (util_sys_inb(KBC_STATUS_REG, &status) != 0) { // We test the function that reads the status from the status register, to check if we didn't have a communication error
                         return 1;
                     }
@@ -487,11 +500,12 @@ int (proj_main_loop)(int argc, char *argv[]) {
 
         }
     }
-
+    printf("Finished interrupts\n");
     // in case there wasn't an interruption just continue (happens for example when it's a non-important timer tick)
     if (!all_received_devices_interrupts.is_timer_second_interrupt && !all_received_devices_interrupts.is_timer_tick_interrupt && !all_received_devices_interrupts.W && !all_received_devices_interrupts.A && !all_received_devices_interrupts.S && !all_received_devices_interrupts.D && !all_received_devices_interrupts.is_mouse_move_interrupt && !all_received_devices_interrupts.m1) {
         continue;
     }
+    printf("Interrupt to be handled\n");
     // checks if there are multiple key presses at the same time, in which case it should ignore them and put the last key pressed as NO_LETTER_PRESSED
     if (all_received_devices_interrupts.W || all_received_devices_interrupts.A || all_received_devices_interrupts.S || all_received_devices_interrupts.D) {
         last_key_pressed = NO_LETTER_PRESSED;
@@ -548,6 +562,19 @@ int (proj_main_loop)(int argc, char *argv[]) {
     memcpy(mouse_frame_buffer, game_frame_buffer, length_frame_buffer);
     image_load_to_frame_buffer(&cursor, mouse_position_x - 16, mouse_position_y - 16, mouse_frame_buffer);
     memcpy(frame_buffer, mouse_frame_buffer, length_frame_buffer);
+
+
+    // [TODO] REMOVE THIS!
+    if (all_received_devices_interrupts.is_timer_second_interrupt) {
+      printf("Mouse second interrupt handled\n");
+      all_received_devices_interrupts.is_timer_second_interrupt = false;
+    }
+
+    if (all_received_devices_interrupts.is_timer_tick_interrupt) {
+      printf("Mouse 0.5 second interrupt handled\n");
+      all_received_devices_interrupts.is_timer_tick_interrupt = false;
+    }
+    ////////////////////////////////////////////////////////////////
   }
 
   if (close_game() != 0) {
