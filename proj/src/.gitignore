@@ -2,3 +2,4 @@
 .gdbinit
 *.o
 *.d
+proj
