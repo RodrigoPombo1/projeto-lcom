@@ -4,7 +4,7 @@ uint8_t scancode = 0; // We'll extract the scancode
 int keyboard_hook_id = 1; // We'll mask the keyboard IRQ
 
 int (keyboard_subscribe)(uint8_t *bit_no) { // Put the mask on, it's (C)arnival time!
-    *bit_no = BIT(KEYBOARD_IRQ);
+    *bit_no = BIT(keyboard_hook_id);
     return sys_irqsetpolicy(KEYBOARD_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &keyboard_hook_id);
 }
 
