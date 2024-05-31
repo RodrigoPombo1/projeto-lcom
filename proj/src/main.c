@@ -209,14 +209,11 @@ int (proj_main_loop)(int argc, char *argv[]) {
   uint8_t full_scancode[2];
   int num_bytes = 1;
 
-  struct keyboard_keys_pressed keys_pressed = {false, false, false, false};
-
   uint8_t timer_counter = 0;
-//  enum letter_pressed last_key_pressed = NO_LETTER_PRESSED;
-//  bool is_key_being_pressed = false;
-  bool is_mouse_button_being_pressed = false;
-  bool interrupt_received = false;
-  enum interrupt_type interrupt_received_type;
+  enum letter_pressed last_key_pressed = NO_LETTER_PRESSED;
+  struct all_devices_interrupts all_received_devices_interrupts = {false, false, false, false, false, false, false, false};
+  int previous_mouse_position_x = 0;
+  int previous_mouse_position_y = 0;
   int mouse_position_x = 0;
   int mouse_position_y = 0;
 
@@ -330,7 +327,6 @@ int (proj_main_loop)(int argc, char *argv[]) {
   memset(mouse_frame_buffer, 0, length_frame_buffer);
 
   bool is_start_of_screen = true;
-  bool has_mouse_moved = false;
   bool was_game_frame_buffer_changed = false;
   bool close_application = false;
 
@@ -370,6 +366,18 @@ int (proj_main_loop)(int argc, char *argv[]) {
                 break;
         }
         memcpy(mouse_frame_buffer, game_frame_buffer, length_frame_buffer);
+        if (mouse_position_x < 0) {
+            mouse_position_x = 0;
+        }
+        if (mouse_position_y < 0) {
+            mouse_position_y = 0;
+        }
+        if (mouse_position_x > 799) {
+            mouse_position_x = 799;
+        }
+        if (mouse_position_y > 599) {
+            mouse_position_y = 599;
+        }
         image_load_to_frame_buffer(&cursor, mouse_position_x - 16, mouse_position_y - 16, mouse_frame_buffer);
         memcpy(frame_buffer, mouse_frame_buffer, length_frame_buffer);
         continue; // skip the rest of the loop
@@ -379,25 +387,18 @@ int (proj_main_loop)(int argc, char *argv[]) {
       continue;
     }
 
-    // checks if there was an interruption
-    interrupt_received = false;
-
     if (is_ipc_notify(ipc_status)) {
         switch (_ENDPOINT_P(msg.m_source)) {
             case HARDWARE:
                 if (msg.m_notify.interrupts & irq_set_timer) {
                     timer_counter++;
                     if (timer_counter == 60) {
-                        interrupt_received = true;
-                        interrupt_received_type = TIMER_SECOND;
+                        all_received_devices_interrupts.is_timer_second_interrupt = true;
                     } else if (timer_counter % 20 == 0) {
-                        interrupt_received = true;
-                        interrupt_received_type = TIMER_TICK;
+                        all_received_devices_interrupts.is_timer_tick_interrupt = true;
                     }
                 }
                 if (msg.m_notify.interrupts & irq_set_keyboard) {
-                    interrupt_received = true;
-                    //  [TODO] get the key that was pressed and associate it with the last_key_pressed enum
                     if (util_sys_inb(KBC_STATUS_REG, &status) != 0) { // We test the function that reads the status from the status register, to check if we didn't have a communication error
                       return 1;
                     }
@@ -418,35 +419,35 @@ int (proj_main_loop)(int argc, char *argv[]) {
                     switch (scancode) {
                       case 0x11:
                         printf("Tecla w pressionada\n");
-                        keys_pressed.W = true;
+                        all_received_devices_interrupts.W = true;
                         break;
                       case 0x91:
                         printf("Tecla w largada\n");
-                        keys_pressed.W = false;
+                        all_received_devices_interrupts.W = false;
                         break;
                       case 0x1e:
                         printf("Tecla a pressionada\n");
-                        keys_pressed.A = true;
+                        all_received_devices_interrupts.A = true;
                         break;
                       case 0x9e:
                         printf("Tecla a largada\n");
-                        keys_pressed.A = false;
+                        all_received_devices_interrupts.A = false;
                         break;
                       case 0x1f:
                         printf("Tecla s pressionada\n");
-                        keys_pressed.S = true;
+                        all_received_devices_interrupts.S = true;
                         break;
                       case 0x9f:
                         printf("Tecla s largada\n");
-                        keys_pressed.S = false;
+                        all_received_devices_interrupts.S = false;
                         break;
                       case 0x20:
                         printf("Tecla d pressionada\n");
-                        keys_pressed.D = true;
+                        all_received_devices_interrupts.D = true;
                         break;
                       case 0xa0:
                         printf("Tecla d largada\n");
-                        keys_pressed.D = false;
+                        all_received_devices_interrupts.D = false;
                         break;
                     }
                     memset(full_scancode, 0, 2 * sizeof(uint8_t)); // We reset the scancode array
@@ -463,66 +464,103 @@ int (proj_main_loop)(int argc, char *argv[]) {
                     }
                     else if (r == 1) {
                       // Seria acabar a execução do programa
-                      printf("Mouse error");
+                      printf("Mouse error\n");
                     }
-                    printf("Breakpoint 20");
+                    printf("Breakpoint 20\n");
                     mouse = mouse_detect_events(&final_packet);
-                    printf("Breakpoint 21");
+                    printf("Breakpoint 21\n");
                     if (mouse->type == LB_PRESSED) {
-                      is_mouse_button_being_pressed = true;
+                      all_received_devices_interrupts.m1 = true;
                       printf("Botão esquerdo pressionado\n");
                     }
                     else if (mouse->type == LB_RELEASED) {
-                      is_mouse_button_being_pressed = false;
+                      all_received_devices_interrupts.m1 = false;
                       printf("Botão esquerdo largado\n");
                     }
                     printf("Posição do rato:\n");
                     printf("Delta x: %d\n", mouse->delta_x);
                     printf("Delta y: %d\n", mouse->delta_y);
-                    interrupt_received = true;
-                    //  [TODO] get the mouse deviation and add it to the mouse position
-                    //  [TODO] get if mouse has pressed m1 (check if left mouse button was pressed) update is_mouse_button_being_pressed accordingly
+                    previous_mouse_position_x = mouse_position_x;
+                    previous_mouse_position_y = mouse_position_y;
+                    mouse_position_x += mouse->delta_x;
+                    mouse_position_y -= mouse->delta_y;
+                    all_received_devices_interrupts.is_mouse_move_interrupt = true;
                 }
 
         }
     }
-    // [TODO] remove this continue (only exists for testing purposes)
-    continue;
-    //////////////
-    // if key if key is still being pressed, put interrupt from keyboard to true?
+//    // [TODO] remove this continue (only exists for testing purposes)
+//    continue;
+//    //////////////
 
-    // [TODO] check if interrupt was useful (depending on gamestate) if not, continue
-    // in case there wasn't an interruption just continue (happens when it's a timer tick)
-    if (!interrupt_received) {
+    // in case there wasn't an interruption just continue (happens for example when it's a non-important timer tick)
+    if (!all_received_devices_interrupts.is_timer_second_interrupt && !all_received_devices_interrupts.is_timer_tick_interrupt && !all_received_devices_interrupts.W && !all_received_devices_interrupts.A && !all_received_devices_interrupts.S && !all_received_devices_interrupts.D && !all_received_devices_interrupts.is_mouse_move_interrupt && !all_received_devices_interrupts.m1) {
         continue;
+    }
+    // checks if there are multiple key presses at the same time, in which case it should ignore them and put the last key pressed as NO_LETTER_PRESSED
+    if (all_received_devices_interrupts.W || all_received_devices_interrupts.A || all_received_devices_interrupts.S || all_received_devices_interrupts.D) {
+        last_key_pressed = NO_LETTER_PRESSED;
+        int keys_pressed_at_the_same_time = 0;
+        if (all_received_devices_interrupts.W) {
+            last_key_pressed = W;
+            keys_pressed_at_the_same_time++;
+        }
+        else if (all_received_devices_interrupts.A) {
+            last_key_pressed = A;
+            keys_pressed_at_the_same_time++;
+        }
+        else if (all_received_devices_interrupts.S) {
+            last_key_pressed = S;
+            keys_pressed_at_the_same_time++;
+        }
+        else if (all_received_devices_interrupts.D) {
+            last_key_pressed = D;
+            keys_pressed_at_the_same_time++;
+        }
+        if (keys_pressed_at_the_same_time > 1) {
+            last_key_pressed = NO_LETTER_PRESSED;
+        }
     }
     was_game_frame_buffer_changed = false; // pointer will be passed in the following functions inside the switch statement
 //  [TODO] probably a switch statement between the different game states // handling each game state will mean a pointer to the game state buffer will be passed in the function
     switch(current_game_state) {
         case MAIN_MENU:
+            // [TODO] check if with the interrupts the function should execute
 //          [TODO] function to handle interrupts while in the main menu state
             break;
         case GAME:
+            // [TODO] check if with the interrupts the function should execute
 //          [TODO] function to handle interrupts while in the game state
             break;
         case GAME_OVER:
+            // [TODO] check if with the interrupts the function should execute
 //          [TODO] function to handle interrupts while in the game over state (where nothing moves only quit can be pressed)
             break;
         case HIGH_SCORE:
+            // [TODO] check if with the interrupts the function should execute
 //          [TODO] function to handle interrupts while in the the high score state
             break;
     }
 
     // if nothing has changed
-    if (!was_game_frame_buffer_changed && !has_mouse_moved) {
+    if (!was_game_frame_buffer_changed && mouse_position_x == previous_mouse_position_x && mouse_position_y == previous_mouse_position_y) {
         continue;
     }
-
-    if (was_game_frame_buffer_changed) {
-        memcpy(game_frame_buffer, mouse_frame_buffer, length_frame_buffer);
+    memcpy(mouse_frame_buffer, game_frame_buffer, length_frame_buffer);
+    if (mouse_position_x < 0) {
+        mouse_position_x = 0;
     }
-    // [TODO] draw mouse on mouse_frame_buffer from the mouse position
-    memcpy(mouse_frame_buffer, frame_buffer, length_frame_buffer);
+    if (mouse_position_y < 0) {
+        mouse_position_y = 0;
+    }
+    if (mouse_position_x > 799) {
+        mouse_position_x = 799;
+    }
+    if (mouse_position_y > 599) {
+        mouse_position_y = 599;
+    }
+    image_load_to_frame_buffer(&cursor, mouse_position_x - 16, mouse_position_y - 16, mouse_frame_buffer);
+    memcpy(frame_buffer, mouse_frame_buffer, length_frame_buffer);
   }
 
   if (close_game() != 0) {

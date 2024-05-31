@@ -18,18 +18,22 @@ enum letter_pressed { // [TODO] remove? no longer used, probably could be used i
     D,
 };
 
-struct keyboard_keys_pressed {
-    bool W;
-    bool A;
-    bool S;
-    bool D;
+enum type_of_entity {
+    EMPTY,
+    PLAYER,
+    ENEMY,
+    WALL, // spawners also count as walls
 };
 
 struct all_devices_interrupts {
     bool is_timer_second_interrupt;
     bool is_timer_tick_interrupt;
-    bool is_keyboard_interrupt;
-    bool is_mouse_interrupt;
+    bool W;
+    bool A;
+    bool S;
+    bool D;
+    bool is_mouse_move_interrupt;
+    bool m1;
 };
 
 struct main_menu_images {
