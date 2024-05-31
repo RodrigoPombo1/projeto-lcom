@@ -101,6 +101,7 @@ int (mouse_write_command)(uint8_t command) {
 }
 
 struct mouse_ev *(mouse_detect_events)(struct packet *pp) {
+  mouse->type = MOUSE_MOV;
   printf("Breakpoint 30\n");
   bool was_type_set;
   printf("Breakpoint 50\n");

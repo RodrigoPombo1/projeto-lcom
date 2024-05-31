@@ -467,6 +467,7 @@ int (proj_main_loop)(int argc, char *argv[]) {
                     }
                     printf("Breakpoint 20\n");
                     mouse = mouse_detect_events(&final_packet);
+                    printf("Botão: %d", mouse->type);
                     printf("Breakpoint 21\n");
                     if (mouse->type == LB_PRESSED) {
                       all_received_devices_interrupts.m1 = true;
