@@ -338,26 +338,21 @@ int (proj_main_loop)(int argc, char *argv[]) {
         break;
     }
 
-    // [TODO] REMOVE THIS!!!!!!!!!!!!! ONLY HERE SO IT DOESN'T GET STUCK IN AN INFINITE LOOP
-    // sleep(30);
-    // close_application = true;
-    /////////////
-
     // checks if it is the start of a screen
     if (is_start_of_screen) {
         is_start_of_screen = false;
-        // [TODO] switch statement for what to do in the start of each screen (load xpm to game_frame_buffer, memcpy game_frame_buffer to mouse_frame_buffer, put mouse in its position, memcpy mouse_frame_buffer to real frame buffer)
         switch (current_game_state) {
             case MAIN_MENU:
                 image_load_to_frame_buffer(&main_menu, 0, 0, game_frame_buffer);
                 break;
             case GAME:
                 timer_counter = 0;
-                image_load_to_frame_buffer(&game, 0, 0, game_frame_buffer);
                 // [TODO] set the game characters to their initial position
+                // [TODO] load game state to the game frame buffer
                 break;
             case GAME_OVER:
                 // [TODO] put gameover array over the game array on game_frame_buffer
+                // [TODO] store the information in the highscore if it is a highscore
                 break;
             case HIGH_SCORE:
                 image_load_to_frame_buffer(&high_scores, 0, 0, game_frame_buffer);
@@ -489,9 +484,6 @@ int (proj_main_loop)(int argc, char *argv[]) {
 
         }
     }
-//    // [TODO] remove this continue (only exists for testing purposes)
-//    continue;
-//    //////////////
 
     // in case there wasn't an interruption just continue (happens for example when it's a non-important timer tick)
     if (!all_received_devices_interrupts.is_timer_second_interrupt && !all_received_devices_interrupts.is_timer_tick_interrupt && !all_received_devices_interrupts.W && !all_received_devices_interrupts.A && !all_received_devices_interrupts.S && !all_received_devices_interrupts.D && !all_received_devices_interrupts.is_mouse_move_interrupt && !all_received_devices_interrupts.m1) {
@@ -525,10 +517,14 @@ int (proj_main_loop)(int argc, char *argv[]) {
 //  [TODO] probably a switch statement between the different game states // handling each game state will mean a pointer to the game state buffer will be passed in the function
     switch(current_game_state) {
         case MAIN_MENU:
-            // [TODO] check if with the interrupts the function should execute
-//          [TODO] function to handle interrupts while in the main menu state
+            if (!all_received_devices_interrupts.m1) {
+                break;
+            }
+            handle_main_menu(mouse_position_x, mouse_position_y, &current_game_state, &is_start_of_screen, &close_application);
             break;
         case GAME:
+            // if m1 attack
+            // if timer tick move last key pressed or move enemies
             // [TODO] check if with the interrupts the function should execute
 //          [TODO] function to handle interrupts while in the game state
             break;

@@ -84,6 +84,9 @@ enum interrupt_type { // [TODO] remove? no longer used
     MOUSE,
 };
 
-void do_nothing(void);
+int handle_main_menu(int mouse_position_x, int mouse_position_y, enum game_state* game_state, bool *is_start_of_game_state, bool *close_application);
 
+// update game state mouse just takes the array and the mouse position
+// update game state keyboard just takes the array and the last key pressed
+// load game state on background just takes the array and the background and the game frame buffer
 #endif
