@@ -307,8 +307,7 @@ int (proj_main_loop)(int argc, char *argv[]) {
   struct image_struct high_scores = {800, 600, high_scores_color_array};
   xpm_load_to_image((xpm_map_t) high_scores_xpm, &high_scores);
 
-//  struct main_menu_images main_menu_loaded_images = {&main_menu, &cursor};
-//  struct game_images game_loaded_images = {&game, &character, &monster, &cursor, &game_over, &character_2_pontos, &number_0, &number_1, &number_2, &number_3, &number_4, &number_5, &number_6, &number_7, &number_8, &number_9};
+  struct game_images game_loaded_images = {&game, &character, &monster, &cursor, &game_over, &character_2_pontos, &number_0, &number_1, &number_2, &number_3, &number_4, &number_5, &number_6, &number_7, &number_8, &number_9};
 //  struct high_score_images high_score_loaded_images = {&high_scores, &cursor, &character_2_pontos, &character_tracinho, &number_0, &number_1, &number_2, &number_3, &number_4, &number_5, &number_6, &number_7, &number_8, &number_9};
 
   printf("Break point 7\n");
@@ -334,6 +333,92 @@ int (proj_main_loop)(int argc, char *argv[]) {
   bool close_application = false;
 
   // create game_position_array
+  const int array_of_rows_of_entities_size = 14;
+  const int row_of_entities_size = 23;
+  struct position player_position = {9, 9};
+  int last_spawn_used = 4;
+
+  struct game_entities_position initial_all_game_entities_position = {
+          .array_of_rows_of_entities = {
+                  {WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL},
+                  {WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL},
+                  {WALL, EMPTY, WALL, EMPTY, WALL, WALL, WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL, WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL, EMPTY, WALL},
+                  {WALL, EMPTY, EMPTY, EMPTY, WALL, WALL, WALL, EMPTY, EMPTY, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, EMPTY, EMPTY, EMPTY, EMPTY, WALL},
+                  {WALL, EMPTY, EMPTY, EMPTY, WALL, WALL, WALL, EMPTY, EMPTY, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, EMPTY, EMPTY, WALL, WALL, WALL},
+                  {WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL, WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL, WALL, WALL},
+                  {WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL, WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL},
+                  {WALL, WALL, WALL, WALL, WALL, WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL, WALL, WALL, EMPTY, EMPTY, EMPTY, WALL},
+                  {WALL, WALL, WALL, WALL, WALL, WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL, WALL, EMPTY, EMPTY, WALL, WALL, WALL, EMPTY, WALL, EMPTY, WALL},
+                  {WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, PLAYER, EMPTY, EMPTY, WALL, WALL, EMPTY, EMPTY, WALL, WALL, WALL, EMPTY, WALL, EMPTY, WALL},
+                  {WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL, WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL},
+                  {WALL, EMPTY, WALL, EMPTY, WALL, WALL, WALL, WALL, WALL, WALL, EMPTY, EMPTY, WALL, WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL, EMPTY, WALL},
+                  {WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL, WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL},
+                  {WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL}
+          },
+          .player_position = player_position,
+          .enemy_structs= {
+                  {
+                      .id = 0,
+                      .position = {0, 0},
+                      .is_alive = false
+                  },
+                  {
+                      .id = 1,
+                      .position = {0, 0},
+                      .is_alive = false
+                  },
+                  {
+                      .id = 2,
+                      .position = {0, 0},
+                      .is_alive = false
+                  },
+                  {
+                      .id = 3,
+                      .position = {0, 0},
+                      .is_alive = false
+                  },
+                  {
+                      .id = 4,
+                      .position = {0, 0},
+                      .is_alive = false
+                  },
+                  {
+                      .id = 5,
+                      .position = {0, 0},
+                      .is_alive = false
+                  },
+                  {
+                      .id = 6,
+                      .position = {0, 0},
+                      .is_alive = false
+                  },
+                  {
+                      .id = 7,
+                      .position = {0, 0},
+                      .is_alive = false
+                  },
+          },
+          .spawner_position = {
+                  {3, 3},
+                  {21, 3},
+                  {3, 12},
+                  {21, 12}
+          },
+          .last_spawn_used = last_spawn_used,
+          .array_of_entities_h_size = row_of_entities_size,
+          .array_of_entities_v_size = array_of_rows_of_entities_size
+  };
+
+  struct game_entities_position all_game_entities_position = initial_all_game_entities_position;
+
+  struct game_values initial_game_values = {
+    .score_digits = {0, 0, 0, 0},
+    .score = 0,
+    .time_digits = {0, 0, 0, 0},
+    .time_in_seconds = 0
+  };
+
+  struct game_values current_game_values = initial_game_values;
 
   while (scancode != ESC_BREAK_CODE) {
     // printf("Breakpoint 12\n");
@@ -353,8 +438,11 @@ int (proj_main_loop)(int argc, char *argv[]) {
                 // [TODO] REMOVE THIS LINE
                 image_load_to_frame_buffer(&game, 0, 0, game_frame_buffer);
                 ////////////
-                // [TODO] set the game characters to their initial position
+                all_game_entities_position = initial_all_game_entities_position;
+                current_game_values = initial_game_values;
+                // [TODO] set the monsters to their initial position // spawn them essencially
                 // [TODO] load game state to the game frame buffer
+                load_game_state_to_game_buffer(&all_game_entities_position, &current_game_values, &game_loaded_images, game_frame_buffer);
                 break;
             case GAME_OVER:
                 // [TODO] put gameover array over the game array on game_frame_buffer
