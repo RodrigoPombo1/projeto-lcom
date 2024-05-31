@@ -361,18 +361,6 @@ int (proj_main_loop)(int argc, char *argv[]) {
                 break;
         }
         memcpy(mouse_frame_buffer, game_frame_buffer, length_frame_buffer);
-        if (mouse_position_x < 0) {
-            mouse_position_x = 0;
-        }
-        if (mouse_position_y < 0) {
-            mouse_position_y = 0;
-        }
-        if (mouse_position_x > 799) {
-            mouse_position_x = 799;
-        }
-        if (mouse_position_y > 599) {
-            mouse_position_y = 599;
-        }
         image_load_to_frame_buffer(&cursor, mouse_position_x - 16, mouse_position_y - 16, mouse_frame_buffer);
         memcpy(frame_buffer, mouse_frame_buffer, length_frame_buffer);
         continue; // skip the rest of the loop
@@ -479,6 +467,18 @@ int (proj_main_loop)(int argc, char *argv[]) {
                     previous_mouse_position_y = mouse_position_y;
                     mouse_position_x += mouse->delta_x;
                     mouse_position_y -= mouse->delta_y;
+                    if (mouse_position_x < 0) {
+                        mouse_position_x = 0;
+                    }
+                    if (mouse_position_y < 0) {
+                        mouse_position_y = 0;
+                    }
+                    if (mouse_position_x > 799) {
+                        mouse_position_x = 799;
+                    }
+                    if (mouse_position_y > 599) {
+                        mouse_position_y = 599;
+                    }
                     all_received_devices_interrupts.is_mouse_move_interrupt = true;
                 }
 
@@ -543,18 +543,6 @@ int (proj_main_loop)(int argc, char *argv[]) {
         continue;
     }
     memcpy(mouse_frame_buffer, game_frame_buffer, length_frame_buffer);
-    if (mouse_position_x < 0) {
-        mouse_position_x = 0;
-    }
-    if (mouse_position_y < 0) {
-        mouse_position_y = 0;
-    }
-    if (mouse_position_x > 799) {
-        mouse_position_x = 799;
-    }
-    if (mouse_position_y > 599) {
-        mouse_position_y = 599;
-    }
     image_load_to_frame_buffer(&cursor, mouse_position_x - 16, mouse_position_y - 16, mouse_frame_buffer);
     memcpy(frame_buffer, mouse_frame_buffer, length_frame_buffer);
   }
