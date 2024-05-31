@@ -35,9 +35,10 @@ uint8_t irq_set_mouse;
 
 uint8_t status = 0;
 extern struct packet final_packet;
-struct mouse_ev* mouse; 
-extern rtc_info_t rtc;
-
+struct mouse_ev* mouse;
+// [TODO] POR NO SITIO ONDE VAI ESTAR O RTC TAMBEM!!!!!!!!
+//extern rtc_info_t rtc;
+/////////////////
 int main(int argc, char *argv[]) {
   // sets the language of LCF messages (can be either EN-US or PT-PT)
   lcf_set_language("EN-US");
@@ -118,82 +119,84 @@ int (close_game)() {
 }
 
 int (proj_main_loop)(int argc, char *argv[]) {
-  int decimal = 0;
-  int base = 1;
+  // [TODO] SECÇÃO RTC, é preciso por no sitio correto
+//  int decimal = 0;
+//  int base = 1;
+//  if (rtc_read_date_time() != 0) {
+//    printf("Falhou\n");
+//  }
+//  while (rtc.seconds > 0) {
+//    int rightmost_digit = rtc.seconds & 0xF;
+//    decimal += rightmost_digit * base;
+//    base *= 10;
+//    rtc.seconds >>= 4;
+//  }
+//  rtc.seconds = decimal;
+//
+//  decimal = 0;
+//  base = 1;
+//
+//  while (rtc.minutes > 0) {
+//    int rightmost_digit = rtc.minutes & 0xF;
+//    decimal += rightmost_digit * base;
+//    base *= 10;
+//    rtc.minutes >>= 4;
+//  }
+//  rtc.minutes = decimal;
+//
+//  decimal = 0;
+//  base = 1;
+//
+//  while (rtc.hours > 0) {
+//    int rightmost_digit = rtc.hours & 0xF;
+//    decimal += rightmost_digit * base;
+//    base *= 10;
+//    rtc.hours >>= 4;
+//  }
+//  rtc.hours = decimal;
+//
+//  decimal = 0;
+//  base = 1;
+//
+//  while (rtc.day > 0) {
+//    int rightmost_digit = rtc.day & 0xF;
+//    decimal += rightmost_digit * base;
+//    base *= 10;
+//    rtc.day >>= 4;
+//  }
+//  rtc.day = decimal;
+//
+//  decimal = 0;
+//  base = 1;
+//
+//  while (rtc.month > 0) {
+//    int rightmost_digit = rtc.month & 0xF;
+//    decimal += rightmost_digit * base;
+//    base *= 10;
+//    rtc.month >>= 4;
+//  }
+//  rtc.month = decimal;
+//
+//  decimal = 0;
+//  base = 1;
+//
+//  while (rtc.year > 0) {
+//    int rightmost_digit = rtc.year & 0xF;
+//    decimal += rightmost_digit * base;
+//    base *= 10;
+//    rtc.year >>= 4;
+//  }
+//  rtc.year = decimal;
+//
+//  printf("Segundos: %u\n", rtc.seconds);
+//  printf("Minutos: %u\n", rtc.minutes);
+//  printf("Horas: %u\n", rtc.hours);
+//  printf("Dia: %u\n", rtc.day);
+//  printf("Mes: %u\n", rtc.month);
+//  printf("Ano: %u\n", rtc.year);
+//  return 0;
+//    //////////////////////
   enum game_state current_game_state = MAIN_MENU;
-  if (rtc_read_date_time() != 0) {
-    printf("Falhou\n");
-  }
-  while (rtc.seconds > 0) {
-    int rightmost_digit = rtc.seconds & 0xF;
-    decimal += rightmost_digit * base;
-    base *= 10;
-    rtc.seconds >>= 4;
-  }
-  rtc.seconds = decimal;
-
-  decimal = 0;
-  base = 1;
-
-  while (rtc.minutes > 0) {
-    int rightmost_digit = rtc.minutes & 0xF;
-    decimal += rightmost_digit * base;
-    base *= 10;
-    rtc.minutes >>= 4;
-  }
-  rtc.minutes = decimal;
-
-  decimal = 0;
-  base = 1;
-
-  while (rtc.hours > 0) {
-    int rightmost_digit = rtc.hours & 0xF;
-    decimal += rightmost_digit * base;
-    base *= 10;
-    rtc.hours >>= 4;
-  }
-  rtc.hours = decimal;
-
-  decimal = 0;
-  base = 1;
-
-  while (rtc.day > 0) {
-    int rightmost_digit = rtc.day & 0xF;
-    decimal += rightmost_digit * base;
-    base *= 10;
-    rtc.day >>= 4;
-  }
-  rtc.day = decimal;
-
-  decimal = 0;
-  base = 1;
-
-  while (rtc.month > 0) {
-    int rightmost_digit = rtc.month & 0xF;
-    decimal += rightmost_digit * base;
-    base *= 10;
-    rtc.month >>= 4;
-  }
-  rtc.month = decimal;
-
-  decimal = 0;
-  base = 1;
-
-  while (rtc.year > 0) {
-    int rightmost_digit = rtc.year & 0xF;
-    decimal += rightmost_digit * base;
-    base *= 10;
-    rtc.year >>= 4;
-  }
-  rtc.year = decimal;
-
-  printf("Segundos: %u\n", rtc.seconds);
-  printf("Minutos: %u\n", rtc.minutes);
-  printf("Horas: %u\n", rtc.hours);
-  printf("Dia: %u\n", rtc.day);
-  printf("Mes: %u\n", rtc.month);
-  printf("Ano: %u\n", rtc.year);
-  return 0;
   if (setup_game() != 0) {
     printf("Game could not be opened\n");
     return close_game();
@@ -211,54 +214,52 @@ int (proj_main_loop)(int argc, char *argv[]) {
   uint8_t timer_counter = 0;
 //  enum letter_pressed last_key_pressed = NO_LETTER_PRESSED;
 //  bool is_key_being_pressed = false;
-//  bool is_mouse_button_being_pressed = false;
+  bool is_mouse_button_being_pressed = false;
   bool interrupt_received = false;
   enum interrupt_type interrupt_received_type;
-//  int mouse_position_x = 0;
-//  int mouse_position_y = 0;
+  int mouse_position_x = 0;
+  int mouse_position_y = 0;
 
-// [TODO] initialize all arrays for every element in the game with memset
-// [TODO] load xpm images into those array of colors
   // load all the xpms into image structs
   // loading all the numbers to image structs
-  uint32_t number_0_color_array[32 * 16];
-  struct image_struct number_0 = {32, 16, number_0_color_array};
+  uint32_t number_0_color_array[16 * 32];
+  struct image_struct number_0 = {16, 32, number_0_color_array};
   xpm_load_to_image((xpm_map_t) xpm_0, &number_0);
 
-  uint32_t number_1_color_array[32 * 16];
-  struct image_struct number_1 = {32, 16, number_1_color_array};
+  uint32_t number_1_color_array[4 * 32];
+  struct image_struct number_1 = {4, 32, number_1_color_array};
   xpm_load_to_image((xpm_map_t) xpm_1, &number_1);
 
-  uint32_t number_2_color_array[32 * 16];
-  struct image_struct number_2 = {32, 16, number_2_color_array};
+  uint32_t number_2_color_array[16 * 32];
+  struct image_struct number_2 = {16, 32, number_2_color_array};
   xpm_load_to_image((xpm_map_t) xpm_2, &number_2);
 
-  uint32_t number_3_color_array[32 * 16];
-  struct image_struct number_3 = {32, 16, number_3_color_array};
+  uint32_t number_3_color_array[16 * 32];
+  struct image_struct number_3 = {16, 32, number_3_color_array};
   xpm_load_to_image((xpm_map_t) xpm_3, &number_3);
 
-  uint32_t number_4_color_array[32 * 16];
-  struct image_struct number_4 = {32, 16, number_4_color_array};
+  uint32_t number_4_color_array[16 * 32];
+  struct image_struct number_4 = {16, 32, number_4_color_array};
   xpm_load_to_image((xpm_map_t) xpm_4, &number_4);
 
-  uint32_t number_5_color_array[32 * 16];
-  struct image_struct number_5 = {32, 16, number_5_color_array};
+  uint32_t number_5_color_array[16 * 32];
+  struct image_struct number_5 = {16, 32, number_5_color_array};
   xpm_load_to_image((xpm_map_t) xpm_5, &number_5);
 
-  uint32_t number_6_color_array[32 * 16];
-  struct image_struct number_6 = {32, 16, number_6_color_array};
+  uint32_t number_6_color_array[16 * 32];
+  struct image_struct number_6 = {16, 32, number_6_color_array};
   xpm_load_to_image((xpm_map_t) xpm_6, &number_6);
 
-  uint32_t number_7_color_array[32 * 16];
-  struct image_struct number_7 = {32, 16, number_7_color_array};
+  uint32_t number_7_color_array[16 * 32];
+  struct image_struct number_7 = {16, 32, number_7_color_array};
   xpm_load_to_image((xpm_map_t) xpm_7, &number_7);
 
-  uint32_t number_8_color_array[32 * 16];
-  struct image_struct number_8 = {32, 16, number_8_color_array};
+  uint32_t number_8_color_array[16 * 32];
+  struct image_struct number_8 = {16, 32, number_8_color_array};
   xpm_load_to_image((xpm_map_t) xpm_8, &number_8);
 
-  uint32_t number_9_color_array[32 * 16];
-  struct image_struct number_9 = {32, 16, number_9_color_array};
+  uint32_t number_9_color_array[16 * 32];
+  struct image_struct number_9 = {16, 32, number_9_color_array};
   xpm_load_to_image((xpm_map_t) xpm_9, &number_9);
 
   // loading the character 2 pontos to an image struct
@@ -267,8 +268,8 @@ int (proj_main_loop)(int argc, char *argv[]) {
   xpm_load_to_image((xpm_map_t) xpm_2_pontos, &character_2_pontos);
 
   // loading the character - to an image struct
-  uint32_t character_tracinho_color_array[4 * 16];
-  struct image_struct character_tracinho = {4, 16, character_tracinho_color_array};
+  uint32_t character_tracinho_color_array[16 * 4];
+  struct image_struct character_tracinho = {16, 4, character_tracinho_color_array};
   xpm_load_to_image((xpm_map_t) xpm_traco, &character_tracinho);
 
   // loading the cursor to an image struct
@@ -276,6 +277,39 @@ int (proj_main_loop)(int argc, char *argv[]) {
   struct image_struct cursor = {32, 32, cursor_color_array};
   xpm_load_to_image((xpm_map_t) cursor_xpm, &cursor);
 
+  // loading the game screen with the map to an image struct (needs to be in the heap because it's too big)
+  uint32_t* game_color_array = malloc(800 * 600 * sizeof(uint32_t));
+  struct image_struct game = {800, 600, game_color_array};
+  xpm_load_to_image((xpm_map_t) mapa_xpm, &game);
+
+  // loading the game over xpm to an image struct (needs to be in the heap because it's too big)
+  uint32_t* game_over_color_array = malloc(544 * 320 * sizeof(uint32_t));
+  struct image_struct game_over = {544, 320, game_over_color_array};
+  xpm_load_to_image((xpm_map_t) game_over_xpm, &game_over);
+
+  // loading the character to an image struct
+  uint32_t character_color_array[32 * 32];
+  struct image_struct character = {32, 32, character_color_array};
+  xpm_load_to_image((xpm_map_t) character_xpm, &character);
+
+  // loading the monster to an image struct
+  uint32_t monster_color_array[32 * 32];
+  struct image_struct monster = {32, 32, monster_color_array};
+  xpm_load_to_image((xpm_map_t) monster_xpm, &monster);
+
+  // loading the main menu to an image struct (needs to be on the heap because it's too big)
+  uint32_t* main_menu_color_array = malloc(800 * 600 * sizeof(uint32_t));
+  struct image_struct main_menu = {800, 600, main_menu_color_array};
+  xpm_load_to_image((xpm_map_t) menu_xpm, &main_menu);
+
+  // loading the high scores screen to an image struct (needs to be on the heap because it's too big)
+  uint32_t* high_scores_color_array = malloc(800 * 600 * sizeof(uint32_t));
+  struct image_struct high_scores = {800, 600, high_scores_color_array};
+  xpm_load_to_image((xpm_map_t) high_scores_xpm, &high_scores);
+
+//  struct main_menu_images main_menu_loaded_images = {&main_menu, &cursor};
+//  struct game_images game_loaded_images = {&game, &character, &monster, &cursor, &game_over, &character_2_pontos, &number_0, &number_1, &number_2, &number_3, &number_4, &number_5, &number_6, &number_7, &number_8, &number_9};
+//  struct high_score_images high_score_loaded_images = {&high_scores, &cursor, &character_2_pontos, &character_tracinho, &number_0, &number_1, &number_2, &number_3, &number_4, &number_5, &number_6, &number_7, &number_8, &number_9};
 
   printf("Break point 7\n");
   uint8_t *frame_buffer = NULL;
@@ -289,10 +323,10 @@ int (proj_main_loop)(int argc, char *argv[]) {
   printf("Length of frame buffer: %d\n", length_frame_buffer);
   memset(frame_buffer, 0, length_frame_buffer);
   printf("Break point 10\n");
-  uint8_t game_frame_buffer[length_frame_buffer];
+  uint8_t* game_frame_buffer = malloc(length_frame_buffer * sizeof(uint8_t));
   memset(game_frame_buffer, 0, length_frame_buffer);
   printf("Break point 11\n");
-  uint8_t mouse_frame_buffer[length_frame_buffer];
+  uint8_t* mouse_frame_buffer = malloc(length_frame_buffer * sizeof(uint8_t));
   memset(mouse_frame_buffer, 0, length_frame_buffer);
 
   bool is_start_of_screen = true;
@@ -300,8 +334,8 @@ int (proj_main_loop)(int argc, char *argv[]) {
   bool was_game_frame_buffer_changed = false;
   bool close_application = false;
 
-  // [TODO] REMOVE !!! FOR TEST PURPOSES ONLY
-  image_load_to_frame_buffer(&number_0, 0, 0, frame_buffer);
+  // create game_position_array
+
   while (scancode != ESC_BREAK_CODE) {
     // printf("Breakpoint 12\n");
     if (close_application) {
@@ -319,23 +353,25 @@ int (proj_main_loop)(int argc, char *argv[]) {
         // [TODO] switch statement for what to do in the start of each screen (load xpm to game_frame_buffer, memcpy game_frame_buffer to mouse_frame_buffer, put mouse in its position, memcpy mouse_frame_buffer to real frame buffer)
         switch (current_game_state) {
             case MAIN_MENU:
-                // [TODO] load the main menu array into game_frame_buffer
+                image_load_to_frame_buffer(&main_menu, 0, 0, game_frame_buffer);
                 break;
             case GAME:
-                timer_counter = 1; // just so it doesn't immediately update the game
-                // [TODO] load the game array into game_frame_buffer
+                timer_counter = 0;
+                image_load_to_frame_buffer(&game, 0, 0, game_frame_buffer);
                 // [TODO] set the game characters to their initial position
                 break;
             case GAME_OVER:
                 // [TODO] put gameover array over the game array on game_frame_buffer
                 break;
             case HIGH_SCORE:
-                // [TODO] load the high score array into game_frame_buffer
+                image_load_to_frame_buffer(&high_scores, 0, 0, game_frame_buffer);
+                // [TODO] get the highscores from the storage file
+                // [TODO] put the highscores in the game frame buffer
                 break;
         }
-        memcpy(game_frame_buffer, mouse_frame_buffer, length_frame_buffer);
-        // [TODO] put the mouse in it's current position on the mouse_frame_buffer
-        memcpy(mouse_frame_buffer, frame_buffer, length_frame_buffer);
+        memcpy(mouse_frame_buffer, game_frame_buffer, length_frame_buffer);
+        image_load_to_frame_buffer(&cursor, mouse_position_x - 16, mouse_position_y - 16, mouse_frame_buffer);
+        memcpy(frame_buffer, mouse_frame_buffer, length_frame_buffer);
         continue; // skip the rest of the loop
     }
     if (driver_receive(ANY, &msg, &ipc_status) != 0) {
@@ -414,7 +450,6 @@ int (proj_main_loop)(int argc, char *argv[]) {
                         break;
                     }
                     memset(full_scancode, 0, 2 * sizeof(uint8_t)); // We reset the scancode array
-                    //  [TODO] check if the key is being pressed and set is_key_being_pressed to true
                 }
                 if (msg.m_notify.interrupts & irq_set_mouse) {
                     if (util_sys_inb(KBC_STATUS_REG, &status) != 0) { // We test the function that reads the status from the status register, to check if we didn't have a communication error
@@ -434,14 +469,16 @@ int (proj_main_loop)(int argc, char *argv[]) {
                     mouse = mouse_detect_events(&final_packet);
                     printf("Breakpoint 21");
                     if (mouse->type == LB_PRESSED) {
-                      printf("Botão esquerdo pressionado");
+                      is_mouse_button_being_pressed = true;
+                      printf("Botão esquerdo pressionado\n");
                     }
                     else if (mouse->type == LB_RELEASED) {
-                      printf("Botão esquerdo largado");
+                      is_mouse_button_being_pressed = false;
+                      printf("Botão esquerdo largado\n");
                     }
                     printf("Posição do rato:\n");
-                    printf("Delta x: %d", mouse->delta_x);
-                    printf("Delta y: %d", mouse->delta_y);
+                    printf("Delta x: %d\n", mouse->delta_x);
+                    printf("Delta y: %d\n", mouse->delta_y);
                     interrupt_received = true;
                     //  [TODO] get the mouse deviation and add it to the mouse position
                     //  [TODO] get if mouse has pressed m1 (check if left mouse button was pressed) update is_mouse_button_being_pressed accordingly
@@ -492,6 +529,16 @@ int (proj_main_loop)(int argc, char *argv[]) {
     printf("Error in closing the game");
     return 1;
   }
+
+  // free the arrays that needed be in the heap because they were too big
+  free(game_color_array);
+  free(high_scores_color_array);
+  free(main_menu_color_array);
+  free(game_over_color_array);
+
+  // free auxiliary frame buffers
+  free(game_frame_buffer);
+  free(mouse_frame_buffer);
 
   return 0;
 }

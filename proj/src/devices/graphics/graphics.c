@@ -68,9 +68,10 @@ int (xpm_print)(xpm_map_t xpm, uint16_t x, uint16_t y, uint8_t* video_mem) {
   xpm_image_t img;
 
   uint8_t* pixels = xpm_load(xpm, XPM_INDEXED, &img);
-
-  for (int i = 0; i < img.height; i++) {
-    for (int j = 0; j < img.width; j++) {
+  int image_h_res = img.width;
+  int image_v_res = img.height;
+  for (int i = 0; i < image_v_res; i++) {
+    for (int j = 0; j < image_h_res; j++) {
       if (vg_draw_pixel(x + j, y + i, *pixels, video_mem) != 0) {
         return 1;
       }
@@ -93,8 +94,8 @@ int (image_load_to_frame_buffer)(struct image_struct* image, uint16_t x, uint16_
     int image_h_res = image->width;
     int image_v_res = image->height;
     int counter = 0;
-    for (int i = 0; i < image_h_res; i++) {
-        for (int j = 0; j < image_v_res; j++) {
+    for (int i = 0; i < image_v_res; i++) {
+        for (int j = 0; j < image_h_res; j++) {
             if (!(image->color_array[counter] == TRANSPARENT_COLOR)) {
                 vg_draw_pixel(x + j, y + i, image->color_array[counter], video_mem);
             }
