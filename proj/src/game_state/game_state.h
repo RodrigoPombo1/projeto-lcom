@@ -11,7 +11,7 @@ enum game_state {
     HIGH_SCORE,
 };
 
-enum letter_pressed { // [TODO] remove? no longer used, probably could be used inside the game state functions despite not being used in main
+enum letter_pressed {
     NO_LETTER_PRESSED,
     W,
     A,
@@ -99,13 +99,6 @@ struct high_score_images {
     struct image_struct* number_7;
     struct image_struct* number_8;
     struct image_struct* number_9;
-};
-
-enum interrupt_type { // [TODO] remove? no longer used
-    TIMER_SECOND,
-    TIMER_TICK,
-    KEYBOARD,
-    MOUSE,
 };
 
 int handle_main_menu(int mouse_position_x, int mouse_position_y, enum game_state* game_state, bool *is_start_of_game_state, bool *close_application);

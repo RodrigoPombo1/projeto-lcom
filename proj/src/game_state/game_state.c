@@ -81,7 +81,7 @@ int load_game_state_to_game_buffer(struct game_entities_position *all_game_state
     }
 
     // load the timer
-    struct image_struct *number_image = NULL;
+    struct image_struct *number_image = all_game_images->number_0;
 
     get_image_from_number_game(number_image, all_game_images, current_game_state_values->time_digits[0]);
     image_load_to_frame_buffer(number_image, 128, 32, video_mem);
