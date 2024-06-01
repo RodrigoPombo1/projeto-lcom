@@ -435,9 +435,6 @@ int (proj_main_loop)(int argc, char *argv[]) {
                 break;
             case GAME:
                 timer_counter = 0;
-                // [TODO] REMOVE THIS LINE
-                image_load_to_frame_buffer(&game, 0, 0, game_frame_buffer);
-                ////////////
                 all_game_entities_position = initial_all_game_entities_position;
                 current_game_values = initial_game_values;
                 // [TODO] set the monsters to their initial position // spawn them essencially

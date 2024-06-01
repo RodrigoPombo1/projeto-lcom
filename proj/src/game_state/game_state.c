@@ -66,6 +66,8 @@ int get_image_from_number_game(struct image_struct** result_image, struct game_i
 }
 
 int load_game_state_to_game_buffer(struct game_entities_position *all_game_state_entities_position, struct game_values *current_game_state_values, struct game_images *all_game_images, uint8_t* video_mem) {
+    image_load_to_frame_buffer(all_game_images->background, 0, 0, video_mem);
+
     int frame_buffer_position_x = 0;
     int frame_buffer_position_y = 0;
     // draw player
