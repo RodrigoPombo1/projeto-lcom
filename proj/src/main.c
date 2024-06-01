@@ -25,7 +25,6 @@
 #include "devices/keyboard/KBC_keyboard.h"
 #include "devices/mouse/KBC_mouse.h"
 #include "devices/graphics/graphics.h"
-#include "devices/rtc/rtc.h"
 #include "game_state/game_state.h"
 
 uint8_t irq_set_timer; 
@@ -45,12 +44,12 @@ int main(int argc, char *argv[]) {
 
   // enables to log function invocations that are being "wrapped" by LCF
   // [comment this out if you don't want/need it]
-  lcf_trace_calls("/home/lcom/labs/g5/proj/src/trace.txt");
+//  lcf_trace_calls("/home/lcom/labs/g5/proj/src/trace.txt");
 //  lcf_trace_calls("/home/lcom/labs/proj/src/trace.txt");
 
   // enables to save the output of printf function calls on a file
   // [comment this out if you don't want/need it]
-  lcf_log_output("/home/lcom/labs/g5/proj/src/output.txt");
+//  lcf_log_output("/home/lcom/labs/g5/proj/src/output.txt");
 //  lcf_log_output("/home/lcom/labs/proj/src/output.txt");
 
   // handles control over to LCF
@@ -459,8 +458,10 @@ int (proj_main_loop)(int argc, char *argv[]) {
                 load_game_state_to_game_buffer(&all_game_entities_position, &current_game_values, &game_loaded_images, game_frame_buffer);
                 break;
             case GAME_OVER:
-                // [TODO] put gameover image over the game image on game_frame_buffer
-                // [TODO] store the information in the highscore if it is a highscore
+                // put gameover image over the game image on game_frame_buffer
+                image_load_to_frame_buffer(&game_over, 128, 176, game_frame_buffer);
+                // store the information in the highscore.csv file if it is a highscore
+                store_high_score_at_this_time(&current_game_values);
                 break;
             case HIGH_SCORE:
                 image_load_to_frame_buffer(&high_scores, 0, 0, game_frame_buffer);
@@ -642,7 +643,7 @@ int (proj_main_loop)(int argc, char *argv[]) {
         }
     }
     was_game_frame_buffer_changed = false; // pointer will be passed in the following functions inside the switch statement
-//  [TODO] probably a switch statement between the different game states // handling each game state will mean a pointer to the game state buffer will be passed in the function
+    //  switch statement between the different game states
     switch(current_game_state) {
         case MAIN_MENU:
             if (!all_received_devices_interrupts.m1) {

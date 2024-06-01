@@ -1,8 +1,13 @@
 #ifndef _LCOM_GAME_STATE_H_
 #define _LCOM_GAME_STATE_H_
-
+///////////////////////////
+///// define high_scores.txt file path name (change this to the correct path name for your computer)
+#define HIGH_SCORES_FILE_PATH_NAME "/home/lcom/labs/g5/proj/src/high_scores.txt"
+//#define HIGH_SCORES_FILE_PATH_NAME "/home/lcom/labs/proj/src/high_scores.txt"
+///////////////////////////
 #include <lcom/lcf.h>
 #include "../devices/graphics/graphics.h"
+#include "../devices/rtc/rtc.h"
 
 enum game_state {
     MAIN_MENU,
@@ -102,6 +107,21 @@ struct high_score_images {
     struct image_struct* number_9;
 };
 
+struct date_time {
+    uint8_t seconds;
+    uint8_t minutes;
+    uint8_t hours;
+    uint8_t day;
+    uint8_t month;
+    uint8_t year;
+};
+
+struct high_score {
+    struct game_values game_values;
+    struct date_time date_time_of_score;
+    bool is_active;
+};
+
 int handle_main_menu(int mouse_position_x, int mouse_position_y, enum game_state* game_state, bool *is_start_of_game_state, bool *close_application);
 
 int load_game_state_to_game_buffer(struct game_entities_position *all_game_state_entities_position, struct game_values *current_game_state_values, struct game_images *all_game_images, uint8_t* video_mem);
@@ -132,5 +152,10 @@ int handle_game_timer_second_interrupt(struct game_entities_position *all_game_s
 
 int handle_game_over_interrupt(int mouse_position_x, int mouse_position_y, enum game_state* game_state, bool *is_start_of_screen);
 
+int store_high_score_at_this_time(struct game_values *game_values);
+
+int write_high_scores(struct high_score high_scores[5]);
+
+int read_high_scores(struct high_score high_scores[5]);
 
 #endif

@@ -1,5 +1,7 @@
 #include "game_state.h"
 
+extern rtc_info_t rtc;
+
 // this handle only happens when m1 is pressed
 int handle_main_menu(int mouse_position_x, int mouse_position_y, enum game_state* game_state, bool *is_start_of_game_state, bool *close_application) {
     // check if the mouse is over the play button
@@ -139,6 +141,9 @@ int spawn_monsters(struct game_entities_position *all_game_state_entities_positi
             }
             break;
         }
+        if (i == 8) {
+            continue;
+        }
         // spawn the monster at that spawn
         all_game_state_entities_position->enemy_structs[i].position.x = x_of_spawn;
         all_game_state_entities_position->enemy_structs[i].position.y = y_of_spawn;
@@ -250,6 +255,9 @@ int handle_game_m1_interrupt(struct game_entities_position *all_game_state_entit
     if (all_game_state_entities_position->array_of_rows_of_entities[mouse_position_in_game_y][mouse_position_in_game_x] == ENEMY) {
         // kill the enemy
         for (int i = 0; i < 8; i++) {
+            if (!all_game_state_entities_position->enemy_structs[i].is_alive) {
+                continue;
+            }
             if (all_game_state_entities_position->enemy_structs[i].position.x == mouse_position_in_game_x && all_game_state_entities_position->enemy_structs[i].position.y == mouse_position_in_game_y) {
                 *was_game_state_changed = true;
                 all_game_state_entities_position->enemy_structs[i].is_alive = false;
@@ -279,7 +287,7 @@ int check_monster_if_the_space_can_be_moved_into(struct game_entities_position *
         return 0;
     }
 
-    // check if it's a wall
+    // check if it's empty
     if (all_game_state_entities_position->array_of_rows_of_entities[y][x] == EMPTY) {
         *can_move = true;
         return 0;
@@ -291,6 +299,7 @@ int handle_game_timer_tick_interrupt(struct game_entities_position *all_game_sta
     bool has_monster_moved = false;
     // move monsters towards the player
     for (int i = 0; i < 8; i++) {
+        has_monster_moved = false;
         if (!all_game_state_entities_position->enemy_structs[i].is_alive) {
             continue;
         }
@@ -450,5 +459,314 @@ int handle_game_over_interrupt(int mouse_position_x, int mouse_position_y, enum 
     return 0;
 }
 
+int store_high_score_at_this_time(struct game_values *game_value) {
+    int decimal = 0;
+    int base = 1;
+    if (rtc_read_date_time() != 0) {
+      printf("Falhou\n");
+    }
+    while (rtc.seconds > 0) {
+        int rightmost_digit = rtc.seconds & 0xF;
+        decimal += rightmost_digit * base;
+        base *= 10;
+        rtc.seconds >>= 4;
+    }
+    rtc.seconds = decimal;
+    printf("Seconds: %d\n", rtc.seconds);
+    decimal = 0;
+    base = 1;
 
+    while (rtc.minutes > 0) {
+        int rightmost_digit = rtc.minutes & 0xF;
+        decimal += rightmost_digit * base;
+        base *= 10;
+        rtc.minutes >>= 4;
+    }
+    rtc.minutes = decimal;
+    printf("Minutes: %d\n", rtc.minutes);
+
+    decimal = 0;
+    base = 1;
+
+    while (rtc.hours > 0) {
+        int rightmost_digit = rtc.hours & 0xF;
+        decimal += rightmost_digit * base;
+        base *= 10;
+        rtc.hours >>= 4;
+    }
+    rtc.hours = decimal;
+    printf("Hours: %d\n", rtc.hours);
+
+    decimal = 0;
+    base = 1;
+
+    while (rtc.day > 0) {
+        int rightmost_digit = rtc.day & 0xF;
+        decimal += rightmost_digit * base;
+        base *= 10;
+        rtc.day >>= 4;
+    }
+    rtc.day = decimal;
+
+    decimal = 0;
+    base = 1;
+
+    while (rtc.month > 0) {
+        int rightmost_digit = rtc.month & 0xF;
+        decimal += rightmost_digit * base;
+        base *= 10;
+        rtc.month >>= 4;
+    }
+    rtc.month = decimal;
+
+    decimal = 0;
+    base = 1;
+
+    while (rtc.year > 0) {
+        int rightmost_digit = rtc.year & 0xF;
+        decimal += rightmost_digit * base;
+        base *= 10;
+        rtc.year >>= 4;
+    }
+    rtc.year = decimal;
+
+    struct high_score high_score_of_the_game = {
+        .is_active = true,
+        .game_values = {
+            .score = game_value->score,
+            .time_in_seconds = game_value->time_in_seconds,
+            .score_digits = {
+                    game_value->score_digits[0],
+                    game_value->score_digits[1],
+                    game_value->score_digits[2],
+                    game_value->score_digits[3]},
+        },
+        .date_time_of_score = {
+            .seconds = rtc.seconds,
+            .minutes = rtc.minutes,
+            .hours = rtc.hours,
+            .day = rtc.day,
+            .month = rtc.month,
+            .year = rtc.year
+        }
+    };
+    printf("Score: %d\n", high_score_of_the_game.game_values.score);
+    // create the array to read the high_scores
+    struct high_score high_scores[5] = {
+            {
+                    .is_active = false,
+                    .game_values = {
+                            .score = 0,
+                            .time_in_seconds = 0,
+                            .score_digits = {0, 0, 0, 0},
+                            .time_digits = {0, 0, 0, 0}
+                    },
+                    .date_time_of_score = {
+                            .seconds = 0,
+                            .minutes = 0,
+                            .hours = 0,
+                            .day = 0,
+                            .month = 0,
+                            .year = 0
+                    }
+            },
+            {
+                    .is_active = false,
+                    .game_values = {
+                            .score = 0,
+                            .time_in_seconds = 0,
+                            .score_digits = {0, 0, 0, 0},
+                            .time_digits = {0, 0, 0, 0}
+                    },
+                    .date_time_of_score = {
+                            .seconds = 0,
+                            .minutes = 0,
+                            .hours = 0,
+                            .day = 0,
+                            .month = 0,
+                            .year = 0
+                    }
+            },
+            {
+                    .is_active = false,
+                    .game_values = {
+                            .score = 0,
+                            .time_in_seconds = 0,
+                            .score_digits = {0, 0, 0, 0},
+                            .time_digits = {0, 0, 0, 0}
+                    },
+                    .date_time_of_score = {
+                            .seconds = 0,
+                            .minutes = 0,
+                            .hours = 0,
+                            .day = 0,
+                            .month = 0,
+                            .year = 0
+                    }
+            },
+            {
+                    .is_active = false,
+                    .game_values = {
+                            .score = 0,
+                            .time_in_seconds = 0,
+                            .score_digits = {0, 0, 0, 0},
+                            .time_digits = {0, 0, 0, 0}
+                    },
+                    .date_time_of_score = {
+                            .seconds = 0,
+                            .minutes = 0,
+                            .hours = 0,
+                            .day = 0,
+                            .month = 0,
+                            .year = 0
+                    }
+            },
+            {
+                    .is_active = false,
+                    .game_values = {
+                            .score = 0,
+                            .time_in_seconds = 0,
+                            .score_digits = {0, 0, 0, 0},
+                            .time_digits = {0, 0, 0, 0}
+                    },
+                    .date_time_of_score = {
+                            .seconds = 0,
+                            .minutes = 0,
+                            .hours = 0,
+                            .day = 0,
+                            .month = 0,
+                            .year = 0
+                    }
+            }
+    };
+
+
+    if (read_high_scores(high_scores)) {
+        printf("Failed to read high scores\n");
+        return 1;
+    }
+
+    // get the index of the last score that is active
+    int last_active_score = 0;
+    for (int i = 0; i < 5; i++) {
+        if (!high_scores[i].is_active) {
+            break;
+        }
+        printf("Incrementing last active score\n");
+        last_active_score++;
+    }
+    printf("Last active score: %d\n", last_active_score);
+    // check if there are no high scores
+    if (last_active_score != 4) {
+        // put the score as the top high score
+        high_scores[last_active_score] = high_score_of_the_game;
+        printf("putting the recent game score has the only score Score: %d\n", high_scores[0].game_values.score);
+        write_high_scores(high_scores);
+        return 0;
+    }
+
+
+    // check if the score is higher than the lowest high score
+    if (high_score_of_the_game.game_values.score > high_scores[4].game_values.score) {
+        // insert the new high score
+        high_scores[4] = high_score_of_the_game;
+        // sort the high scores
+        for (int i = 0; i < 5; i++) {
+            for (int j = i + 1; j < 5; j++) {
+                if (high_scores[i].game_values.score < high_scores[j].game_values.score) {
+                    struct high_score temp = high_scores[i];
+                    high_scores[i] = high_scores[j];
+                    high_scores[j] = temp;
+                }
+            }
+        }
+        /// [TODO] REMOVE THIS FOR TEST PURPOSES ONLY
+        for (int i = 0; i < 5; i++) {
+            printf("Score: %d\n", high_scores[i].game_values.score);
+            printf("Is active: %d\n", high_scores[i].is_active);
+        }
+        // write the high scores to the file
+        if (write_high_scores(high_scores)) {
+            printf("Failed to write high scores\n");
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int write_high_scores(struct high_score high_scores[5]) {
+    printf("Writing high scores\n");
+    FILE *file = fopen(HIGH_SCORES_FILE_PATH_NAME, "w");
+    if (file == NULL) {
+        fclose(file);
+        return 1;
+    }
+
+    for (int i = 0; i < 5; i++) {
+        printf("Writing high score %d\n", i);
+        if (!high_scores[i].is_active) {
+            break;
+        }
+        int score = high_scores[i].game_values.score;
+        int time_minutes = high_scores[i].game_values.time_in_seconds / 60;
+        int time_seconds = high_scores[i].game_values.time_in_seconds % 60;
+
+        fprintf(file, "%d %d %d %d %d %d %d %d %d\n", score, time_minutes, time_seconds, high_scores[i].date_time_of_score.hours, high_scores[i].date_time_of_score.minutes, high_scores[i].date_time_of_score.seconds, high_scores[i].date_time_of_score.day, high_scores[i].date_time_of_score.month, high_scores[i].date_time_of_score.year);
+    }
+
+    fclose(file);
+    return 0;
+}
+
+int read_high_scores(struct high_score high_scores[5]) {
+    FILE *file = fopen(HIGH_SCORES_FILE_PATH_NAME, "r");
+    if (file == NULL) {
+        return 0;
+    }
+    char line[100];
+    int count = 0;
+    printf("count = %d\n", count);
+
+    while (fgets(line, 100, file) != NULL) {
+        if (count >= 5) {
+            break;
+        }
+        printf("count = %d\n", count);
+        printf("Entrou para aqui para dentro\n");
+        printf("line that just read: %s\n", line);
+        high_scores[count].is_active = true;
+
+        int score, time_minutes, time_seconds, hour, minute, second, day, month, year;
+        sscanf(line, "%d %d %d %d %d %d %d %d %d", &score, &time_minutes, &time_seconds, &hour, &minute, &second, &day, &month, &year);
+
+        // split score into digits
+        high_scores[count].game_values.score_digits[0] = (score / 1000) % 10;
+        high_scores[count].game_values.score_digits[1] = (score / 100) % 10;
+        high_scores[count].game_values.score_digits[2] = (score / 10) % 10;
+        high_scores[count].game_values.score_digits[3] = score % 10;
+
+        // split time into digits
+        high_scores[count].game_values.time_digits[0] = (time_minutes / 10) % 10;
+        high_scores[count].game_values.time_digits[1] = time_minutes % 10;
+        high_scores[count].game_values.time_digits[2] = (time_seconds / 10) % 10;
+        high_scores[count].game_values.time_digits[3] = time_seconds % 10;
+
+        // load the other game_values struct fields
+        high_scores[count].game_values.score = score;
+        high_scores[count].game_values.time_in_seconds = time_minutes * 60 + time_seconds;
+
+        // load the date_time_of_score struct fields
+        high_scores[count].date_time_of_score.hours = hour;
+        high_scores[count].date_time_of_score.minutes = minute;
+        high_scores[count].date_time_of_score.seconds = second;
+        high_scores[count].date_time_of_score.day = day;
+        high_scores[count].date_time_of_score.month = month;
+        high_scores[count].date_time_of_score.year = year;
+
+        count++;
+    }
+    printf("Read %d high scores\n", count);
+    fclose(file);
+    return 0;
+}
 

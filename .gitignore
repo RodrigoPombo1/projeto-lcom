@@ -1,2 +1,3 @@
-*.txt
+trace.txt
+output.txt
 .idea/
