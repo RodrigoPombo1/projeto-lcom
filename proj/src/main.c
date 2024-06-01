@@ -445,7 +445,6 @@ int (proj_main_loop)(int argc, char *argv[]) {
                 timer_counter = 0;
                 all_game_entities_position = initial_all_game_entities_position;
                 current_game_values = initial_game_values;
-                // [TODO] set the monsters to their initial position // spawn them essencially
                 spawn_monsters(&all_game_entities_position);
                 load_game_state_to_game_buffer(&all_game_entities_position, &current_game_values, &game_loaded_images, game_frame_buffer);
                 break;
@@ -634,10 +633,9 @@ int (proj_main_loop)(int argc, char *argv[]) {
             handle_main_menu(mouse_position_x, mouse_position_y, &current_game_state, &is_start_of_screen, &close_application);
             break;
         case GAME:
-            // if m1 attack
-            // if timer tick move last key pressed or move enemies
-            // [TODO] check if with the interrupts the function should execute
-//          [TODO] function to handle interrupts while in the game state
+            // handle for mouse 1 input (quit game, kill monsters, update score)
+            // handle for timer tick (move monsters)
+            // handle for timer second (try move player last key pressed, update time, spawn monsters every 4 seconds)
             break;
         case GAME_OVER:
             // [TODO] check if with the interrupts the function should execute
@@ -648,7 +646,10 @@ int (proj_main_loop)(int argc, char *argv[]) {
 //          [TODO] function to handle interrupts while in the the high score state
             break;
     }
-
+    // remove the interrupts so that they don't get handled again
+    all_received_devices_interrupts.is_timer_second_interrupt = false;
+    all_received_devices_interrupts.is_timer_tick_interrupt = false;
+    all_received_devices_interrupts.is_mouse_move_interrupt = false;
     // if nothing has changed
     if (!was_game_frame_buffer_changed && mouse_position_x == previous_mouse_position_x && mouse_position_y == previous_mouse_position_y) {
         continue;
@@ -656,19 +657,6 @@ int (proj_main_loop)(int argc, char *argv[]) {
     memcpy(mouse_frame_buffer, game_frame_buffer, length_frame_buffer);
     image_load_to_frame_buffer(&cursor, mouse_position_x - 16, mouse_position_y - 16, mouse_frame_buffer);
     memcpy(frame_buffer, mouse_frame_buffer, length_frame_buffer);
-
-
-    // [TODO] REMOVE THIS!
-    if (all_received_devices_interrupts.is_timer_second_interrupt) {
-      printf("Mouse second interrupt handled\n");
-      all_received_devices_interrupts.is_timer_second_interrupt = false;
-    }
-
-    if (all_received_devices_interrupts.is_timer_tick_interrupt) {
-      printf("Mouse 0.5 second interrupt handled\n");
-      all_received_devices_interrupts.is_timer_tick_interrupt = false;
-    }
-    ////////////////////////////////////////////////////////////////
   }
 
   if (close_game() != 0) {
