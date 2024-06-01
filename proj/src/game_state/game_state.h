@@ -128,6 +128,9 @@ int handle_game_m1_interrupt(struct game_entities_position *all_game_state_entit
 
 int handle_game_timer_tick_interrupt(struct game_entities_position *all_game_state_entities_position, struct game_values *current_game_state_values, bool *was_game_state_changed, bool *is_game_over);
 
-int handle_game_timer_second_interrupt(struct game_entities_position *all_game_state_entities_position, struct game_values *current_game_state_values, enum letter_pressed last_key_pressed, bool *was_game_state_changed);
+int handle_game_timer_second_interrupt(struct game_entities_position *all_game_state_entities_position, struct game_values *current_game_state_values, enum letter_pressed *last_key_pressed, bool *was_game_state_changed);
+
+int handle_game_over_interrupt(int mouse_position_x, int mouse_position_y, enum game_state* game_state, bool *is_start_of_screen);
+
 
 #endif

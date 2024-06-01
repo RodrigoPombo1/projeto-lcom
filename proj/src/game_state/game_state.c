@@ -85,18 +85,18 @@ int load_game_state_to_game_buffer(struct game_entities_position *all_game_state
     // load the timer
     struct image_struct *number_image = NULL;
 
-    get_image_from_number_game(&number_image, all_game_images, current_game_state_values->time_digits[0]);
+    get_image_from_number_game(&number_image, all_game_images, current_game_state_values->time_digits[2]);
     image_load_to_frame_buffer(number_image, 128, 32, video_mem);
 
-    get_image_from_number_game(&number_image, all_game_images, current_game_state_values->time_digits[1]);
+    get_image_from_number_game(&number_image, all_game_images, current_game_state_values->time_digits[3]);
     image_load_to_frame_buffer(number_image, 148, 32, video_mem);
 
     image_load_to_frame_buffer(all_game_images->character_2_pontos, 168, 32, video_mem);
 
-    get_image_from_number_game(&number_image, all_game_images, current_game_state_values->time_digits[2]);
+    get_image_from_number_game(&number_image, all_game_images, current_game_state_values->time_digits[0]);
     image_load_to_frame_buffer(number_image, 188, 32, video_mem);
 
-    get_image_from_number_game(&number_image, all_game_images, current_game_state_values->time_digits[3]);
+    get_image_from_number_game(&number_image, all_game_images, current_game_state_values->time_digits[1]);
     image_load_to_frame_buffer(number_image, 208, 32, video_mem);
 
     // load the score
@@ -266,7 +266,7 @@ int handle_game_m1_interrupt(struct game_entities_position *all_game_state_entit
 }
 
 int check_monster_if_the_space_can_be_moved_into(struct game_entities_position *all_game_state_entities_position, int x, int y, bool *can_move, bool *killed_player) {
-    *can_move = true;
+    *can_move = false;
     *killed_player = false;
     // check if it's outside the map
     if (x < 0 || x >= 23 || y < 0 || y >= 14) {
@@ -288,6 +288,7 @@ int check_monster_if_the_space_can_be_moved_into(struct game_entities_position *
 }
 
 int handle_game_timer_tick_interrupt(struct game_entities_position *all_game_state_entities_position, struct game_values *current_game_state_values, bool *was_game_state_changed, bool *is_game_over) {
+    bool has_monster_moved = false;
     // move monsters towards the player
     for (int i = 0; i < 8; i++) {
         if (!all_game_state_entities_position->enemy_structs[i].is_alive) {
@@ -306,42 +307,70 @@ int handle_game_timer_tick_interrupt(struct game_entities_position *all_game_sta
                                                  &killed_player);
             if (can_move) {
                 *was_game_state_changed = true;
+                has_monster_moved = true;
                 all_game_state_entities_position->array_of_rows_of_entities[enemy_y][enemy_x] = EMPTY;
                 all_game_state_entities_position->array_of_rows_of_entities[enemy_y][enemy_x - 1] = ENEMY;
                 all_game_state_entities_position->enemy_structs[i].position.x--;
             }
         }
+        if (has_monster_moved) {
+            has_monster_moved = false;
+            if (killed_player) {
+                *is_game_over = true;
+                return 0;
+            }
+            continue;
+        }
         // check if the player is to the right of the monster
-        else if (player_x > enemy_x) {
+        if (player_x > enemy_x) {
             // check if the monster can move to the right
             check_monster_if_the_space_can_be_moved_into(all_game_state_entities_position, enemy_x + 1, enemy_y, &can_move,
                                                  &killed_player);
             if (can_move) {
                 *was_game_state_changed = true;
+                has_monster_moved = true;
                 all_game_state_entities_position->array_of_rows_of_entities[enemy_y][enemy_x] = EMPTY;
                 all_game_state_entities_position->array_of_rows_of_entities[enemy_y][enemy_x + 1] = ENEMY;
                 all_game_state_entities_position->enemy_structs[i].position.x++;
             }
         }
+        if (has_monster_moved) {
+            has_monster_moved = false;
+            if (killed_player) {
+                *is_game_over = true;
+                return 0;
+            }
+            continue;
+        }
         // check if the player is above the monster
-        else if (player_y < enemy_y) {
+        if (player_y < enemy_y) {
             // check if the monster can move up
             check_monster_if_the_space_can_be_moved_into(all_game_state_entities_position, enemy_x, enemy_y - 1, &can_move,
                                                  &killed_player);
             if (can_move) {
                 *was_game_state_changed = true;
+                has_monster_moved = true;
                 all_game_state_entities_position->array_of_rows_of_entities[enemy_y][enemy_x] = EMPTY;
                 all_game_state_entities_position->array_of_rows_of_entities[enemy_y - 1][enemy_x] = ENEMY;
                 all_game_state_entities_position->enemy_structs[i].position.y--;
             }
         }
+        if (has_monster_moved) {
+            has_monster_moved = false;
+            if (killed_player) {
+                *is_game_over = true;
+                return 0;
+            }
+            continue;
+        }
         // check if the player is below the monster
-        else if (player_y > enemy_y) {
+        if (player_y > enemy_y) {
             // check if the monster can move down
             check_monster_if_the_space_can_be_moved_into(all_game_state_entities_position, enemy_x, enemy_y + 1, &can_move,
                                                  &killed_player);
             if (can_move) {
                 *was_game_state_changed = true;
+                has_monster_moved = true;
                 all_game_state_entities_position->array_of_rows_of_entities[enemy_y][enemy_x] = EMPTY;
                 all_game_state_entities_position->array_of_rows_of_entities[enemy_y + 1][enemy_x] = ENEMY;
                 all_game_state_entities_position->enemy_structs[i].position.y++;
@@ -371,8 +400,9 @@ int check_player_if_the_space_can_be_moved_into(struct game_entities_position *a
     return 0;
 }
 
-int handle_game_timer_second_interrupt(struct game_entities_position *all_game_state_entities_position, struct game_values *current_game_state_values, enum letter_pressed last_key_pressed, bool *was_game_state_changed) {
+int handle_game_timer_second_interrupt(struct game_entities_position *all_game_state_entities_position, struct game_values *current_game_state_values, enum letter_pressed *last_key_pressed, bool *was_game_state_changed) {
     increment_timer(current_game_state_values);
+    *was_game_state_changed = true;
     // spawn monsters every 4th second
     if (current_game_state_values->time_in_seconds % 4 == 0) {
         spawn_monsters(all_game_state_entities_position);
@@ -381,7 +411,7 @@ int handle_game_timer_second_interrupt(struct game_entities_position *all_game_s
     int player_x = all_game_state_entities_position->player_position.x;
     int player_y = all_game_state_entities_position->player_position.y;
     // check if there was a key pressed
-    switch (last_key_pressed) {
+    switch (*last_key_pressed) {
         case NO_LETTER_PRESSED:
             return 0;
         case W:
@@ -397,6 +427,7 @@ int handle_game_timer_second_interrupt(struct game_entities_position *all_game_s
             player_x++;
             break;
     }
+    *last_key_pressed = NO_LETTER_PRESSED;
     // move the player if the player can move there
     bool can_move = false;
     check_player_if_the_space_can_be_moved_into(all_game_state_entities_position, player_x, player_y, &can_move);
@@ -409,4 +440,15 @@ int handle_game_timer_second_interrupt(struct game_entities_position *all_game_s
     }
     return 0;
 }
+
+int handle_game_over_interrupt(int mouse_position_x, int mouse_position_y, enum game_state* game_state, bool *is_start_of_screen) {
+    // check if the mouse is over the quit button
+    if (608 <= mouse_position_x && mouse_position_x <= 752 && 16 <= mouse_position_y && mouse_position_y <= 64) {
+        *game_state = MAIN_MENU;
+        *is_start_of_screen = true;
+    }
+    return 0;
+}
+
+
 

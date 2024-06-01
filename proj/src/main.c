@@ -434,6 +434,8 @@ int (proj_main_loop)(int argc, char *argv[]) {
   bool is_game_quit = false;
   bool was_game_state_changed = false;
 
+  bool was_change_during_keyboard_interrupts = false;
+
   while (scancode != ESC_BREAK_CODE) {
     // printf("Breakpoint 12\n");
     if (close_application) {
@@ -488,7 +490,7 @@ int (proj_main_loop)(int argc, char *argv[]) {
                         all_received_devices_interrupts.is_timer_second_interrupt = true;
 //                        printf("1 segundo\n");
                     } 
-                    else if (timer_counter % 30 == 0) {
+                    else if (timer_counter == 30) {
                         all_received_devices_interrupts.is_timer_tick_interrupt = true;
 //                        printf("0.5 segundos\n");
                     }
@@ -517,34 +519,42 @@ int (proj_main_loop)(int argc, char *argv[]) {
                       case 0x11:
 //                        printf("Tecla w pressionada\n");
                         all_received_devices_interrupts.W = true;
+                        was_change_during_keyboard_interrupts = true;
                         break;
                       case 0x91:
 //                        printf("Tecla w largada\n");
                         all_received_devices_interrupts.W = false;
+                        was_change_during_keyboard_interrupts = true;
                         break;
                       case 0x1e:
 //                        printf("Tecla a pressionada\n");
                         all_received_devices_interrupts.A = true;
+                        was_change_during_keyboard_interrupts = true;
                         break;
                       case 0x9e:
 //                        printf("Tecla a largada\n");
                         all_received_devices_interrupts.A = false;
+                        was_change_during_keyboard_interrupts = true;
                         break;
                       case 0x1f:
 //                        printf("Tecla s pressionada\n");
                         all_received_devices_interrupts.S = true;
+                        was_change_during_keyboard_interrupts = true;
                         break;
                       case 0x9f:
 //                        printf("Tecla s largada\n");
                         all_received_devices_interrupts.S = false;
+                        was_change_during_keyboard_interrupts = true;
                         break;
                       case 0x20:
 //                        printf("Tecla d pressionada\n");
                         all_received_devices_interrupts.D = true;
+                        was_change_during_keyboard_interrupts = true;
                         break;
                       case 0xa0:
 //                        printf("Tecla d largada\n");
                         all_received_devices_interrupts.D = false;
+                        was_change_during_keyboard_interrupts = true;
                         break;
                     }
                     memset(full_scancode, 0, 2 * sizeof(uint8_t)); // We reset the scancode array
@@ -608,8 +618,8 @@ int (proj_main_loop)(int argc, char *argv[]) {
     }
 //    printf("Interrupt to be handled\n");
     // checks if there are multiple key presses at the same time, in which case it should ignore them and put the last key pressed as NO_LETTER_PRESSED
-    if (all_received_devices_interrupts.W || all_received_devices_interrupts.A || all_received_devices_interrupts.S || all_received_devices_interrupts.D) {
-        last_key_pressed = NO_LETTER_PRESSED;
+    if (was_change_during_keyboard_interrupts) {
+        was_change_during_keyboard_interrupts = false;
         int keys_pressed_at_the_same_time = 0;
         if (all_received_devices_interrupts.W) {
             last_key_pressed = W;
@@ -660,11 +670,10 @@ int (proj_main_loop)(int argc, char *argv[]) {
             if (is_game_over) {
                 current_game_state = GAME_OVER;
                 is_start_of_screen = true;
-                break;
             }
-            // handle for timer second (try move player last key pressed, update time, spawn monsters every 4th seconds)
+            // handle for timer second (try move player last key pressed, update time, spawn monsters every 4th timer_second interrupt)
             if (all_received_devices_interrupts.is_timer_second_interrupt) {
-                handle_game_timer_second_interrupt(&all_game_entities_position, &current_game_values, last_key_pressed,
+                handle_game_timer_second_interrupt(&all_game_entities_position, &current_game_values, &last_key_pressed,
                                                    &was_game_state_changed);
             }
 
@@ -677,10 +686,13 @@ int (proj_main_loop)(int argc, char *argv[]) {
             if (!all_received_devices_interrupts.m1) {
                 break;
             }
-//          [TODO] function to handle interrupts while in the game over state (where nothing moves and only quit can be pressed)
+            // function to handle interrupts while in the game over state (where nothing moves and only quit can be pressed)
+            handle_game_over_interrupt(mouse_position_x, mouse_position_y, &current_game_state, &is_start_of_screen);
             break;
         case HIGH_SCORE:
-         // [TODO] check if with the interrupts the function should execute
+            if (!all_received_devices_interrupts.m1) {
+                break;
+            }
 //          [TODO] function to handle interrupts while in the the high score state
             break;
     }
