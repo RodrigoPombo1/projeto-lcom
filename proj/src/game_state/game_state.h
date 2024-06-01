@@ -112,6 +112,8 @@ int handle_main_menu(int mouse_position_x, int mouse_position_y, enum game_state
 
 int load_game_state_to_game_buffer(struct game_entities_position *all_game_state_entities_position, struct game_values *current_game_state_values, struct game_images *all_game_images, uint8_t* video_mem);
 
+int get_image_from_number_game(struct image_struct* result_image, struct game_images *all_game_images, int number);
+
 int convert_game_position_to_frame_buffer_position(int game_position_x, int game_position_y, int *frame_buffer_position_x, int *frame_buffer_position_y);
 // update game state mouse just takes the array and the mouse position
 // update game state keyboard just takes the array and the last key pressed

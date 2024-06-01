@@ -28,6 +28,43 @@ int convert_game_position_to_frame_buffer_position(int game_position_x, int game
     return 0;
 }
 
+int get_image_from_number_game(struct image_struct* result_image, struct game_images *all_game_images, int number) {
+    switch (number) {
+        case 0:
+            result_image = all_game_images->number_0;
+            return 0;
+        case 1:
+            result_image = all_game_images->number_1;
+            return 0;
+        case 2:
+            result_image = all_game_images->number_2;
+            return 0;
+        case 3:
+            result_image = all_game_images->number_3;
+            return 0;
+        case 4:
+            result_image = all_game_images->number_4;
+            return 0;
+        case 5:
+            result_image = all_game_images->number_5;
+            return 0;
+        case 6:
+            result_image = all_game_images->number_6;
+            return 0;
+        case 7:
+            result_image = all_game_images->number_7;
+            return 0;
+        case 8:
+            result_image = all_game_images->number_8;
+            return 0;
+        case 9:
+            result_image = all_game_images->number_9;
+            return 0;
+        default:
+            return 1;
+    }
+}
+
 int load_game_state_to_game_buffer(struct game_entities_position *all_game_state_entities_position, struct game_values *current_game_state_values, struct game_images *all_game_images, uint8_t* video_mem) {
     int frame_buffer_position_x = 0;
     int frame_buffer_position_y = 0;
@@ -42,6 +79,37 @@ int load_game_state_to_game_buffer(struct game_entities_position *all_game_state
         convert_game_position_to_frame_buffer_position(all_game_state_entities_position->enemy_structs[i].position.x, all_game_state_entities_position->enemy_structs[i].position.x, &frame_buffer_position_x, &frame_buffer_position_y);
         image_load_to_frame_buffer(all_game_images->enemy, frame_buffer_position_x, frame_buffer_position_y, video_mem);
     }
+
+    // load the timer
+    struct image_struct *number_image = NULL;
+
+    get_image_from_number_game(number_image, all_game_images, current_game_state_values->time_digits[0]);
+    image_load_to_frame_buffer(number_image, 128, 32, video_mem);
+
+    get_image_from_number_game(number_image, all_game_images, current_game_state_values->time_digits[1]);
+    image_load_to_frame_buffer(number_image, 148, 32, video_mem);
+
+    image_load_to_frame_buffer(all_game_images->character_2_pontos, 168, 32, video_mem);
+
+    get_image_from_number_game(number_image, all_game_images, current_game_state_values->time_digits[2]);
+    image_load_to_frame_buffer(number_image, 188, 32, video_mem);
+
+    get_image_from_number_game(number_image, all_game_images, current_game_state_values->time_digits[3]);
+    image_load_to_frame_buffer(number_image, 208, 32, video_mem);
+
+    // load the score
+    get_image_from_number_game(number_image, all_game_images, current_game_state_values->score_digits[0]);
+    image_load_to_frame_buffer(number_image, 416, 32, video_mem);
+
+    get_image_from_number_game(number_image, all_game_images, current_game_state_values->score_digits[1]);
+    image_load_to_frame_buffer(number_image, 436, 32, video_mem);
+
+    get_image_from_number_game(number_image, all_game_images, current_game_state_values->score_digits[2]);
+    image_load_to_frame_buffer(number_image, 456, 32, video_mem);
+
+    get_image_from_number_game(number_image, all_game_images, current_game_state_values->score_digits[3]);
+    image_load_to_frame_buffer(number_image, 476, 32, video_mem);
+
     return 0;
 }
 
