@@ -46,10 +46,12 @@ int main(int argc, char *argv[]) {
   // enables to log function invocations that are being "wrapped" by LCF
   // [comment this out if you don't want/need it]
   lcf_trace_calls("/home/lcom/labs/g5/proj/src/trace.txt");
+//  lcf_trace_calls("/home/lcom/labs/proj/src/trace.txt");
 
   // enables to save the output of printf function calls on a file
   // [comment this out if you don't want/need it]
   lcf_log_output("/home/lcom/labs/g5/proj/src/output.txt");
+//  lcf_log_output("/home/lcom/labs/proj/src/output.txt");
 
   // handles control over to LCF
   // [LCF handles command line arguments and invokes the right function]
@@ -64,7 +66,7 @@ int main(int argc, char *argv[]) {
 }
 
 int (setup_game)() {
-  printf("Break point 0\n");
+//  printf("Break point 0\n");
   // Initiate 32 bits per pixel video mode
   if (set_video_mode(0x115) != 0) {
     return 1;
@@ -72,16 +74,16 @@ int (setup_game)() {
   // if (timer_set_frequency(0, 20) != 0) {
   //   return 1;
   // }
-  printf("Break point 1\n");
+//  printf("Break point 1\n");
   // Subscribe interruptions of all necessary devices
   if (timer_subscribe_int(&irq_set_timer) != 0) {
     return 1;
   }
-  printf("Break point 2\n");
+//  printf("Break point 2\n");
   if (keyboard_subscribe(&irq_set_keyboard) != 0) {
     return 1;
   }
-  printf("Break point 3\n");
+//  printf("Break point 3\n");
   // Enable mouse data report 
   if (mouse_write_command(ENABLE_DR) != 0) {
     return 1;
@@ -89,8 +91,8 @@ int (setup_game)() {
   if (mouse_subscribe(&irq_set_mouse) != 0) {
     return 1;
   }
-  printf("Break point 4\n");
-  printf("Break point 5\n");
+//  printf("Break point 4\n");
+//  printf("Break point 5\n");
   return 0;
 }
 
@@ -204,7 +206,7 @@ int (proj_main_loop)(int argc, char *argv[]) {
     printf("Game could not be opened\n");
     return close_game();
   }
-  printf("Break point 6\n");
+//  printf("Break point 6\n");
   int ipc_status, r;
   message msg;
 
@@ -227,7 +229,7 @@ int (proj_main_loop)(int argc, char *argv[]) {
   xpm_load_to_image((xpm_map_t) xpm_0, &number_0);
 
   uint32_t number_1_color_array[16 * 32];
-  struct image_struct number_1 = {4, 32, number_1_color_array};
+  struct image_struct number_1 = {16, 32, number_1_color_array};
   xpm_load_to_image((xpm_map_t) xpm_1, &number_1);
 
   uint32_t number_2_color_array[16 * 32];
@@ -310,21 +312,21 @@ int (proj_main_loop)(int argc, char *argv[]) {
   struct game_images game_loaded_images = {&game, &character, &monster, &cursor, &game_over, &character_2_pontos, &number_0, &number_1, &number_2, &number_3, &number_4, &number_5, &number_6, &number_7, &number_8, &number_9};
 //  struct high_score_images high_score_loaded_images = {&high_scores, &cursor, &character_2_pontos, &character_tracinho, &number_0, &number_1, &number_2, &number_3, &number_4, &number_5, &number_6, &number_7, &number_8, &number_9};
 
-  printf("Break point 7\n");
+//  printf("Break point 7\n");
   uint8_t *frame_buffer = NULL;
   if (build_frame_buffer(0x115, &frame_buffer) != 0) {
     printf("Error while building the main frame buffer");
     return 1;
   }
-  printf("Break point 8\n");
+//  printf("Break point 8\n");
   uint32_t length_frame_buffer = get_length_frame_buffer();
-  printf("Break point 9\n");
-  printf("Length of frame buffer: %d\n", length_frame_buffer);
+//  printf("Break point 9\n");
+//  printf("Length of frame buffer: %d\n", length_frame_buffer);
   memset(frame_buffer, 0, length_frame_buffer);
-  printf("Break point 10\n");
+//  printf("Break point 10\n");
   uint8_t* game_frame_buffer = malloc(length_frame_buffer * sizeof(uint8_t));
   memset(game_frame_buffer, 0, length_frame_buffer);
-  printf("Break point 11\n");
+//  printf("Break point 11\n");
   uint8_t* mouse_frame_buffer = malloc(length_frame_buffer * sizeof(uint8_t));
   memset(mouse_frame_buffer, 0, length_frame_buffer);
 
@@ -428,6 +430,10 @@ int (proj_main_loop)(int argc, char *argv[]) {
 
   struct game_values current_game_values = initial_game_values;
 
+  bool is_game_over = false;
+  bool is_game_quit = false;
+  bool was_game_state_changed = false;
+
   while (scancode != ESC_BREAK_CODE) {
     // printf("Breakpoint 12\n");
     if (close_application) {
@@ -443,13 +449,15 @@ int (proj_main_loop)(int argc, char *argv[]) {
                 break;
             case GAME:
                 timer_counter = 0;
+                is_game_over = false;
+                is_game_quit = false;
                 all_game_entities_position = initial_all_game_entities_position;
                 current_game_values = initial_game_values;
                 spawn_monsters(&all_game_entities_position);
                 load_game_state_to_game_buffer(&all_game_entities_position, &current_game_values, &game_loaded_images, game_frame_buffer);
                 break;
             case GAME_OVER:
-                // [TODO] put gameover array over the game array on game_frame_buffer
+                // [TODO] put gameover image over the game image on game_frame_buffer
                 // [TODO] store the information in the highscore if it is a highscore
                 break;
             case HIGH_SCORE:
@@ -471,23 +479,23 @@ int (proj_main_loop)(int argc, char *argv[]) {
     if (is_ipc_notify(ipc_status)) {
         switch (_ENDPOINT_P(msg.m_source)) {
             case HARDWARE:
-                printf("Msg: %u\n", msg.m_notify.interrupts);
+//                printf("Msg: %u\n", msg.m_notify.interrupts);
                 if (msg.m_notify.interrupts & irq_set_timer) {
                     timer_counter++;
-                    printf("Timer counter: %d\n", timer_counter);
+//                    printf("Timer counter: %d\n", timer_counter);
                     if (timer_counter == 60) {
                         timer_counter = 0;
                         all_received_devices_interrupts.is_timer_second_interrupt = true;
-                        printf("1 segundo\n");
+//                        printf("1 segundo\n");
                     } 
                     else if (timer_counter % 30 == 0) {
                         all_received_devices_interrupts.is_timer_tick_interrupt = true;
-                        printf("0.5 segundos\n");
+//                        printf("0.5 segundos\n");
                     }
                 }
-                printf("Breakpoint 70\n");
+//                printf("Breakpoint 70\n");
                 if (msg.m_notify.interrupts & irq_set_keyboard) {
-                    printf("Inside keyboard interrupt\n");
+//                    printf("Inside keyboard interrupt\n");
                     if (util_sys_inb(KBC_STATUS_REG, &status) != 0) { // We test the function that reads the status from the status register, to check if we didn't have a communication error
                       return 1;
                     }
@@ -507,71 +515,71 @@ int (proj_main_loop)(int argc, char *argv[]) {
                     }
                     switch (scancode) {
                       case 0x11:
-                        printf("Tecla w pressionada\n");
+//                        printf("Tecla w pressionada\n");
                         all_received_devices_interrupts.W = true;
                         break;
                       case 0x91:
-                        printf("Tecla w largada\n");
+//                        printf("Tecla w largada\n");
                         all_received_devices_interrupts.W = false;
                         break;
                       case 0x1e:
-                        printf("Tecla a pressionada\n");
+//                        printf("Tecla a pressionada\n");
                         all_received_devices_interrupts.A = true;
                         break;
                       case 0x9e:
-                        printf("Tecla a largada\n");
+//                        printf("Tecla a largada\n");
                         all_received_devices_interrupts.A = false;
                         break;
                       case 0x1f:
-                        printf("Tecla s pressionada\n");
+//                        printf("Tecla s pressionada\n");
                         all_received_devices_interrupts.S = true;
                         break;
                       case 0x9f:
-                        printf("Tecla s largada\n");
+//                        printf("Tecla s largada\n");
                         all_received_devices_interrupts.S = false;
                         break;
                       case 0x20:
-                        printf("Tecla d pressionada\n");
+//                        printf("Tecla d pressionada\n");
                         all_received_devices_interrupts.D = true;
                         break;
                       case 0xa0:
-                        printf("Tecla d largada\n");
+//                        printf("Tecla d largada\n");
                         all_received_devices_interrupts.D = false;
                         break;
                     }
                     memset(full_scancode, 0, 2 * sizeof(uint8_t)); // We reset the scancode array
                 }
-                printf("Breakpoint 71\n");
+//                printf("Breakpoint 71\n");
                 if (msg.m_notify.interrupts & irq_set_mouse) {
-                    printf("Inside mouse interrupt\n");
+//                    printf("Inside mouse interrupt\n");
                     if (util_sys_inb(KBC_STATUS_REG, &status) != 0) { // We test the function that reads the status from the status register, to check if we didn't have a communication error
                         return 1;
                     }
                     mouse_ih();
-                    printf("Status: %d\n", status);
+//                    printf("Status: %d\n", status);
                     r = mouse_build_packet();
                     if (r == 0) {
                       break;
                     }
                     else if (r == 1) {
                       // Seria acabar a execução do programa
-                      printf("Mouse error\n");
+//                      printf("Mouse error\n");
                     }
-                    printf("Breakpoint 20\n");
+//                    printf("Breakpoint 20\n");
                     mouse = mouse_detect_events(&final_packet);
-                    printf("Botão: %d", mouse->type);
-                    printf("Breakpoint 21\n");
+//                    printf("Botão: %d", mouse->type);
+//                    printf("Breakpoint 21\n");
                     if (mouse->type == LB_PRESSED) {
                       all_received_devices_interrupts.m1 = true;
-                      printf("Botão esquerdo pressionado\n");
+//                      printf("Botão esquerdo pressionado\n");
                     }
                     else if (mouse->type == LB_RELEASED) {
                       all_received_devices_interrupts.m1 = false;
-                      printf("Botão esquerdo largado\n");
+//                      printf("Botão esquerdo largado\n");
                     }
-                    printf("Posição do rato:\n");
-                    printf("Delta x: %d\n", mouse->delta_x);
-                    printf("Delta y: %d\n", mouse->delta_y);
+//                    printf("Posição do rato:\n");
+//                    printf("Delta x: %d\n", mouse->delta_x);
+//                    printf("Delta y: %d\n", mouse->delta_y);
                     previous_mouse_position_x = mouse_position_x;
                     previous_mouse_position_y = mouse_position_y;
                     mouse_position_x += mouse->delta_x;
@@ -593,12 +601,12 @@ int (proj_main_loop)(int argc, char *argv[]) {
 
         }
     }
-    printf("Finished interrupts\n");
+//    printf("Finished interrupts\n");
     // in case there wasn't an interruption just continue (happens for example when it's a non-important timer tick)
     if (!all_received_devices_interrupts.is_timer_second_interrupt && !all_received_devices_interrupts.is_timer_tick_interrupt && !all_received_devices_interrupts.W && !all_received_devices_interrupts.A && !all_received_devices_interrupts.S && !all_received_devices_interrupts.D && !all_received_devices_interrupts.is_mouse_move_interrupt && !all_received_devices_interrupts.m1) {
         continue;
     }
-    printf("Interrupt to be handled\n");
+//    printf("Interrupt to be handled\n");
     // checks if there are multiple key presses at the same time, in which case it should ignore them and put the last key pressed as NO_LETTER_PRESSED
     if (all_received_devices_interrupts.W || all_received_devices_interrupts.A || all_received_devices_interrupts.S || all_received_devices_interrupts.D) {
         last_key_pressed = NO_LETTER_PRESSED;
@@ -633,16 +641,46 @@ int (proj_main_loop)(int argc, char *argv[]) {
             handle_main_menu(mouse_position_x, mouse_position_y, &current_game_state, &is_start_of_screen, &close_application);
             break;
         case GAME:
+            was_game_state_changed = false;
             // handle for mouse 1 input (quit game, kill monsters, update score)
-            // handle for timer tick (move monsters)
-            // handle for timer second (try move player last key pressed, update time, spawn monsters every 4 seconds)
+            if (all_received_devices_interrupts.m1) {
+                handle_game_m1_interrupt(&all_game_entities_position, &current_game_values, mouse_position_x,
+                                         mouse_position_y, &was_game_state_changed, &is_game_quit);
+            }
+            if (is_game_quit) {
+                current_game_state = MAIN_MENU;
+                is_start_of_screen = true;
+                break;
+            }
+            // handle for timer tick (move monsters and monster attack)
+            if (all_received_devices_interrupts.is_timer_tick_interrupt) {
+                handle_game_timer_tick_interrupt(&all_game_entities_position, &current_game_values,
+                                                 &was_game_state_changed, &is_game_over);
+            }
+            if (is_game_over) {
+                current_game_state = GAME_OVER;
+                is_start_of_screen = true;
+                break;
+            }
+            // handle for timer second (try move player last key pressed, update time, spawn monsters every 4th seconds)
+            if (all_received_devices_interrupts.is_timer_second_interrupt) {
+                handle_game_timer_second_interrupt(&all_game_entities_position, &current_game_values, last_key_pressed,
+                                                   &was_game_state_changed);
+            }
+
+            if (was_game_state_changed) {
+                load_game_state_to_game_buffer(&all_game_entities_position, &current_game_values, &game_loaded_images, game_frame_buffer);
+                was_game_frame_buffer_changed = true;
+            }
             break;
         case GAME_OVER:
-            // [TODO] check if with the interrupts the function should execute
-//          [TODO] function to handle interrupts while in the game over state (where nothing moves only quit can be pressed)
+            if (!all_received_devices_interrupts.m1) {
+                break;
+            }
+//          [TODO] function to handle interrupts while in the game over state (where nothing moves and only quit can be pressed)
             break;
         case HIGH_SCORE:
-            // [TODO] check if with the interrupts the function should execute
+         // [TODO] check if with the interrupts the function should execute
 //          [TODO] function to handle interrupts while in the the high score state
             break;
     }

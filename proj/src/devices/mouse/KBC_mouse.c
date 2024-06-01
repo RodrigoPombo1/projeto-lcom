@@ -18,8 +18,8 @@ int (mouse_unsubscribe)() { // (C)arnival is over
 }
 
 int (mouse_build_packet)() {
-  printf("Byte: %u\n", byte);
-  printf("Byte count: %d\n", byte_count);
+//  printf("Byte: %u\n", byte);
+//  printf("Byte count: %d\n", byte_count);
   if (byte_count == 0 && ((byte & CONTROL_BIT) == 0)) {
     printf("Build error");
     return 1;
@@ -102,26 +102,26 @@ int (mouse_write_command)(uint8_t command) {
 
 struct mouse_ev *(mouse_detect_events)(struct packet *pp) {
   mouse->type = MOUSE_MOV;
-  printf("Breakpoint 30\n");
+//  printf("Breakpoint 30\n");
   bool was_type_set;
-  printf("Breakpoint 50\n");
+//  printf("Breakpoint 50\n");
   if (pp->lb && !was_left_button_pressed) {
-    printf("Breakpoint 40\n");
+//    printf("Breakpoint 40\n");
     mouse->type = LB_PRESSED;
     was_left_button_pressed = true;
     was_type_set = true;
   }
-printf("Breakpoint 31\n");
+//printf("Breakpoint 31\n");
   if (!pp->lb && was_left_button_pressed) {
-    printf("Breakpoint 41\n");
+//    printf("Breakpoint 41\n");
     mouse->type = LB_RELEASED;
     was_left_button_pressed = false;
     was_type_set = true;
   }
-printf("Breakpoint 32\n");
+//printf("Breakpoint 32\n");
   mouse->delta_x = pp->delta_x;
   mouse->delta_y = pp->delta_y;
-printf("Breakpoint 36\n");
+//printf("Breakpoint 36\n");
   if ((mouse->delta_x != 0 || mouse->delta_y != 0) && !was_type_set) {
     mouse->type = MOUSE_MOV;
     was_type_set = true;

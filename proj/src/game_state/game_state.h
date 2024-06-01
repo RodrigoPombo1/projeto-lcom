@@ -111,7 +111,23 @@ int get_image_from_number_game(struct image_struct**  result_image, struct game_
 int convert_game_position_to_frame_buffer_position(int game_position_x, int game_position_y, int *frame_buffer_position_x, int *frame_buffer_position_y);
 
 int spawn_monsters(struct game_entities_position *all_game_state_entities_position);
-// update game state mouse just takes the array and the mouse position
-// update game state keyboard just takes the array and the last key pressed
-// load game state on background just takes the array and the background and the game frame buffer
+
+int increment_score(struct game_values *current_game_state_values);
+
+int increment_timer(struct game_values *current_game_state_values);
+
+int fill_spawns(struct game_entities_position *all_game_state_entities_position);
+
+int convert_frame_buffer_position_to_game_position(int frame_buffer_position_x, int frame_buffer_position_y, int *game_position_x, int *game_position_y);
+
+int check_monster_if_the_space_can_be_moved_into(struct game_entities_position *all_game_state_entities_position, int x, int y, bool *can_move, bool *killed_player);
+
+int check_player_if_the_space_can_be_moved_into(struct game_entities_position *all_game_state_entities_position, int x, int y, bool *can_move);
+
+int handle_game_m1_interrupt(struct game_entities_position *all_game_state_entities_position, struct game_values *current_game_state_values, int mouse_position_x, int mouse_position_y, bool *was_game_state_changed, bool *is_game_quit);
+
+int handle_game_timer_tick_interrupt(struct game_entities_position *all_game_state_entities_position, struct game_values *current_game_state_values, bool *was_game_state_changed, bool *is_game_over);
+
+int handle_game_timer_second_interrupt(struct game_entities_position *all_game_state_entities_position, struct game_values *current_game_state_values, enum letter_pressed last_key_pressed, bool *was_game_state_changed);
+
 #endif
