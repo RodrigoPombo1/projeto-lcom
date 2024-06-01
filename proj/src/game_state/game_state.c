@@ -208,7 +208,7 @@ int increment_timer(struct game_values *current_game_state_values) {
 
 int handle_game_m1_interrupt(struct game_entities_position *all_game_state_entities_position, struct game_values *current_game_state_values, int mouse_position_x, int mouse_position_y, bool *was_game_state_changed, bool *is_game_quit) {
     // check if the mouse is over the quit button
-    if (608 <= mouse_position_x && mouse_position_x <= 752 && 16 <= mouse_position_y && mouse_position_y <= 64) {
+    if (608 <= mouse_position_x && mouse_position_x <= 752 && 16 <= mouse_position_y && mouse_position_y <= 80) {
         *is_game_quit = true;
         return 0;
     }
@@ -767,6 +767,15 @@ int read_high_scores(struct high_score high_scores[5]) {
     }
     printf("Read %d high scores\n", count);
     fclose(file);
+    return 0;
+}
+
+int handle_high_score_interrupt(int mouse_position_x, int mouse_position_y, enum game_state* game_state, bool *is_start_of_screen) {
+    // check if the mouse is over the quit button
+    if (608 <= mouse_position_x && mouse_position_x <= 752 && 16 <= mouse_position_y && mouse_position_y <= 80) {
+        *game_state = MAIN_MENU;
+        *is_start_of_screen = true;
+    }
     return 0;
 }
 

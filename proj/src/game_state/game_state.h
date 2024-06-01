@@ -152,6 +152,8 @@ int handle_game_timer_second_interrupt(struct game_entities_position *all_game_s
 
 int handle_game_over_interrupt(int mouse_position_x, int mouse_position_y, enum game_state* game_state, bool *is_start_of_screen);
 
+int handle_high_score_interrupt(int mouse_position_x, int mouse_position_y, enum game_state* game_state, bool *is_start_of_screen);
+
 int store_high_score_at_this_time(struct game_values *game_values);
 
 int write_high_scores(struct high_score high_scores[5]);

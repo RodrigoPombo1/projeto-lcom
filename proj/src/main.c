@@ -694,7 +694,7 @@ int (proj_main_loop)(int argc, char *argv[]) {
             if (!all_received_devices_interrupts.m1) {
                 break;
             }
-//          [TODO] function to handle interrupts while in the the high score state
+            handle_high_score_interrupt(mouse_position_x, mouse_position_y, &current_game_state, &is_start_of_screen);
             break;
     }
     // remove the interrupts so that they don't get handled again
