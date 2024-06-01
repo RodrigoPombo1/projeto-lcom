@@ -35,13 +35,14 @@ struct enemy {
     struct position position;
     int id;
     bool is_alive;
+    bool move_horizontally;
 };
 
 struct game_entities_position {
     enum type_of_entity array_of_rows_of_entities[14][23];
     struct position player_position;
     struct enemy enemy_structs[8];
-    struct position spawner_position[4];
+    struct position spawners_positions[4];
     int last_spawn_used;
     int array_of_entities_h_size;
     int array_of_entities_v_size;
@@ -108,6 +109,8 @@ int load_game_state_to_game_buffer(struct game_entities_position *all_game_state
 int get_image_from_number_game(struct image_struct**  result_image, struct game_images *all_game_images, int number);
 
 int convert_game_position_to_frame_buffer_position(int game_position_x, int game_position_y, int *frame_buffer_position_x, int *frame_buffer_position_y);
+
+int spawn_monsters(struct game_entities_position *all_game_state_entities_position);
 // update game state mouse just takes the array and the mouse position
 // update game state keyboard just takes the array and the last key pressed
 // load game state on background just takes the array and the background and the game frame buffer

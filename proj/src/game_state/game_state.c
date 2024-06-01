@@ -75,10 +75,10 @@ int load_game_state_to_game_buffer(struct game_entities_position *all_game_state
     image_load_to_frame_buffer(all_game_images->player, frame_buffer_position_x, frame_buffer_position_y, video_mem);
     // draw all the enemies
     for (int i = 0; i < 8; i++) {
-        if (all_game_state_entities_position->enemy_structs[i].is_alive == false) {
+        if (!all_game_state_entities_position->enemy_structs[i].is_alive) {
             continue;
         }
-        convert_game_position_to_frame_buffer_position(all_game_state_entities_position->enemy_structs[i].position.x, all_game_state_entities_position->enemy_structs[i].position.x, &frame_buffer_position_x, &frame_buffer_position_y);
+        convert_game_position_to_frame_buffer_position(all_game_state_entities_position->enemy_structs[i].position.x, all_game_state_entities_position->enemy_structs[i].position.y, &frame_buffer_position_x, &frame_buffer_position_y);
         image_load_to_frame_buffer(all_game_images->enemy, frame_buffer_position_x, frame_buffer_position_y, video_mem);
     }
 
@@ -111,6 +111,40 @@ int load_game_state_to_game_buffer(struct game_entities_position *all_game_state
 
     get_image_from_number_game(&number_image, all_game_images, current_game_state_values->score_digits[3]);
     image_load_to_frame_buffer(number_image, 476, 32, video_mem);
+
+    return 0;
+}
+
+int spawn_monsters(struct game_entities_position *all_game_state_entities_position) {
+    // find a spawn
+    for (int _ = 0; _ < 4; _++) {
+        // go to the next spawn
+        int current_spawn = (all_game_state_entities_position->last_spawn_used + 1) % 4;
+        all_game_state_entities_position->last_spawn_used = current_spawn;
+        // get the coordinates of that spawn
+        int x_of_spawn = all_game_state_entities_position->spawners_positions[current_spawn].x;
+        int y_of_spawn = all_game_state_entities_position->spawners_positions[current_spawn].y;
+        printf("Analysing spawn %d at %d, %d\n", current_spawn, x_of_spawn, y_of_spawn);
+        // check if there is an entity at that spawn
+        enum type_of_entity entity_at_the_spawn_position = all_game_state_entities_position->array_of_rows_of_entities[y_of_spawn][x_of_spawn];
+        if (entity_at_the_spawn_position == ENEMY) {
+            continue;
+        }
+        int i = 0;
+        // find a monster that is dead
+        while(i < 8) {
+            if (all_game_state_entities_position->enemy_structs[i].is_alive) {
+                i++;
+                continue;
+            }
+            break;
+        }
+        // spawn the monster at that spawn
+        all_game_state_entities_position->enemy_structs[i].position.x = x_of_spawn;
+        all_game_state_entities_position->enemy_structs[i].position.y = y_of_spawn;
+        all_game_state_entities_position->array_of_rows_of_entities[y_of_spawn][x_of_spawn] = ENEMY;
+        all_game_state_entities_position->enemy_structs[i].is_alive = true;
+    }
 
     return 0;
 }

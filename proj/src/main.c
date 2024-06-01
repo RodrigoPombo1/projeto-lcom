@@ -336,7 +336,7 @@ int (proj_main_loop)(int argc, char *argv[]) {
   const int array_of_rows_of_entities_size = 14;
   const int row_of_entities_size = 23;
   struct position player_position = {9, 9};
-  int last_spawn_used = 4;
+  int last_spawn_used = 3;
 
   struct game_entities_position initial_all_game_entities_position = {
           .array_of_rows_of_entities = {
@@ -360,49 +360,57 @@ int (proj_main_loop)(int argc, char *argv[]) {
                   {
                       .id = 0,
                       .position = {0, 0},
-                      .is_alive = false
+                      .is_alive = false,
+                      .move_horizontally = false
                   },
                   {
                       .id = 1,
                       .position = {0, 0},
-                      .is_alive = false
+                      .is_alive = false,
+                      .move_horizontally = true
                   },
                   {
                       .id = 2,
                       .position = {0, 0},
-                      .is_alive = false
+                      .is_alive = false,
+                      .move_horizontally = false
                   },
                   {
                       .id = 3,
                       .position = {0, 0},
-                      .is_alive = false
+                      .is_alive = false,
+                      .move_horizontally = true
                   },
                   {
                       .id = 4,
                       .position = {0, 0},
-                      .is_alive = false
+                      .is_alive = false,
+                      .move_horizontally = false
                   },
                   {
                       .id = 5,
                       .position = {0, 0},
-                      .is_alive = false
+                      .is_alive = false,
+                      .move_horizontally = true
                   },
                   {
                       .id = 6,
                       .position = {0, 0},
-                      .is_alive = false
+                      .is_alive = false,
+                      .move_horizontally = false
                   },
                   {
                       .id = 7,
                       .position = {0, 0},
-                      .is_alive = false
+                      .is_alive = false,
+                      .move_horizontally = true
                   },
           },
-          .spawner_position = {
-                  {3, 3},
-                  {21, 3},
-                  {3, 12},
-                  {21, 12}
+          .spawners_positions = {
+                  {2, 2},
+                  {2, 11},
+                  {20, 2},
+                  {20, 11}
           },
           .last_spawn_used = last_spawn_used,
           .array_of_entities_h_size = row_of_entities_size,
@@ -438,7 +446,7 @@ int (proj_main_loop)(int argc, char *argv[]) {
                 all_game_entities_position = initial_all_game_entities_position;
                 current_game_values = initial_game_values;
                 // [TODO] set the monsters to their initial position // spawn them essencially
-                // [TODO] load game state to the game frame buffer
+                spawn_monsters(&all_game_entities_position);
                 load_game_state_to_game_buffer(&all_game_entities_position, &current_game_values, &game_loaded_images, game_frame_buffer);
                 break;
             case GAME_OVER:
