@@ -680,7 +680,7 @@ int store_high_score_at_this_time(struct game_values *game_value) {
 //    }
 
     // check if the score is higher than the lowest high score
-    if (high_score_of_the_game.game_values.score > high_scores[last_active_score].game_values.score) {
+    if (high_score_of_the_game.game_values.score > high_scores[last_active_score].game_values.score || last_active_score < 4) {
         // insert the new high score in the position of the lowest high score which we know is the lowest
         high_scores[last_active_score] = high_score_of_the_game;
         // sort the high scores
