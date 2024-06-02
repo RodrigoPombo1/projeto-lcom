@@ -45,6 +45,6 @@
 #define ERROR 0xFC
 
 // Extra
-#define MAX_16_BITS 0x8000 
+#define MAX_16_BITS 0x8000
 
 #endif

@@ -3,7 +3,9 @@
 extern rtc_info_t rtc;
 
 // this handle only happens when m1 is pressed
-int handle_main_menu(int mouse_position_x, int mouse_position_y, enum game_state* game_state, bool *is_start_of_game_state, bool *close_application) {
+int
+handle_main_menu(int mouse_position_x, int mouse_position_y, enum game_state *game_state, bool *is_start_of_game_state,
+                 bool *close_application) {
     // check if the mouse is over the play button
     if (224 <= mouse_position_x && mouse_position_x <= 576 && 144 <= mouse_position_y && mouse_position_y <= 208) {
         *game_state = GAME;
@@ -24,13 +26,15 @@ int handle_main_menu(int mouse_position_x, int mouse_position_y, enum game_state
     return 1;
 }
 
-int convert_game_position_to_frame_buffer_position(int game_position_x, int game_position_y, int *frame_buffer_position_x, int *frame_buffer_position_y) {
+int
+convert_game_position_to_frame_buffer_position(int game_position_x, int game_position_y, int *frame_buffer_position_x,
+                                               int *frame_buffer_position_y) {
     *frame_buffer_position_x = 32 + 32 * game_position_x;
     *frame_buffer_position_y = 112 + 32 * game_position_y;
     return 0;
 }
 
-int get_image_from_number_game(struct image_struct** result_image, struct game_images *all_game_images, int number) {
+int get_image_from_number_game(struct image_struct **result_image, struct game_images *all_game_images, int number) {
     switch (number) {
         case 0:
             *result_image = all_game_images->number_0;
@@ -67,20 +71,26 @@ int get_image_from_number_game(struct image_struct** result_image, struct game_i
     }
 }
 
-int load_game_state_to_game_buffer(struct game_entities_position *all_game_state_entities_position, struct game_values *current_game_state_values, struct game_images *all_game_images, uint8_t* video_mem) {
+int load_game_state_to_game_buffer(struct game_entities_position *all_game_state_entities_position,
+                                   struct game_values *current_game_state_values, struct game_images *all_game_images,
+                                   uint8_t *video_mem) {
     image_load_to_frame_buffer(all_game_images->background, 0, 0, video_mem);
 
     int frame_buffer_position_x = 0;
     int frame_buffer_position_y = 0;
     // draw player
-    convert_game_position_to_frame_buffer_position(all_game_state_entities_position->player_position.x, all_game_state_entities_position->player_position.y, &frame_buffer_position_x, &frame_buffer_position_y);
+    convert_game_position_to_frame_buffer_position(all_game_state_entities_position->player_position.x,
+                                                   all_game_state_entities_position->player_position.y,
+                                                   &frame_buffer_position_x, &frame_buffer_position_y);
     image_load_to_frame_buffer(all_game_images->player, frame_buffer_position_x, frame_buffer_position_y, video_mem);
     // draw all the enemies
     for (int i = 0; i < 8; i++) {
         if (!all_game_state_entities_position->enemy_structs[i].is_alive) {
             continue;
         }
-        convert_game_position_to_frame_buffer_position(all_game_state_entities_position->enemy_structs[i].position.x, all_game_state_entities_position->enemy_structs[i].position.y, &frame_buffer_position_x, &frame_buffer_position_y);
+        convert_game_position_to_frame_buffer_position(all_game_state_entities_position->enemy_structs[i].position.x,
+                                                       all_game_state_entities_position->enemy_structs[i].position.y,
+                                                       &frame_buffer_position_x, &frame_buffer_position_y);
         image_load_to_frame_buffer(all_game_images->enemy, frame_buffer_position_x, frame_buffer_position_y, video_mem);
     }
 
@@ -134,7 +144,7 @@ int spawn_monsters(struct game_entities_position *all_game_state_entities_positi
         }
         int i = 0;
         // find a monster that is dead
-        while(i < 8) {
+        while (i < 8) {
             if (all_game_state_entities_position->enemy_structs[i].is_alive) {
                 i++;
                 continue;
@@ -154,8 +164,10 @@ int spawn_monsters(struct game_entities_position *all_game_state_entities_positi
     return 0;
 }
 
-int convert_frame_buffer_position_to_game_position(int frame_buffer_position_x, int frame_buffer_position_y, int *game_position_x, int *game_position_y) {
-    if (frame_buffer_position_x < 32 || frame_buffer_position_x > 768 || frame_buffer_position_y < 112 || frame_buffer_position_y > 560) {
+int convert_frame_buffer_position_to_game_position(int frame_buffer_position_x, int frame_buffer_position_y,
+                                                   int *game_position_x, int *game_position_y) {
+    if (frame_buffer_position_x < 32 || frame_buffer_position_x > 768 || frame_buffer_position_y < 112 ||
+        frame_buffer_position_y > 560) {
         *game_position_x = -1;
         *game_position_y = -1;
         return 1;
@@ -206,7 +218,9 @@ int increment_timer(struct game_values *current_game_state_values) {
     return 0;
 }
 
-int handle_game_m1_interrupt(struct game_entities_position *all_game_state_entities_position, struct game_values *current_game_state_values, int mouse_position_x, int mouse_position_y, bool *was_game_state_changed, bool *is_game_quit) {
+int handle_game_m1_interrupt(struct game_entities_position *all_game_state_entities_position,
+                             struct game_values *current_game_state_values, int mouse_position_x, int mouse_position_y,
+                             bool *was_game_state_changed, bool *is_game_quit) {
     // check if the mouse is over the quit button
     if (608 <= mouse_position_x && mouse_position_x <= 752 && 16 <= mouse_position_y && mouse_position_y <= 80) {
         *is_game_quit = true;
@@ -215,7 +229,8 @@ int handle_game_m1_interrupt(struct game_entities_position *all_game_state_entit
     int mouse_position_in_game_x;
     int mouse_position_in_game_y;
     // get the game coordinates the mouse is hovering
-    convert_frame_buffer_position_to_game_position(mouse_position_x, mouse_position_y, &mouse_position_in_game_x, &mouse_position_in_game_y);
+    convert_frame_buffer_position_to_game_position(mouse_position_x, mouse_position_y, &mouse_position_in_game_x,
+                                                   &mouse_position_in_game_y);
     // check if the mouse position is even in the game
     if (mouse_position_in_game_x == -1 || mouse_position_in_game_y == -1) {
         return 0;
@@ -224,25 +239,29 @@ int handle_game_m1_interrupt(struct game_entities_position *all_game_state_entit
     bool mouse_is_adjacent_to_character = false;
     // check coordinate above
     if (mouse_position_in_game_y - 1 >= 0) {
-        if (all_game_state_entities_position->array_of_rows_of_entities[mouse_position_in_game_y - 1][mouse_position_in_game_x] == PLAYER) {
+        if (all_game_state_entities_position->array_of_rows_of_entities[mouse_position_in_game_y -
+                                                                        1][mouse_position_in_game_x] == PLAYER) {
             mouse_is_adjacent_to_character = true;
         }
     }
     // check coordinate below
     if (mouse_position_in_game_y + 1 < 14) {
-        if (all_game_state_entities_position->array_of_rows_of_entities[mouse_position_in_game_y + 1][mouse_position_in_game_x] == PLAYER) {
+        if (all_game_state_entities_position->array_of_rows_of_entities[mouse_position_in_game_y +
+                                                                        1][mouse_position_in_game_x] == PLAYER) {
             mouse_is_adjacent_to_character = true;
         }
     }
     // check coordinate to the left
     if (mouse_position_in_game_x - 1 >= 0) {
-        if (all_game_state_entities_position->array_of_rows_of_entities[mouse_position_in_game_y][mouse_position_in_game_x - 1] == PLAYER) {
+        if (all_game_state_entities_position->array_of_rows_of_entities[mouse_position_in_game_y][
+                    mouse_position_in_game_x - 1] == PLAYER) {
             mouse_is_adjacent_to_character = true;
         }
     }
     // check coordinate to the right
     if (mouse_position_in_game_x + 1 < 24) {
-        if (all_game_state_entities_position->array_of_rows_of_entities[mouse_position_in_game_y][mouse_position_in_game_x + 1] == PLAYER) {
+        if (all_game_state_entities_position->array_of_rows_of_entities[mouse_position_in_game_y][
+                    mouse_position_in_game_x + 1] == PLAYER) {
             mouse_is_adjacent_to_character = true;
         }
     }
@@ -252,13 +271,15 @@ int handle_game_m1_interrupt(struct game_entities_position *all_game_state_entit
     }
 
     // check if the mouse is over an enemy
-    if (all_game_state_entities_position->array_of_rows_of_entities[mouse_position_in_game_y][mouse_position_in_game_x] == ENEMY) {
+    if (all_game_state_entities_position->array_of_rows_of_entities[mouse_position_in_game_y][mouse_position_in_game_x] ==
+        ENEMY) {
         // kill the enemy
         for (int i = 0; i < 8; i++) {
             if (!all_game_state_entities_position->enemy_structs[i].is_alive) {
                 continue;
             }
-            if (all_game_state_entities_position->enemy_structs[i].position.x == mouse_position_in_game_x && all_game_state_entities_position->enemy_structs[i].position.y == mouse_position_in_game_y) {
+            if (all_game_state_entities_position->enemy_structs[i].position.x == mouse_position_in_game_x &&
+                all_game_state_entities_position->enemy_structs[i].position.y == mouse_position_in_game_y) {
                 *was_game_state_changed = true;
                 all_game_state_entities_position->enemy_structs[i].is_alive = false;
                 all_game_state_entities_position->array_of_rows_of_entities[mouse_position_in_game_y][mouse_position_in_game_x] = EMPTY;
@@ -273,7 +294,8 @@ int handle_game_m1_interrupt(struct game_entities_position *all_game_state_entit
     return 0;
 }
 
-int check_monster_if_the_space_can_be_moved_into(struct game_entities_position *all_game_state_entities_position, int x, int y, bool *can_move, bool *killed_player) {
+int check_monster_if_the_space_can_be_moved_into(struct game_entities_position *all_game_state_entities_position, int x,
+                                                 int y, bool *can_move, bool *killed_player) {
     *can_move = false;
     *killed_player = false;
     // check if it's outside the map
@@ -295,7 +317,9 @@ int check_monster_if_the_space_can_be_moved_into(struct game_entities_position *
     return 0;
 }
 
-int handle_game_timer_tick_interrupt(struct game_entities_position *all_game_state_entities_position, struct game_values *current_game_state_values, bool *was_game_state_changed, bool *is_game_over) {
+int handle_game_timer_tick_interrupt(struct game_entities_position *all_game_state_entities_position,
+                                     struct game_values *current_game_state_values, bool *was_game_state_changed,
+                                     bool *is_game_over) {
     bool has_monster_moved = false;
     // move monsters towards the player
     for (int i = 0; i < 8; i++) {
@@ -312,8 +336,9 @@ int handle_game_timer_tick_interrupt(struct game_entities_position *all_game_sta
         // check if the player is to the left of the monster
         if (player_x < enemy_x) {
             // check if the monster can move to the left
-            check_monster_if_the_space_can_be_moved_into(all_game_state_entities_position, enemy_x - 1, enemy_y, &can_move,
-                                                 &killed_player);
+            check_monster_if_the_space_can_be_moved_into(all_game_state_entities_position, enemy_x - 1, enemy_y,
+                                                         &can_move,
+                                                         &killed_player);
             if (can_move) {
                 *was_game_state_changed = true;
                 has_monster_moved = true;
@@ -333,8 +358,9 @@ int handle_game_timer_tick_interrupt(struct game_entities_position *all_game_sta
         // check if the player is to the right of the monster
         if (player_x > enemy_x) {
             // check if the monster can move to the right
-            check_monster_if_the_space_can_be_moved_into(all_game_state_entities_position, enemy_x + 1, enemy_y, &can_move,
-                                                 &killed_player);
+            check_monster_if_the_space_can_be_moved_into(all_game_state_entities_position, enemy_x + 1, enemy_y,
+                                                         &can_move,
+                                                         &killed_player);
             if (can_move) {
                 *was_game_state_changed = true;
                 has_monster_moved = true;
@@ -354,8 +380,9 @@ int handle_game_timer_tick_interrupt(struct game_entities_position *all_game_sta
         // check if the player is above the monster
         if (player_y < enemy_y) {
             // check if the monster can move up
-            check_monster_if_the_space_can_be_moved_into(all_game_state_entities_position, enemy_x, enemy_y - 1, &can_move,
-                                                 &killed_player);
+            check_monster_if_the_space_can_be_moved_into(all_game_state_entities_position, enemy_x, enemy_y - 1,
+                                                         &can_move,
+                                                         &killed_player);
             if (can_move) {
                 *was_game_state_changed = true;
                 has_monster_moved = true;
@@ -375,8 +402,9 @@ int handle_game_timer_tick_interrupt(struct game_entities_position *all_game_sta
         // check if the player is below the monster
         if (player_y > enemy_y) {
             // check if the monster can move down
-            check_monster_if_the_space_can_be_moved_into(all_game_state_entities_position, enemy_x, enemy_y + 1, &can_move,
-                                                 &killed_player);
+            check_monster_if_the_space_can_be_moved_into(all_game_state_entities_position, enemy_x, enemy_y + 1,
+                                                         &can_move,
+                                                         &killed_player);
             if (can_move) {
                 *was_game_state_changed = true;
                 has_monster_moved = true;
@@ -394,7 +422,8 @@ int handle_game_timer_tick_interrupt(struct game_entities_position *all_game_sta
     return 0;
 }
 
-int check_player_if_the_space_can_be_moved_into(struct game_entities_position *all_game_state_entities_position, int x, int y, bool *can_move) {
+int check_player_if_the_space_can_be_moved_into(struct game_entities_position *all_game_state_entities_position, int x,
+                                                int y, bool *can_move) {
     *can_move = false;
     // check if it's outside the map
     if (x < 0 || x >= 23 || y < 0 || y >= 14) {
@@ -409,7 +438,9 @@ int check_player_if_the_space_can_be_moved_into(struct game_entities_position *a
     return 0;
 }
 
-int handle_game_timer_second_interrupt(struct game_entities_position *all_game_state_entities_position, struct game_values *current_game_state_values, enum letter_pressed *last_key_pressed, bool *was_game_state_changed) {
+int handle_game_timer_second_interrupt(struct game_entities_position *all_game_state_entities_position,
+                                       struct game_values *current_game_state_values,
+                                       enum letter_pressed *last_key_pressed, bool *was_game_state_changed) {
     increment_timer(current_game_state_values);
     *was_game_state_changed = true;
     // spawn monsters every 4th second
@@ -450,7 +481,8 @@ int handle_game_timer_second_interrupt(struct game_entities_position *all_game_s
     return 0;
 }
 
-int handle_game_over_interrupt(int mouse_position_x, int mouse_position_y, enum game_state* game_state, bool *is_start_of_screen) {
+int handle_game_over_interrupt(int mouse_position_x, int mouse_position_y, enum game_state *game_state,
+                               bool *is_start_of_screen) {
     // check if the mouse is over the quit button
     if (608 <= mouse_position_x && mouse_position_x <= 752 && 16 <= mouse_position_y && mouse_position_y <= 64) {
         *game_state = MAIN_MENU;
@@ -463,7 +495,7 @@ int store_high_score_at_this_time(struct game_values *game_value) {
     int decimal = 0;
     int base = 1;
     if (rtc_read_date_time() != 0) {
-      printf("Falhou\n");
+        printf("Falhou\n");
     }
     while (rtc.seconds > 0) {
         int rightmost_digit = rtc.seconds & 0xF;
@@ -531,24 +563,24 @@ int store_high_score_at_this_time(struct game_values *game_value) {
     rtc.year = decimal;
 
     struct high_score high_score_of_the_game = {
-        .is_active = true,
-        .game_values = {
-            .score = game_value->score,
-            .time_in_seconds = game_value->time_in_seconds,
-            .score_digits = {
-                    game_value->score_digits[0],
-                    game_value->score_digits[1],
-                    game_value->score_digits[2],
-                    game_value->score_digits[3]},
-        },
-        .date_time_of_score = {
-            .seconds = rtc.seconds,
-            .minutes = rtc.minutes,
-            .hours = rtc.hours,
-            .day = rtc.day,
-            .month = rtc.month,
-            .year = rtc.year
-        }
+            .is_active = true,
+            .game_values = {
+                    .score = game_value->score,
+                    .time_in_seconds = game_value->time_in_seconds,
+                    .score_digits = {
+                            game_value->score_digits[0],
+                            game_value->score_digits[1],
+                            game_value->score_digits[2],
+                            game_value->score_digits[3]},
+            },
+            .date_time_of_score = {
+                    .seconds = rtc.seconds,
+                    .minutes = rtc.minutes,
+                    .hours = rtc.hours,
+                    .day = rtc.day,
+                    .month = rtc.month,
+                    .year = rtc.year
+            }
     };
 //    printf("Score: %d\n", high_score_of_the_game.game_values.score);
     // create the array to read the high_scores
@@ -671,7 +703,8 @@ int store_high_score_at_this_time(struct game_values *game_value) {
     }
 
     // check if the score is higher than the lowest high score
-    if (high_score_of_the_game.game_values.score > high_scores[last_active_score].game_values.score || last_active_score < 4) {
+    if (high_score_of_the_game.game_values.score > high_scores[last_active_score].game_values.score ||
+        last_active_score < 4) {
         // insert the new high score in the position of the lowest high score which we know is the lowest
         high_scores[last_active_score] = high_score_of_the_game;
         // sort the high scores
@@ -711,7 +744,10 @@ int write_high_scores(struct high_score high_scores[5]) {
         int time_minutes = high_scores[i].game_values.time_in_seconds / 60;
         int time_seconds = high_scores[i].game_values.time_in_seconds % 60;
 
-        fprintf(file, "%d %d %d %d %d %d %d %d %d\n", score, time_minutes, time_seconds, high_scores[i].date_time_of_score.hours, high_scores[i].date_time_of_score.minutes, high_scores[i].date_time_of_score.seconds, high_scores[i].date_time_of_score.day, high_scores[i].date_time_of_score.month, high_scores[i].date_time_of_score.year);
+        fprintf(file, "%d %d %d %d %d %d %d %d %d\n", score, time_minutes, time_seconds,
+                high_scores[i].date_time_of_score.hours, high_scores[i].date_time_of_score.minutes,
+                high_scores[i].date_time_of_score.seconds, high_scores[i].date_time_of_score.day,
+                high_scores[i].date_time_of_score.month, high_scores[i].date_time_of_score.year);
     }
 
     fclose(file);
@@ -737,7 +773,8 @@ int read_high_scores(struct high_score high_scores[5]) {
         high_scores[count].is_active = true;
 
         int score, time_minutes, time_seconds, hour, minute, second, day, month, year;
-        sscanf(line, "%d %d %d %d %d %d %d %d %d", &score, &time_minutes, &time_seconds, &hour, &minute, &second, &day, &month, &year);
+        sscanf(line, "%d %d %d %d %d %d %d %d %d", &score, &time_minutes, &time_seconds, &hour, &minute, &second, &day,
+               &month, &year);
 
         // split score into digits
         high_scores[count].game_values.score_digits[0] = (score / 1000) % 10;
@@ -770,7 +807,8 @@ int read_high_scores(struct high_score high_scores[5]) {
     return 0;
 }
 
-int handle_high_score_interrupt(int mouse_position_x, int mouse_position_y, enum game_state* game_state, bool *is_start_of_screen) {
+int handle_high_score_interrupt(int mouse_position_x, int mouse_position_y, enum game_state *game_state,
+                                bool *is_start_of_screen) {
     // check if the mouse is over the quit button
     if (608 <= mouse_position_x && mouse_position_x <= 752 && 16 <= mouse_position_y && mouse_position_y <= 80) {
         *game_state = MAIN_MENU;
@@ -780,7 +818,9 @@ int handle_high_score_interrupt(int mouse_position_x, int mouse_position_y, enum
 }
 
 
-int get_image_from_number_high_score(struct image_struct** result_image, struct high_score_images *all_high_score_images, int number) {
+int
+get_image_from_number_high_score(struct image_struct **result_image, struct high_score_images *all_high_score_images,
+                                 int number) {
     switch (number) {
         case 0:
             *result_image = all_high_score_images->number_0;
@@ -817,7 +857,7 @@ int get_image_from_number_high_score(struct image_struct** result_image, struct 
     }
 }
 
-int load_high_scores_to_game_buffer(struct high_score_images *all_high_score_images, uint8_t* video_mem) {
+int load_high_scores_to_game_buffer(struct high_score_images *all_high_score_images, uint8_t *video_mem) {
     // create the array to read the high_scores
     struct high_score high_scores[5] = {
             {
@@ -939,7 +979,8 @@ int load_high_scores_to_game_buffer(struct high_score_images *all_high_score_ima
         image_load_to_frame_buffer(number_image, 260 + desvio_date_time, y_position_1, video_mem);
 
         // load the -
-        image_load_to_frame_buffer(all_high_score_images->character_tracinho, 280 + desvio_date_time , y_position_1 + desvio_y_tracinho, video_mem);
+        image_load_to_frame_buffer(all_high_score_images->character_tracinho, 280 + desvio_date_time,
+                                   y_position_1 + desvio_y_tracinho, video_mem);
 
         // load the month
 
@@ -955,7 +996,8 @@ int load_high_scores_to_game_buffer(struct high_score_images *all_high_score_ima
         image_load_to_frame_buffer(number_image, 320 + desvio_date_time, y_position_1, video_mem);
 
         // load the -
-        image_load_to_frame_buffer(all_high_score_images->character_tracinho, 340 + desvio_date_time, y_position_1 + desvio_y_tracinho, video_mem);
+        image_load_to_frame_buffer(all_high_score_images->character_tracinho, 340 + desvio_date_time,
+                                   y_position_1 + desvio_y_tracinho, video_mem);
 
         // load the year
         // extract the value digit by digit
@@ -982,7 +1024,8 @@ int load_high_scores_to_game_buffer(struct high_score_images *all_high_score_ima
         image_load_to_frame_buffer(number_image, 260 + desvio_date_time, y_position_2, video_mem);
 
         // load the :
-        image_load_to_frame_buffer(all_high_score_images->character_2_pontos, 280 + desvio_date_time, y_position_2, video_mem);
+        image_load_to_frame_buffer(all_high_score_images->character_2_pontos, 280 + desvio_date_time, y_position_2,
+                                   video_mem);
 
         // load the minute
         // extract the value digit by digit
@@ -997,7 +1040,8 @@ int load_high_scores_to_game_buffer(struct high_score_images *all_high_score_ima
         image_load_to_frame_buffer(number_image, 320 + desvio_date_time, y_position_2, video_mem);
 
         // load the :
-        image_load_to_frame_buffer(all_high_score_images->character_2_pontos, 340 + desvio_date_time, y_position_2, video_mem);
+        image_load_to_frame_buffer(all_high_score_images->character_2_pontos, 340 + desvio_date_time, y_position_2,
+                                   video_mem);
 
         // load the second
         // extract the value digit by digit
@@ -1014,29 +1058,37 @@ int load_high_scores_to_game_buffer(struct high_score_images *all_high_score_ima
 
         // load the game time
         // load the minutes
-        get_image_from_number_high_score(&number_image, all_high_score_images, high_scores[i].game_values.time_digits[0]);
+        get_image_from_number_high_score(&number_image, all_high_score_images,
+                                         high_scores[i].game_values.time_digits[0]);
         image_load_to_frame_buffer(number_image, 416, y_position_1, video_mem);
-        get_image_from_number_high_score(&number_image, all_high_score_images, high_scores[i].game_values.time_digits[1]);
+        get_image_from_number_high_score(&number_image, all_high_score_images,
+                                         high_scores[i].game_values.time_digits[1]);
         image_load_to_frame_buffer(number_image, 436, y_position_1, video_mem);
 
         // load the :
         image_load_to_frame_buffer(all_high_score_images->character_2_pontos, 456, y_position_1, video_mem);
 
         // load the seconds
-        get_image_from_number_high_score(&number_image, all_high_score_images, high_scores[i].game_values.time_digits[2]);
+        get_image_from_number_high_score(&number_image, all_high_score_images,
+                                         high_scores[i].game_values.time_digits[2]);
         image_load_to_frame_buffer(number_image, 476, y_position_1, video_mem);
-        get_image_from_number_high_score(&number_image, all_high_score_images, high_scores[i].game_values.time_digits[3]);
+        get_image_from_number_high_score(&number_image, all_high_score_images,
+                                         high_scores[i].game_values.time_digits[3]);
         image_load_to_frame_buffer(number_image, 496, y_position_1, video_mem);
 
 
         // load the game score
-        get_image_from_number_high_score(&number_image, all_high_score_images, high_scores[i].game_values.score_digits[0]);
+        get_image_from_number_high_score(&number_image, all_high_score_images,
+                                         high_scores[i].game_values.score_digits[0]);
         image_load_to_frame_buffer(number_image, 592, y_position_1, video_mem);
-        get_image_from_number_high_score(&number_image, all_high_score_images, high_scores[i].game_values.score_digits[1]);
+        get_image_from_number_high_score(&number_image, all_high_score_images,
+                                         high_scores[i].game_values.score_digits[1]);
         image_load_to_frame_buffer(number_image, 612, y_position_1, video_mem);
-        get_image_from_number_high_score(&number_image, all_high_score_images, high_scores[i].game_values.score_digits[2]);
+        get_image_from_number_high_score(&number_image, all_high_score_images,
+                                         high_scores[i].game_values.score_digits[2]);
         image_load_to_frame_buffer(number_image, 632, y_position_1, video_mem);
-        get_image_from_number_high_score(&number_image, all_high_score_images, high_scores[i].game_values.score_digits[3]);
+        get_image_from_number_high_score(&number_image, all_high_score_images,
+                                         high_scores[i].game_values.score_digits[3]);
         image_load_to_frame_buffer(number_image, 652, y_position_1, video_mem);
     }
 

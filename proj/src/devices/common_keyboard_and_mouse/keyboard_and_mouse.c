@@ -1,17 +1,17 @@
 #include "keyboard_and_mouse.h"
 
-int (kbc_read_output)(uint8_t port, uint8_t* output) {
+int (kbc_read_output)(uint8_t port, uint8_t *output) {
     extern uint8_t status; // Status is defined on lab3.c
     uint8_t attempts = 10;
 
     while (attempts) {
         if ((status & FULL_OUT_BUFFER) != 0) { // Let's check if the output buffer is full (ready to be read)
             // Let's check if everything's alright with the status
-            if ((status & TIMEOUT_ERROR) != 0){  // Timeout error?
+            if ((status & TIMEOUT_ERROR) != 0) {  // Timeout error?
                 printf("Error: Parity error!\n");
                 return 1;
             }
-            if ((status & PARITY_ERROR) != 0){  // Parity error?
+            if ((status & PARITY_ERROR) != 0) {  // Parity error?
                 printf("Error: Timeout error!\n");
                 return 1;
             }

@@ -12,7 +12,8 @@ int (keyboard_unsubscribe)() { // (C)arnival is over
     return sys_irqrmpolicy(&keyboard_hook_id);
 }
 
-void (kbc_ih)() { // We test the function that invokes the Interrupt Handler (it will only read the scancode from the output buffer, in this implementation)
+void
+(kbc_ih)() { // We test the function that invokes the Interrupt Handler (it will only read the scancode from the output buffer, in this implementation)
     if (kbc_read_output(KBC_OUT_BUFFER, &scancode) != 0) {
         printf("Error: Could not read scancode!\n");
     }
@@ -31,7 +32,8 @@ int (restore_keyboard)() {
 
     cmdByte |= BIT(0); // We change the command byte to enable interruptions
 
-    if (kbc_write_command(KBC_IN_BUFFER, KBC_WRITE_CMD) != 0) {  // We tell the KBC that we want to write a new command byte
+    if (kbc_write_command(KBC_IN_BUFFER, KBC_WRITE_CMD) !=
+        0) {  // We tell the KBC that we want to write a new command byte
         return 1;
     }
 
