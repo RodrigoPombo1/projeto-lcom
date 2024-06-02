@@ -160,4 +160,8 @@ int write_high_scores(struct high_score high_scores[5]);
 
 int read_high_scores(struct high_score high_scores[5]);
 
+int get_image_from_number_high_score(struct image_struct**  result_image, struct high_score_images *all_high_score_images, int number);
+
+int load_high_scores_to_game_buffer(struct high_score_images *all_high_score_images, uint8_t* video_mem);
+
 #endif

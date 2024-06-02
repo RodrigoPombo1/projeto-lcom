@@ -653,26 +653,39 @@ int store_high_score_at_this_time(struct game_values *game_value) {
             break;
         }
         printf("Incrementing last active score\n");
+        // don't increment the final time
+        if (i == 4) {
+            continue;
+        }
         last_active_score++;
     }
+
     printf("Last active score: %d\n", last_active_score);
-    // check if there are no high scores
-    if (last_active_score != 4) {
-        // put the score as the top high score
+    // if there are 0 high scores in the file
+    if (last_active_score == 0) {
+        // put the score in the last active score (in the empty score position)
         high_scores[last_active_score] = high_score_of_the_game;
         printf("putting the recent game score has the only score Score: %d\n", high_scores[0].game_values.score);
         write_high_scores(high_scores);
         return 0;
     }
 
+//    // check if there are less than 5 high scores, but more than 0
+//    if (last_active_score != 4) {
+//        // put the score in the last active score (in the empty score position)
+//        high_scores[last_active_score] = high_score_of_the_game;
+//        printf("putting the recent game score has the only score Score: %d\n", high_scores[0].game_values.score);
+//        write_high_scores(high_scores);
+//        return 0;
+//    }
 
     // check if the score is higher than the lowest high score
-    if (high_score_of_the_game.game_values.score > high_scores[4].game_values.score) {
-        // insert the new high score
-        high_scores[4] = high_score_of_the_game;
+    if (high_score_of_the_game.game_values.score > high_scores[last_active_score].game_values.score) {
+        // insert the new high score in the position of the lowest high score which we know is the lowest
+        high_scores[last_active_score] = high_score_of_the_game;
         // sort the high scores
-        for (int i = 0; i < 5; i++) {
-            for (int j = i + 1; j < 5; j++) {
+        for (int i = 0; i < last_active_score + 1; i++) {
+            for (int j = i + 1; j < last_active_score + 1; j++) {
                 if (high_scores[i].game_values.score < high_scores[j].game_values.score) {
                     struct high_score temp = high_scores[i];
                     high_scores[i] = high_scores[j];
@@ -685,7 +698,7 @@ int store_high_score_at_this_time(struct game_values *game_value) {
             printf("Score: %d\n", high_scores[i].game_values.score);
             printf("Is active: %d\n", high_scores[i].is_active);
         }
-        // write the high scores to the file
+        // write the sorted high scores to the file
         if (write_high_scores(high_scores)) {
             printf("Failed to write high scores\n");
             return 1;
@@ -778,4 +791,271 @@ int handle_high_score_interrupt(int mouse_position_x, int mouse_position_y, enum
     }
     return 0;
 }
+
+
+int get_image_from_number_high_score(struct image_struct** result_image, struct high_score_images *all_high_score_images, int number) {
+    switch (number) {
+        case 0:
+            *result_image = all_high_score_images->number_0;
+            return 0;
+        case 1:
+            *result_image = all_high_score_images->number_1;
+            return 0;
+        case 2:
+            *result_image = all_high_score_images->number_2;
+            return 0;
+        case 3:
+            *result_image = all_high_score_images->number_3;
+            return 0;
+        case 4:
+            *result_image = all_high_score_images->number_4;
+            return 0;
+        case 5:
+            *result_image = all_high_score_images->number_5;
+            return 0;
+        case 6:
+            *result_image = all_high_score_images->number_6;
+            return 0;
+        case 7:
+            *result_image = all_high_score_images->number_7;
+            return 0;
+        case 8:
+            *result_image = all_high_score_images->number_8;
+            return 0;
+        case 9:
+            *result_image = all_high_score_images->number_9;
+            return 0;
+        default:
+            return 1;
+    }
+}
+
+int load_high_scores_to_game_buffer(struct high_score_images *all_high_score_images, uint8_t* video_mem) {
+    // create the array to read the high_scores
+    struct high_score high_scores[5] = {
+            {
+                    .is_active = false,
+                    .game_values = {
+                            .score = 0,
+                            .time_in_seconds = 0,
+                            .score_digits = {0, 0, 0, 0},
+                            .time_digits = {0, 0, 0, 0}
+                    },
+                    .date_time_of_score = {
+                            .seconds = 0,
+                            .minutes = 0,
+                            .hours = 0,
+                            .day = 0,
+                            .month = 0,
+                            .year = 0
+                    }
+            },
+            {
+                    .is_active = false,
+                    .game_values = {
+                            .score = 0,
+                            .time_in_seconds = 0,
+                            .score_digits = {0, 0, 0, 0},
+                            .time_digits = {0, 0, 0, 0}
+                    },
+                    .date_time_of_score = {
+                            .seconds = 0,
+                            .minutes = 0,
+                            .hours = 0,
+                            .day = 0,
+                            .month = 0,
+                            .year = 0
+                    }
+            },
+            {
+                    .is_active = false,
+                    .game_values = {
+                            .score = 0,
+                            .time_in_seconds = 0,
+                            .score_digits = {0, 0, 0, 0},
+                            .time_digits = {0, 0, 0, 0}
+                    },
+                    .date_time_of_score = {
+                            .seconds = 0,
+                            .minutes = 0,
+                            .hours = 0,
+                            .day = 0,
+                            .month = 0,
+                            .year = 0
+                    }
+            },
+            {
+                    .is_active = false,
+                    .game_values = {
+                            .score = 0,
+                            .time_in_seconds = 0,
+                            .score_digits = {0, 0, 0, 0},
+                            .time_digits = {0, 0, 0, 0}
+                    },
+                    .date_time_of_score = {
+                            .seconds = 0,
+                            .minutes = 0,
+                            .hours = 0,
+                            .day = 0,
+                            .month = 0,
+                            .year = 0
+                    }
+            },
+            {
+                    .is_active = false,
+                    .game_values = {
+                            .score = 0,
+                            .time_in_seconds = 0,
+                            .score_digits = {0, 0, 0, 0},
+                            .time_digits = {0, 0, 0, 0}
+                    },
+                    .date_time_of_score = {
+                            .seconds = 0,
+                            .minutes = 0,
+                            .hours = 0,
+                            .day = 0,
+                            .month = 0,
+                            .year = 0
+                    }
+            }
+    };
+
+    // read the high scores
+    if (read_high_scores(high_scores)) {
+        printf("Failed to read high scores\n");
+        return 1;
+    }
+
+    int desvio_y_tracinho = 14;
+    int desvio_date_time = -40;
+
+    // load the active high scores to the screen
+    for (int i = 0; i < 5; i++) {
+        int y_position_1 = 176 + (80 * i);
+        int y_position_2 = 212 + (80 * i);
+        if (!high_scores[i].is_active) {
+            break;
+        }
+        // load the score
+        struct image_struct *number_image = NULL;
+
+        // load the day
+        // extract the value digit by digit
+        int date_time = high_scores[i].date_time_of_score.day;
+        int digit_1 = date_time % 10;
+        date_time /= 10;
+        int digit_2 = date_time % 10;
+        // print the day digit by digit
+        get_image_from_number_high_score(&number_image, all_high_score_images, digit_2);
+        image_load_to_frame_buffer(number_image, 240 + desvio_date_time, y_position_1, video_mem);
+        get_image_from_number_high_score(&number_image, all_high_score_images, digit_1);
+        image_load_to_frame_buffer(number_image, 260 + desvio_date_time, y_position_1, video_mem);
+
+        // load the -
+        image_load_to_frame_buffer(all_high_score_images->character_tracinho, 280 + desvio_date_time , y_position_1 + desvio_y_tracinho, video_mem);
+
+        // load the month
+
+        // extract the value digit by digit
+        date_time = high_scores[i].date_time_of_score.month;
+        digit_1 = date_time % 10;
+        date_time /= 10;
+        digit_2 = date_time % 10;
+        // print the month digit by digit
+        get_image_from_number_high_score(&number_image, all_high_score_images, digit_2);
+        image_load_to_frame_buffer(number_image, 300 + desvio_date_time, y_position_1, video_mem);
+        get_image_from_number_high_score(&number_image, all_high_score_images, digit_1);
+        image_load_to_frame_buffer(number_image, 320 + desvio_date_time, y_position_1, video_mem);
+
+        // load the -
+        image_load_to_frame_buffer(all_high_score_images->character_tracinho, 340 + desvio_date_time, y_position_1 + desvio_y_tracinho, video_mem);
+
+        // load the year
+        // extract the value digit by digit
+        date_time = high_scores[i].date_time_of_score.year;
+        digit_1 = date_time % 10;
+        date_time /= 10;
+        digit_2 = date_time % 10;
+        // print the year digit by digit
+        get_image_from_number_high_score(&number_image, all_high_score_images, digit_2);
+        image_load_to_frame_buffer(number_image, 360 + desvio_date_time, y_position_1, video_mem);
+        get_image_from_number_high_score(&number_image, all_high_score_images, digit_1);
+        image_load_to_frame_buffer(number_image, 380 + desvio_date_time, y_position_1, video_mem);
+
+        // load the hour
+        // extract the value digit by digit
+        date_time = high_scores[i].date_time_of_score.hours;
+        digit_1 = date_time % 10;
+        date_time /= 10;
+        digit_2 = date_time % 10;
+        // print the hour digit by digit
+        get_image_from_number_high_score(&number_image, all_high_score_images, digit_2);
+        image_load_to_frame_buffer(number_image, 240 + desvio_date_time, y_position_2, video_mem);
+        get_image_from_number_high_score(&number_image, all_high_score_images, digit_1);
+        image_load_to_frame_buffer(number_image, 260 + desvio_date_time, y_position_2, video_mem);
+
+        // load the :
+        image_load_to_frame_buffer(all_high_score_images->character_2_pontos, 280 + desvio_date_time, y_position_2, video_mem);
+
+        // load the minute
+        // extract the value digit by digit
+        date_time = high_scores[i].date_time_of_score.minutes;
+        digit_1 = date_time % 10;
+        date_time /= 10;
+        digit_2 = date_time % 10;
+        // print the minute digit by digit
+        get_image_from_number_high_score(&number_image, all_high_score_images, digit_2);
+        image_load_to_frame_buffer(number_image, 300 + desvio_date_time, y_position_2, video_mem);
+        get_image_from_number_high_score(&number_image, all_high_score_images, digit_1);
+        image_load_to_frame_buffer(number_image, 320 + desvio_date_time, y_position_2, video_mem);
+
+        // load the :
+        image_load_to_frame_buffer(all_high_score_images->character_2_pontos, 340 + desvio_date_time, y_position_2, video_mem);
+
+        // load the second
+        // extract the value digit by digit
+        date_time = high_scores[i].date_time_of_score.seconds;
+        digit_1 = date_time % 10;
+        date_time /= 10;
+        digit_2 = date_time % 10;
+        // print the second digit by digit
+        get_image_from_number_high_score(&number_image, all_high_score_images, digit_2);
+        image_load_to_frame_buffer(number_image, 360 + desvio_date_time, y_position_2, video_mem);
+        get_image_from_number_high_score(&number_image, all_high_score_images, digit_1);
+        image_load_to_frame_buffer(number_image, 380 + desvio_date_time, y_position_2, video_mem);
+
+
+        // load the game time
+        // load the minutes
+        get_image_from_number_high_score(&number_image, all_high_score_images, high_scores[i].game_values.time_digits[0]);
+        image_load_to_frame_buffer(number_image, 416, y_position_1, video_mem);
+        get_image_from_number_high_score(&number_image, all_high_score_images, high_scores[i].game_values.time_digits[1]);
+        image_load_to_frame_buffer(number_image, 436, y_position_1, video_mem);
+
+        // load the :
+        image_load_to_frame_buffer(all_high_score_images->character_2_pontos, 456, y_position_1, video_mem);
+
+        // load the seconds
+        get_image_from_number_high_score(&number_image, all_high_score_images, high_scores[i].game_values.time_digits[2]);
+        image_load_to_frame_buffer(number_image, 476, y_position_1, video_mem);
+        get_image_from_number_high_score(&number_image, all_high_score_images, high_scores[i].game_values.time_digits[3]);
+        image_load_to_frame_buffer(number_image, 496, y_position_1, video_mem);
+
+
+        // load the game score
+        get_image_from_number_high_score(&number_image, all_high_score_images, high_scores[i].game_values.score_digits[0]);
+        image_load_to_frame_buffer(number_image, 592, y_position_1, video_mem);
+        get_image_from_number_high_score(&number_image, all_high_score_images, high_scores[i].game_values.score_digits[1]);
+        image_load_to_frame_buffer(number_image, 612, y_position_1, video_mem);
+        get_image_from_number_high_score(&number_image, all_high_score_images, high_scores[i].game_values.score_digits[2]);
+        image_load_to_frame_buffer(number_image, 632, y_position_1, video_mem);
+        get_image_from_number_high_score(&number_image, all_high_score_images, high_scores[i].game_values.score_digits[3]);
+        image_load_to_frame_buffer(number_image, 652, y_position_1, video_mem);
+    }
+
+    return 0;
+}
+
+
+
 
