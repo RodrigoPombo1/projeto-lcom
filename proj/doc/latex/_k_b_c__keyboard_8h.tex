@@ -1,0 +1,70 @@
+\doxysection{src/devices/keyboard/\+KBC\+\_\+keyboard.h File Reference}
+\hypertarget{_k_b_c__keyboard_8h}{}\label{_k_b_c__keyboard_8h}\index{src/devices/keyboard/KBC\_keyboard.h@{src/devices/keyboard/KBC\_keyboard.h}}
+{\ttfamily \#include "{}../../controllers/i8042.\+h"{}}\newline
+{\ttfamily \#include "{}../common\+\_\+keyboard\+\_\+and\+\_\+mouse/keyboard\+\_\+and\+\_\+mouse.\+h"{}}\newline
+Include dependency graph for KBC\+\_\+keyboard.\+h\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int() \mbox{\hyperlink{_k_b_c__keyboard_8h_adb9aab7f0c3161133854c952a0eb979d}{keyboard\+\_\+subscribe}} (uint8\+\_\+t \texorpdfstring{$\ast$}{*}bit\+\_\+no)
+\begin{DoxyCompactList}\small\item\em Subscribes and enables Keyboard interrupts. \end{DoxyCompactList}\item 
+int() \mbox{\hyperlink{_k_b_c__keyboard_8h_aa8dbaf115a31f57b46d05cee57447157}{keyboard\+\_\+unsubscribe}} ()
+\begin{DoxyCompactList}\small\item\em Unsubscribes Keyboard interrupts. \end{DoxyCompactList}\item 
+int() \mbox{\hyperlink{_k_b_c__keyboard_8h_a15b3b00c968c59ddb1c7f4b29eb75b6e}{restore\+\_\+keyboard}} ()
+\begin{DoxyCompactList}\small\item\em Restores the keyboard to default configuration. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{_k_b_c__keyboard_8h_adb9aab7f0c3161133854c952a0eb979d}\label{_k_b_c__keyboard_8h_adb9aab7f0c3161133854c952a0eb979d} 
+\index{KBC\_keyboard.h@{KBC\_keyboard.h}!keyboard\_subscribe@{keyboard\_subscribe}}
+\index{keyboard\_subscribe@{keyboard\_subscribe}!KBC\_keyboard.h@{KBC\_keyboard.h}}
+\doxysubsubsection{\texorpdfstring{keyboard\_subscribe()}{keyboard\_subscribe()}}
+{\footnotesize\ttfamily int() keyboard\+\_\+subscribe (\begin{DoxyParamCaption}\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{bit\+\_\+no }\end{DoxyParamCaption})}
+
+
+
+Subscribes and enables Keyboard interrupts. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bit\+\_\+no} & The bit number to be set in the mask \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if successful, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 2
+\Hypertarget{_k_b_c__keyboard_8h_aa8dbaf115a31f57b46d05cee57447157}\label{_k_b_c__keyboard_8h_aa8dbaf115a31f57b46d05cee57447157} 
+\index{KBC\_keyboard.h@{KBC\_keyboard.h}!keyboard\_unsubscribe@{keyboard\_unsubscribe}}
+\index{keyboard\_unsubscribe@{keyboard\_unsubscribe}!KBC\_keyboard.h@{KBC\_keyboard.h}}
+\doxysubsubsection{\texorpdfstring{keyboard\_unsubscribe()}{keyboard\_unsubscribe()}}
+{\footnotesize\ttfamily int() keyboard\+\_\+unsubscribe (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Unsubscribes Keyboard interrupts. 
+
+\begin{DoxyReturn}{Returns}
+0 if successful, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 3
+\Hypertarget{_k_b_c__keyboard_8h_a15b3b00c968c59ddb1c7f4b29eb75b6e}\label{_k_b_c__keyboard_8h_a15b3b00c968c59ddb1c7f4b29eb75b6e} 
+\index{KBC\_keyboard.h@{KBC\_keyboard.h}!restore\_keyboard@{restore\_keyboard}}
+\index{restore\_keyboard@{restore\_keyboard}!KBC\_keyboard.h@{KBC\_keyboard.h}}
+\doxysubsubsection{\texorpdfstring{restore\_keyboard()}{restore\_keyboard()}}
+{\footnotesize\ttfamily int() restore\+\_\+keyboard (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Restores the keyboard to default configuration. 
+
+\begin{DoxyReturn}{Returns}
+0 if successful, 1 otherwise 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+% FIG 4

@@ -1,0 +1,61 @@
+\doxysection{src/devices/common\+\_\+keyboard\+\_\+and\+\_\+mouse/keyboard\+\_\+and\+\_\+mouse.c File Reference}
+\hypertarget{keyboard__and__mouse_8c}{}\label{keyboard__and__mouse_8c}\index{src/devices/common\_keyboard\_and\_mouse/keyboard\_and\_mouse.c@{src/devices/common\_keyboard\_and\_mouse/keyboard\_and\_mouse.c}}
+{\ttfamily \#include "{}keyboard\+\_\+and\+\_\+mouse.\+h"{}}\newline
+Include dependency graph for keyboard\+\_\+and\+\_\+mouse.\+c\+:
+% FIG 0
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int() \mbox{\hyperlink{keyboard__and__mouse_8c_a96a58da8f498883efa9ba37f49146dc1}{kbc\+\_\+read\+\_\+output}} (uint8\+\_\+t port, uint8\+\_\+t \texorpdfstring{$\ast$}{*}output)
+\begin{DoxyCompactList}\small\item\em Reads the output buffer of the KBC. \end{DoxyCompactList}\item 
+int() \mbox{\hyperlink{keyboard__and__mouse_8c_adc518359e3360363766aeb037a97f3bc}{kbc\+\_\+write\+\_\+command}} (uint8\+\_\+t port, uint8\+\_\+t command\+Byte)
+\begin{DoxyCompactList}\small\item\em Writes a command byte to the KBC. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{keyboard__and__mouse_8c_a96a58da8f498883efa9ba37f49146dc1}\label{keyboard__and__mouse_8c_a96a58da8f498883efa9ba37f49146dc1} 
+\index{keyboard\_and\_mouse.c@{keyboard\_and\_mouse.c}!kbc\_read\_output@{kbc\_read\_output}}
+\index{kbc\_read\_output@{kbc\_read\_output}!keyboard\_and\_mouse.c@{keyboard\_and\_mouse.c}}
+\doxysubsubsection{\texorpdfstring{kbc\_read\_output()}{kbc\_read\_output()}}
+{\footnotesize\ttfamily int() kbc\+\_\+read\+\_\+output (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{port,  }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{output }\end{DoxyParamCaption})}
+
+
+
+Reads the output buffer of the KBC. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em port} & The port to read the output buffer from \\
+\hline
+{\em output} & The variable to store the output buffer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if successful, 1 otherwise 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+% FIG 1
+Here is the caller graph for this function\+:
+% FIG 2
+\Hypertarget{keyboard__and__mouse_8c_adc518359e3360363766aeb037a97f3bc}\label{keyboard__and__mouse_8c_adc518359e3360363766aeb037a97f3bc} 
+\index{keyboard\_and\_mouse.c@{keyboard\_and\_mouse.c}!kbc\_write\_command@{kbc\_write\_command}}
+\index{kbc\_write\_command@{kbc\_write\_command}!keyboard\_and\_mouse.c@{keyboard\_and\_mouse.c}}
+\doxysubsubsection{\texorpdfstring{kbc\_write\_command()}{kbc\_write\_command()}}
+{\footnotesize\ttfamily int() kbc\+\_\+write\+\_\+command (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{port,  }\item[{uint8\+\_\+t}]{command\+Byte }\end{DoxyParamCaption})}
+
+
+
+Writes a command byte to the KBC. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em port} & The port to write the command byte to \\
+\hline
+{\em command\+Byte} & The command byte to write \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if successful, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 3

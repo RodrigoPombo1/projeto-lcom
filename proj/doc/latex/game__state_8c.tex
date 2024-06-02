@@ -1,0 +1,580 @@
+\doxysection{src/game\+\_\+state/game\+\_\+state.c File Reference}
+\hypertarget{game__state_8c}{}\label{game__state_8c}\index{src/game\_state/game\_state.c@{src/game\_state/game\_state.c}}
+{\ttfamily \#include "{}game\+\_\+state.\+h"{}}\newline
+Include dependency graph for game\+\_\+state.\+c\+:
+% FIG 0
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{game__state_8c_af8d6868d19938cd034043c4881617c31}{handle\+\_\+main\+\_\+menu}} (int mouse\+\_\+position\+\_\+x, int mouse\+\_\+position\+\_\+y, enum \mbox{\hyperlink{game__state_8h_ad0ed1832dd134806ad335cdcc1a59ad2}{game\+\_\+state}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{game__state_8h_ad0ed1832dd134806ad335cdcc1a59ad2}{game\+\_\+state}}, bool \texorpdfstring{$\ast$}{*}is\+\_\+start\+\_\+of\+\_\+game\+\_\+state, bool \texorpdfstring{$\ast$}{*}close\+\_\+application)
+\begin{DoxyCompactList}\small\item\em Handles the main menu. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game__state_8c_abc43aedcbe0367f58393cfaa161c11f6}{convert\+\_\+game\+\_\+position\+\_\+to\+\_\+frame\+\_\+buffer\+\_\+position}} (int game\+\_\+position\+\_\+x, int game\+\_\+position\+\_\+y, int \texorpdfstring{$\ast$}{*}frame\+\_\+buffer\+\_\+position\+\_\+x, int \texorpdfstring{$\ast$}{*}frame\+\_\+buffer\+\_\+position\+\_\+y)
+\begin{DoxyCompactList}\small\item\em Converts a game position to a frame buffer position. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game__state_8c_a87a5a47ecd43a6382ee4da8ac785fa15}{get\+\_\+image\+\_\+from\+\_\+number\+\_\+game}} (struct \mbox{\hyperlink{structimage__struct}{image\+\_\+struct}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}result\+\_\+image, struct \mbox{\hyperlink{structgame__images}{game\+\_\+images}} \texorpdfstring{$\ast$}{*}all\+\_\+game\+\_\+images, int number)
+\begin{DoxyCompactList}\small\item\em Gets the number image from the image struct. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game__state_8c_a964b6f534e78e2901dc7dc7939f57356}{load\+\_\+game\+\_\+state\+\_\+to\+\_\+game\+\_\+buffer}} (struct \mbox{\hyperlink{structgame__entities__position}{game\+\_\+entities\+\_\+position}} \texorpdfstring{$\ast$}{*}all\+\_\+game\+\_\+state\+\_\+entities\+\_\+position, struct \mbox{\hyperlink{structgame__values}{game\+\_\+values}} \texorpdfstring{$\ast$}{*}current\+\_\+game\+\_\+state\+\_\+values, struct \mbox{\hyperlink{structgame__images}{game\+\_\+images}} \texorpdfstring{$\ast$}{*}all\+\_\+game\+\_\+images, uint8\+\_\+t \texorpdfstring{$\ast$}{*}video\+\_\+mem)
+\begin{DoxyCompactList}\small\item\em Loads game state to the frame buffer. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game__state_8c_a41940fffd827d8d90ce4b34e4c1eef52}{spawn\+\_\+monsters}} (struct \mbox{\hyperlink{structgame__entities__position}{game\+\_\+entities\+\_\+position}} \texorpdfstring{$\ast$}{*}all\+\_\+game\+\_\+state\+\_\+entities\+\_\+position)
+\begin{DoxyCompactList}\small\item\em Sees if monsters can be spawned and spawns them. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game__state_8c_a08ed8c2b1d5a5b25b60dceb2c488478a}{convert\+\_\+frame\+\_\+buffer\+\_\+position\+\_\+to\+\_\+game\+\_\+position}} (int frame\+\_\+buffer\+\_\+position\+\_\+x, int frame\+\_\+buffer\+\_\+position\+\_\+y, int \texorpdfstring{$\ast$}{*}game\+\_\+position\+\_\+x, int \texorpdfstring{$\ast$}{*}game\+\_\+position\+\_\+y)
+\begin{DoxyCompactList}\small\item\em Converts a frame buffer position to a game position. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game__state_8c_a9597c4ad96082b352109868d40d06ef5}{fill\+\_\+spawns}} (struct \mbox{\hyperlink{structgame__entities__position}{game\+\_\+entities\+\_\+position}} \texorpdfstring{$\ast$}{*}all\+\_\+game\+\_\+state\+\_\+entities\+\_\+position)
+\begin{DoxyCompactList}\small\item\em Fills the spawns with walls. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game__state_8c_aaf2d1ea742c25cd72eb35b4fc1d39f64}{increment\+\_\+score}} (struct \mbox{\hyperlink{structgame__values}{game\+\_\+values}} \texorpdfstring{$\ast$}{*}current\+\_\+game\+\_\+state\+\_\+values)
+\begin{DoxyCompactList}\small\item\em Increments the score. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game__state_8c_a25702e514927c8787e7c90e6c5695947}{increment\+\_\+timer}} (struct \mbox{\hyperlink{structgame__values}{game\+\_\+values}} \texorpdfstring{$\ast$}{*}current\+\_\+game\+\_\+state\+\_\+values)
+\begin{DoxyCompactList}\small\item\em Increments the timer. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game__state_8c_ade66e36dc09e228ff31fe17e0905b8b7}{handle\+\_\+game\+\_\+m1\+\_\+interrupt}} (struct \mbox{\hyperlink{structgame__entities__position}{game\+\_\+entities\+\_\+position}} \texorpdfstring{$\ast$}{*}all\+\_\+game\+\_\+state\+\_\+entities\+\_\+position, struct \mbox{\hyperlink{structgame__values}{game\+\_\+values}} \texorpdfstring{$\ast$}{*}current\+\_\+game\+\_\+state\+\_\+values, int mouse\+\_\+position\+\_\+x, int mouse\+\_\+position\+\_\+y, bool \texorpdfstring{$\ast$}{*}was\+\_\+game\+\_\+state\+\_\+changed, bool \texorpdfstring{$\ast$}{*}is\+\_\+game\+\_\+quit)
+\begin{DoxyCompactList}\small\item\em Handles the game state interrupts when the left mouse button is pressed. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game__state_8c_ae8f38ffaf653b04da0844c4a0c8faeeb}{check\+\_\+monster\+\_\+if\+\_\+the\+\_\+space\+\_\+can\+\_\+be\+\_\+moved\+\_\+into}} (struct \mbox{\hyperlink{structgame__entities__position}{game\+\_\+entities\+\_\+position}} \texorpdfstring{$\ast$}{*}all\+\_\+game\+\_\+state\+\_\+entities\+\_\+position, int x, int y, bool \texorpdfstring{$\ast$}{*}can\+\_\+move, bool \texorpdfstring{$\ast$}{*}killed\+\_\+player)
+\begin{DoxyCompactList}\small\item\em Checks if a monster can move into a space. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game__state_8c_afcc21b054d1a0a986930505c12a4f95c}{handle\+\_\+game\+\_\+timer\+\_\+tick\+\_\+interrupt}} (struct \mbox{\hyperlink{structgame__entities__position}{game\+\_\+entities\+\_\+position}} \texorpdfstring{$\ast$}{*}all\+\_\+game\+\_\+state\+\_\+entities\+\_\+position, struct \mbox{\hyperlink{structgame__values}{game\+\_\+values}} \texorpdfstring{$\ast$}{*}current\+\_\+game\+\_\+state\+\_\+values, bool \texorpdfstring{$\ast$}{*}was\+\_\+game\+\_\+state\+\_\+changed, bool \texorpdfstring{$\ast$}{*}is\+\_\+game\+\_\+over)
+\begin{DoxyCompactList}\small\item\em Handles the interrupts of the game timer ticks. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game__state_8c_a552dcb0ba76f4d4fc299d98ad9c66b5e}{check\+\_\+player\+\_\+if\+\_\+the\+\_\+space\+\_\+can\+\_\+be\+\_\+moved\+\_\+into}} (struct \mbox{\hyperlink{structgame__entities__position}{game\+\_\+entities\+\_\+position}} \texorpdfstring{$\ast$}{*}all\+\_\+game\+\_\+state\+\_\+entities\+\_\+position, int x, int y, bool \texorpdfstring{$\ast$}{*}can\+\_\+move)
+\begin{DoxyCompactList}\small\item\em Checks if the player can move into a space. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game__state_8c_a02cb5ccaa590131f02a7048b3edab0af}{handle\+\_\+game\+\_\+timer\+\_\+second\+\_\+interrupt}} (struct \mbox{\hyperlink{structgame__entities__position}{game\+\_\+entities\+\_\+position}} \texorpdfstring{$\ast$}{*}all\+\_\+game\+\_\+state\+\_\+entities\+\_\+position, struct \mbox{\hyperlink{structgame__values}{game\+\_\+values}} \texorpdfstring{$\ast$}{*}current\+\_\+game\+\_\+state\+\_\+values, enum \mbox{\hyperlink{game__state_8h_a0b5dae9cb65fa4eb5fcc7c093d088556}{letter\+\_\+pressed}} \texorpdfstring{$\ast$}{*}last\+\_\+key\+\_\+pressed, bool \texorpdfstring{$\ast$}{*}was\+\_\+game\+\_\+state\+\_\+changed)
+\begin{DoxyCompactList}\small\item\em Handles the interrupts of the game timer seconds. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game__state_8c_aa86e24f6c7321d4ef7325f2a279b54b6}{handle\+\_\+game\+\_\+over\+\_\+interrupt}} (int mouse\+\_\+position\+\_\+x, int mouse\+\_\+position\+\_\+y, enum \mbox{\hyperlink{game__state_8h_ad0ed1832dd134806ad335cdcc1a59ad2}{game\+\_\+state}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{game__state_8h_ad0ed1832dd134806ad335cdcc1a59ad2}{game\+\_\+state}}, bool \texorpdfstring{$\ast$}{*}is\+\_\+start\+\_\+of\+\_\+screen)
+\begin{DoxyCompactList}\small\item\em Handles the game over interrupts. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game__state_8c_ac05b2eb6acb6c4f562706b860b367919}{store\+\_\+high\+\_\+score\+\_\+at\+\_\+this\+\_\+time}} (struct \mbox{\hyperlink{structgame__values}{game\+\_\+values}} \texorpdfstring{$\ast$}{*}game\+\_\+value)
+\begin{DoxyCompactList}\small\item\em Stores the high score at the current time. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game__state_8c_ab3dd64187b0a968fbd8302e924455e77}{write\+\_\+high\+\_\+scores}} (struct \mbox{\hyperlink{structhigh__score}{high\+\_\+score}} high\+\_\+scores\mbox{[}5\mbox{]})
+\begin{DoxyCompactList}\small\item\em Writes the high scores to the file. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game__state_8c_ae6dd3d09c8c75ed82cd5bb3f7df932c5}{read\+\_\+high\+\_\+scores}} (struct \mbox{\hyperlink{structhigh__score}{high\+\_\+score}} high\+\_\+scores\mbox{[}5\mbox{]})
+\begin{DoxyCompactList}\small\item\em Reads the high scores from the file. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game__state_8c_a41ab0879da4d54440b94bf03216aeca2}{handle\+\_\+high\+\_\+score\+\_\+interrupt}} (int mouse\+\_\+position\+\_\+x, int mouse\+\_\+position\+\_\+y, enum \mbox{\hyperlink{game__state_8h_ad0ed1832dd134806ad335cdcc1a59ad2}{game\+\_\+state}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{game__state_8h_ad0ed1832dd134806ad335cdcc1a59ad2}{game\+\_\+state}}, bool \texorpdfstring{$\ast$}{*}is\+\_\+start\+\_\+of\+\_\+screen)
+\begin{DoxyCompactList}\small\item\em Handles the high score interrupts. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game__state_8c_a3d5e2403682e61915d0ca62040839170}{get\+\_\+image\+\_\+from\+\_\+number\+\_\+high\+\_\+score}} (struct \mbox{\hyperlink{structimage__struct}{image\+\_\+struct}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}result\+\_\+image, struct \mbox{\hyperlink{structhigh__score__images}{high\+\_\+score\+\_\+images}} \texorpdfstring{$\ast$}{*}all\+\_\+high\+\_\+score\+\_\+images, int number)
+\begin{DoxyCompactList}\small\item\em Gets the number image from the high score images. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game__state_8c_aa80e2dc7bf857262fe4aa6c89179eca0}{load\+\_\+high\+\_\+scores\+\_\+to\+\_\+game\+\_\+buffer}} (struct \mbox{\hyperlink{structhigh__score__images}{high\+\_\+score\+\_\+images}} \texorpdfstring{$\ast$}{*}all\+\_\+high\+\_\+score\+\_\+images, uint8\+\_\+t \texorpdfstring{$\ast$}{*}video\+\_\+mem)
+\begin{DoxyCompactList}\small\item\em Loads the high scores to the game buffer. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structrtc__info__t}{rtc\+\_\+info\+\_\+t}} \mbox{\hyperlink{game__state_8c_a15ba364a5ba8c36047e87f0f387bfd40}{rtc}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{game__state_8c_ae8f38ffaf653b04da0844c4a0c8faeeb}\label{game__state_8c_ae8f38ffaf653b04da0844c4a0c8faeeb} 
+\index{game\_state.c@{game\_state.c}!check\_monster\_if\_the\_space\_can\_be\_moved\_into@{check\_monster\_if\_the\_space\_can\_be\_moved\_into}}
+\index{check\_monster\_if\_the\_space\_can\_be\_moved\_into@{check\_monster\_if\_the\_space\_can\_be\_moved\_into}!game\_state.c@{game\_state.c}}
+\doxysubsubsection{\texorpdfstring{check\_monster\_if\_the\_space\_can\_be\_moved\_into()}{check\_monster\_if\_the\_space\_can\_be\_moved\_into()}}
+{\footnotesize\ttfamily int check\+\_\+monster\+\_\+if\+\_\+the\+\_\+space\+\_\+can\+\_\+be\+\_\+moved\+\_\+into (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structgame__entities__position}{game\+\_\+entities\+\_\+position}} \texorpdfstring{$\ast$}{*}}]{all\+\_\+game\+\_\+state\+\_\+entities\+\_\+position,  }\item[{int}]{x,  }\item[{int}]{y,  }\item[{bool \texorpdfstring{$\ast$}{*}}]{can\+\_\+move,  }\item[{bool \texorpdfstring{$\ast$}{*}}]{killed\+\_\+player }\end{DoxyParamCaption})}
+
+
+
+Checks if a monster can move into a space. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em all\+\_\+game\+\_\+state\+\_\+entities\+\_\+position} & The struct with all the game state entities positions \\
+\hline
+{\em x} & The x position of the space \\
+\hline
+{\em y} & The y position of the space \\
+\hline
+{\em can\+\_\+move} & If the monster can move into the space \\
+\hline
+{\em killed\+\_\+player} & If the player was killed \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the space was checked, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 1
+\Hypertarget{game__state_8c_a552dcb0ba76f4d4fc299d98ad9c66b5e}\label{game__state_8c_a552dcb0ba76f4d4fc299d98ad9c66b5e} 
+\index{game\_state.c@{game\_state.c}!check\_player\_if\_the\_space\_can\_be\_moved\_into@{check\_player\_if\_the\_space\_can\_be\_moved\_into}}
+\index{check\_player\_if\_the\_space\_can\_be\_moved\_into@{check\_player\_if\_the\_space\_can\_be\_moved\_into}!game\_state.c@{game\_state.c}}
+\doxysubsubsection{\texorpdfstring{check\_player\_if\_the\_space\_can\_be\_moved\_into()}{check\_player\_if\_the\_space\_can\_be\_moved\_into()}}
+{\footnotesize\ttfamily int check\+\_\+player\+\_\+if\+\_\+the\+\_\+space\+\_\+can\+\_\+be\+\_\+moved\+\_\+into (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structgame__entities__position}{game\+\_\+entities\+\_\+position}} \texorpdfstring{$\ast$}{*}}]{all\+\_\+game\+\_\+state\+\_\+entities\+\_\+position,  }\item[{int}]{x,  }\item[{int}]{y,  }\item[{bool \texorpdfstring{$\ast$}{*}}]{can\+\_\+move }\end{DoxyParamCaption})}
+
+
+
+Checks if the player can move into a space. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em all\+\_\+game\+\_\+state\+\_\+entities\+\_\+position} & The struct with all the game state entities positions \\
+\hline
+{\em x} & The x position of the space \\
+\hline
+{\em y} & The y position of the space \\
+\hline
+{\em can\+\_\+move} & If the player can move into the space \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the space was checked, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 2
+\Hypertarget{game__state_8c_a08ed8c2b1d5a5b25b60dceb2c488478a}\label{game__state_8c_a08ed8c2b1d5a5b25b60dceb2c488478a} 
+\index{game\_state.c@{game\_state.c}!convert\_frame\_buffer\_position\_to\_game\_position@{convert\_frame\_buffer\_position\_to\_game\_position}}
+\index{convert\_frame\_buffer\_position\_to\_game\_position@{convert\_frame\_buffer\_position\_to\_game\_position}!game\_state.c@{game\_state.c}}
+\doxysubsubsection{\texorpdfstring{convert\_frame\_buffer\_position\_to\_game\_position()}{convert\_frame\_buffer\_position\_to\_game\_position()}}
+{\footnotesize\ttfamily int convert\+\_\+frame\+\_\+buffer\+\_\+position\+\_\+to\+\_\+game\+\_\+position (\begin{DoxyParamCaption}\item[{int}]{frame\+\_\+buffer\+\_\+position\+\_\+x,  }\item[{int}]{frame\+\_\+buffer\+\_\+position\+\_\+y,  }\item[{int \texorpdfstring{$\ast$}{*}}]{game\+\_\+position\+\_\+x,  }\item[{int \texorpdfstring{$\ast$}{*}}]{game\+\_\+position\+\_\+y }\end{DoxyParamCaption})}
+
+
+
+Converts a frame buffer position to a game position. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em frame\+\_\+buffer\+\_\+position\+\_\+x} & The x position in the frame buffer \\
+\hline
+{\em frame\+\_\+buffer\+\_\+position\+\_\+y} & The y position in the frame buffer \\
+\hline
+{\em game\+\_\+position\+\_\+x} & The x position in the game \\
+\hline
+{\em game\+\_\+position\+\_\+y} & The y position in the game \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the conversion was successful, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 3
+\Hypertarget{game__state_8c_abc43aedcbe0367f58393cfaa161c11f6}\label{game__state_8c_abc43aedcbe0367f58393cfaa161c11f6} 
+\index{game\_state.c@{game\_state.c}!convert\_game\_position\_to\_frame\_buffer\_position@{convert\_game\_position\_to\_frame\_buffer\_position}}
+\index{convert\_game\_position\_to\_frame\_buffer\_position@{convert\_game\_position\_to\_frame\_buffer\_position}!game\_state.c@{game\_state.c}}
+\doxysubsubsection{\texorpdfstring{convert\_game\_position\_to\_frame\_buffer\_position()}{convert\_game\_position\_to\_frame\_buffer\_position()}}
+{\footnotesize\ttfamily int convert\+\_\+game\+\_\+position\+\_\+to\+\_\+frame\+\_\+buffer\+\_\+position (\begin{DoxyParamCaption}\item[{int}]{game\+\_\+position\+\_\+x,  }\item[{int}]{game\+\_\+position\+\_\+y,  }\item[{int \texorpdfstring{$\ast$}{*}}]{frame\+\_\+buffer\+\_\+position\+\_\+x,  }\item[{int \texorpdfstring{$\ast$}{*}}]{frame\+\_\+buffer\+\_\+position\+\_\+y }\end{DoxyParamCaption})}
+
+
+
+Converts a game position to a frame buffer position. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em game\+\_\+position\+\_\+x} & The x position in the game \\
+\hline
+{\em game\+\_\+position\+\_\+y} & The y position in the game \\
+\hline
+{\em frame\+\_\+buffer\+\_\+position\+\_\+x} & The x position in the frame buffer \\
+\hline
+{\em frame\+\_\+buffer\+\_\+position\+\_\+y} & The y position in the frame buffer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the conversion was successful, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 4
+\Hypertarget{game__state_8c_a9597c4ad96082b352109868d40d06ef5}\label{game__state_8c_a9597c4ad96082b352109868d40d06ef5} 
+\index{game\_state.c@{game\_state.c}!fill\_spawns@{fill\_spawns}}
+\index{fill\_spawns@{fill\_spawns}!game\_state.c@{game\_state.c}}
+\doxysubsubsection{\texorpdfstring{fill\_spawns()}{fill\_spawns()}}
+{\footnotesize\ttfamily int fill\+\_\+spawns (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structgame__entities__position}{game\+\_\+entities\+\_\+position}} \texorpdfstring{$\ast$}{*}}]{all\+\_\+game\+\_\+state\+\_\+entities\+\_\+position }\end{DoxyParamCaption})}
+
+
+
+Fills the spawns with walls. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em all\+\_\+game\+\_\+state\+\_\+entities\+\_\+position} & The struct with all the game state entities positions \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the spawns were filled, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 5
+\Hypertarget{game__state_8c_a87a5a47ecd43a6382ee4da8ac785fa15}\label{game__state_8c_a87a5a47ecd43a6382ee4da8ac785fa15} 
+\index{game\_state.c@{game\_state.c}!get\_image\_from\_number\_game@{get\_image\_from\_number\_game}}
+\index{get\_image\_from\_number\_game@{get\_image\_from\_number\_game}!game\_state.c@{game\_state.c}}
+\doxysubsubsection{\texorpdfstring{get\_image\_from\_number\_game()}{get\_image\_from\_number\_game()}}
+{\footnotesize\ttfamily int get\+\_\+image\+\_\+from\+\_\+number\+\_\+game (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structimage__struct}{image\+\_\+struct}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{result\+\_\+image,  }\item[{struct \mbox{\hyperlink{structgame__images}{game\+\_\+images}} \texorpdfstring{$\ast$}{*}}]{all\+\_\+game\+\_\+images,  }\item[{int}]{number }\end{DoxyParamCaption})}
+
+
+
+Gets the number image from the image struct. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em result\+\_\+image} & The image struct that will be returned \\
+\hline
+{\em all\+\_\+game\+\_\+images} & The struct with all the game images \\
+\hline
+{\em number} & The number to get the image for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the image was found, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 6
+\Hypertarget{game__state_8c_a3d5e2403682e61915d0ca62040839170}\label{game__state_8c_a3d5e2403682e61915d0ca62040839170} 
+\index{game\_state.c@{game\_state.c}!get\_image\_from\_number\_high\_score@{get\_image\_from\_number\_high\_score}}
+\index{get\_image\_from\_number\_high\_score@{get\_image\_from\_number\_high\_score}!game\_state.c@{game\_state.c}}
+\doxysubsubsection{\texorpdfstring{get\_image\_from\_number\_high\_score()}{get\_image\_from\_number\_high\_score()}}
+{\footnotesize\ttfamily int get\+\_\+image\+\_\+from\+\_\+number\+\_\+high\+\_\+score (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structimage__struct}{image\+\_\+struct}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{result\+\_\+image,  }\item[{struct \mbox{\hyperlink{structhigh__score__images}{high\+\_\+score\+\_\+images}} \texorpdfstring{$\ast$}{*}}]{all\+\_\+high\+\_\+score\+\_\+images,  }\item[{int}]{number }\end{DoxyParamCaption})}
+
+
+
+Gets the number image from the high score images. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em result\+\_\+image} & The image to be returned \\
+\hline
+{\em all\+\_\+high\+\_\+score\+\_\+images} & The struct with all the high score images \\
+\hline
+{\em number} & The number to get the image from \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the image was gotten, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 7
+\Hypertarget{game__state_8c_ade66e36dc09e228ff31fe17e0905b8b7}\label{game__state_8c_ade66e36dc09e228ff31fe17e0905b8b7} 
+\index{game\_state.c@{game\_state.c}!handle\_game\_m1\_interrupt@{handle\_game\_m1\_interrupt}}
+\index{handle\_game\_m1\_interrupt@{handle\_game\_m1\_interrupt}!game\_state.c@{game\_state.c}}
+\doxysubsubsection{\texorpdfstring{handle\_game\_m1\_interrupt()}{handle\_game\_m1\_interrupt()}}
+{\footnotesize\ttfamily int handle\+\_\+game\+\_\+m1\+\_\+interrupt (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structgame__entities__position}{game\+\_\+entities\+\_\+position}} \texorpdfstring{$\ast$}{*}}]{all\+\_\+game\+\_\+state\+\_\+entities\+\_\+position,  }\item[{struct \mbox{\hyperlink{structgame__values}{game\+\_\+values}} \texorpdfstring{$\ast$}{*}}]{current\+\_\+game\+\_\+state\+\_\+values,  }\item[{int}]{mouse\+\_\+position\+\_\+x,  }\item[{int}]{mouse\+\_\+position\+\_\+y,  }\item[{bool \texorpdfstring{$\ast$}{*}}]{was\+\_\+game\+\_\+state\+\_\+changed,  }\item[{bool \texorpdfstring{$\ast$}{*}}]{is\+\_\+game\+\_\+quit }\end{DoxyParamCaption})}
+
+
+
+Handles the game state interrupts when the left mouse button is pressed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em all\+\_\+game\+\_\+state\+\_\+entities\+\_\+position} & The struct with all the game state entities positions \\
+\hline
+{\em current\+\_\+game\+\_\+state\+\_\+values} & The struct with the current game state values \\
+\hline
+{\em mouse\+\_\+position\+\_\+x} & The x position of the mouse \\
+\hline
+{\em mouse\+\_\+position\+\_\+y} & The y position of the mouse \\
+\hline
+{\em was\+\_\+game\+\_\+state\+\_\+changed} & If the game state was changed \\
+\hline
+{\em is\+\_\+game\+\_\+quit} & If the game should be quit \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the game state was changed, 1 otherwise 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+% FIG 8
+Here is the caller graph for this function\+:
+% FIG 9
+\Hypertarget{game__state_8c_aa86e24f6c7321d4ef7325f2a279b54b6}\label{game__state_8c_aa86e24f6c7321d4ef7325f2a279b54b6} 
+\index{game\_state.c@{game\_state.c}!handle\_game\_over\_interrupt@{handle\_game\_over\_interrupt}}
+\index{handle\_game\_over\_interrupt@{handle\_game\_over\_interrupt}!game\_state.c@{game\_state.c}}
+\doxysubsubsection{\texorpdfstring{handle\_game\_over\_interrupt()}{handle\_game\_over\_interrupt()}}
+{\footnotesize\ttfamily int handle\+\_\+game\+\_\+over\+\_\+interrupt (\begin{DoxyParamCaption}\item[{int}]{mouse\+\_\+position\+\_\+x,  }\item[{int}]{mouse\+\_\+position\+\_\+y,  }\item[{enum \mbox{\hyperlink{game__state_8h_ad0ed1832dd134806ad335cdcc1a59ad2}{game\+\_\+state}} \texorpdfstring{$\ast$}{*}}]{game\+\_\+state,  }\item[{bool \texorpdfstring{$\ast$}{*}}]{is\+\_\+start\+\_\+of\+\_\+screen }\end{DoxyParamCaption})}
+
+
+
+Handles the game over interrupts. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mouse\+\_\+position\+\_\+x} & The x position of the mouse \\
+\hline
+{\em mouse\+\_\+position\+\_\+y} & The y position of the mouse \\
+\hline
+{\em game\+\_\+state} & The current game state \\
+\hline
+{\em is\+\_\+start\+\_\+of\+\_\+screen} & If the game state is the start of the screen \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the game state was changed, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 10
+\Hypertarget{game__state_8c_a02cb5ccaa590131f02a7048b3edab0af}\label{game__state_8c_a02cb5ccaa590131f02a7048b3edab0af} 
+\index{game\_state.c@{game\_state.c}!handle\_game\_timer\_second\_interrupt@{handle\_game\_timer\_second\_interrupt}}
+\index{handle\_game\_timer\_second\_interrupt@{handle\_game\_timer\_second\_interrupt}!game\_state.c@{game\_state.c}}
+\doxysubsubsection{\texorpdfstring{handle\_game\_timer\_second\_interrupt()}{handle\_game\_timer\_second\_interrupt()}}
+{\footnotesize\ttfamily int handle\+\_\+game\+\_\+timer\+\_\+second\+\_\+interrupt (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structgame__entities__position}{game\+\_\+entities\+\_\+position}} \texorpdfstring{$\ast$}{*}}]{all\+\_\+game\+\_\+state\+\_\+entities\+\_\+position,  }\item[{struct \mbox{\hyperlink{structgame__values}{game\+\_\+values}} \texorpdfstring{$\ast$}{*}}]{current\+\_\+game\+\_\+state\+\_\+values,  }\item[{enum \mbox{\hyperlink{game__state_8h_a0b5dae9cb65fa4eb5fcc7c093d088556}{letter\+\_\+pressed}} \texorpdfstring{$\ast$}{*}}]{last\+\_\+key\+\_\+pressed,  }\item[{bool \texorpdfstring{$\ast$}{*}}]{was\+\_\+game\+\_\+state\+\_\+changed }\end{DoxyParamCaption})}
+
+
+
+Handles the interrupts of the game timer seconds. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em all\+\_\+game\+\_\+state\+\_\+entities\+\_\+position} & The struct with all the game state entities positions \\
+\hline
+{\em current\+\_\+game\+\_\+state\+\_\+values} & The struct with the current game state values \\
+\hline
+{\em last\+\_\+key\+\_\+pressed} & The last key pressed \\
+\hline
+{\em was\+\_\+game\+\_\+state\+\_\+changed} & If the game state was changed \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the game state was changed, 1 otherwise 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+% FIG 11
+Here is the caller graph for this function\+:
+% FIG 12
+\Hypertarget{game__state_8c_afcc21b054d1a0a986930505c12a4f95c}\label{game__state_8c_afcc21b054d1a0a986930505c12a4f95c} 
+\index{game\_state.c@{game\_state.c}!handle\_game\_timer\_tick\_interrupt@{handle\_game\_timer\_tick\_interrupt}}
+\index{handle\_game\_timer\_tick\_interrupt@{handle\_game\_timer\_tick\_interrupt}!game\_state.c@{game\_state.c}}
+\doxysubsubsection{\texorpdfstring{handle\_game\_timer\_tick\_interrupt()}{handle\_game\_timer\_tick\_interrupt()}}
+{\footnotesize\ttfamily int handle\+\_\+game\+\_\+timer\+\_\+tick\+\_\+interrupt (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structgame__entities__position}{game\+\_\+entities\+\_\+position}} \texorpdfstring{$\ast$}{*}}]{all\+\_\+game\+\_\+state\+\_\+entities\+\_\+position,  }\item[{struct \mbox{\hyperlink{structgame__values}{game\+\_\+values}} \texorpdfstring{$\ast$}{*}}]{current\+\_\+game\+\_\+state\+\_\+values,  }\item[{bool \texorpdfstring{$\ast$}{*}}]{was\+\_\+game\+\_\+state\+\_\+changed,  }\item[{bool \texorpdfstring{$\ast$}{*}}]{is\+\_\+game\+\_\+over }\end{DoxyParamCaption})}
+
+
+
+Handles the interrupts of the game timer ticks. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em all\+\_\+game\+\_\+state\+\_\+entities\+\_\+position} & The struct with all the game state entities positions \\
+\hline
+{\em current\+\_\+game\+\_\+state\+\_\+values} & The struct with the current game state values \\
+\hline
+{\em was\+\_\+game\+\_\+state\+\_\+changed} & If the game state was changed \\
+\hline
+{\em is\+\_\+game\+\_\+over} & If the game is over \\
+\hline
+\end{DoxyParams}
+Here is the call graph for this function\+:
+% FIG 13
+Here is the caller graph for this function\+:
+% FIG 14
+\Hypertarget{game__state_8c_a41ab0879da4d54440b94bf03216aeca2}\label{game__state_8c_a41ab0879da4d54440b94bf03216aeca2} 
+\index{game\_state.c@{game\_state.c}!handle\_high\_score\_interrupt@{handle\_high\_score\_interrupt}}
+\index{handle\_high\_score\_interrupt@{handle\_high\_score\_interrupt}!game\_state.c@{game\_state.c}}
+\doxysubsubsection{\texorpdfstring{handle\_high\_score\_interrupt()}{handle\_high\_score\_interrupt()}}
+{\footnotesize\ttfamily int handle\+\_\+high\+\_\+score\+\_\+interrupt (\begin{DoxyParamCaption}\item[{int}]{mouse\+\_\+position\+\_\+x,  }\item[{int}]{mouse\+\_\+position\+\_\+y,  }\item[{enum \mbox{\hyperlink{game__state_8h_ad0ed1832dd134806ad335cdcc1a59ad2}{game\+\_\+state}} \texorpdfstring{$\ast$}{*}}]{game\+\_\+state,  }\item[{bool \texorpdfstring{$\ast$}{*}}]{is\+\_\+start\+\_\+of\+\_\+screen }\end{DoxyParamCaption})}
+
+
+
+Handles the high score interrupts. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mouse\+\_\+position\+\_\+x} & The x position of the mouse \\
+\hline
+{\em mouse\+\_\+position\+\_\+y} & The y position of the mouse \\
+\hline
+{\em game\+\_\+state} & The current game state \\
+\hline
+{\em is\+\_\+start\+\_\+of\+\_\+screen} & If the game state is the start of the screen \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the game state was changed, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 15
+\Hypertarget{game__state_8c_af8d6868d19938cd034043c4881617c31}\label{game__state_8c_af8d6868d19938cd034043c4881617c31} 
+\index{game\_state.c@{game\_state.c}!handle\_main\_menu@{handle\_main\_menu}}
+\index{handle\_main\_menu@{handle\_main\_menu}!game\_state.c@{game\_state.c}}
+\doxysubsubsection{\texorpdfstring{handle\_main\_menu()}{handle\_main\_menu()}}
+{\footnotesize\ttfamily int handle\+\_\+main\+\_\+menu (\begin{DoxyParamCaption}\item[{int}]{mouse\+\_\+position\+\_\+x,  }\item[{int}]{mouse\+\_\+position\+\_\+y,  }\item[{enum \mbox{\hyperlink{game__state_8h_ad0ed1832dd134806ad335cdcc1a59ad2}{game\+\_\+state}} \texorpdfstring{$\ast$}{*}}]{game\+\_\+state,  }\item[{bool \texorpdfstring{$\ast$}{*}}]{is\+\_\+start\+\_\+of\+\_\+game\+\_\+state,  }\item[{bool \texorpdfstring{$\ast$}{*}}]{close\+\_\+application }\end{DoxyParamCaption})}
+
+
+
+Handles the main menu. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mouse\+\_\+position\+\_\+x} & The x position of the mouse \\
+\hline
+{\em mouse\+\_\+position\+\_\+y} & The y position of the mouse \\
+\hline
+{\em game\+\_\+state} & The current game state \\
+\hline
+{\em is\+\_\+start\+\_\+of\+\_\+game\+\_\+state} & If the game state is the start of the game state \\
+\hline
+{\em close\+\_\+application} & If the application should be closed \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the game state was changed, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 16
+\Hypertarget{game__state_8c_aaf2d1ea742c25cd72eb35b4fc1d39f64}\label{game__state_8c_aaf2d1ea742c25cd72eb35b4fc1d39f64} 
+\index{game\_state.c@{game\_state.c}!increment\_score@{increment\_score}}
+\index{increment\_score@{increment\_score}!game\_state.c@{game\_state.c}}
+\doxysubsubsection{\texorpdfstring{increment\_score()}{increment\_score()}}
+{\footnotesize\ttfamily int increment\+\_\+score (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structgame__values}{game\+\_\+values}} \texorpdfstring{$\ast$}{*}}]{current\+\_\+game\+\_\+state\+\_\+values }\end{DoxyParamCaption})}
+
+
+
+Increments the score. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em current\+\_\+game\+\_\+state\+\_\+values} & The struct with the current game state values \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the score was incremented, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 17
+\Hypertarget{game__state_8c_a25702e514927c8787e7c90e6c5695947}\label{game__state_8c_a25702e514927c8787e7c90e6c5695947} 
+\index{game\_state.c@{game\_state.c}!increment\_timer@{increment\_timer}}
+\index{increment\_timer@{increment\_timer}!game\_state.c@{game\_state.c}}
+\doxysubsubsection{\texorpdfstring{increment\_timer()}{increment\_timer()}}
+{\footnotesize\ttfamily int increment\+\_\+timer (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structgame__values}{game\+\_\+values}} \texorpdfstring{$\ast$}{*}}]{current\+\_\+game\+\_\+state\+\_\+values }\end{DoxyParamCaption})}
+
+
+
+Increments the timer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em current\+\_\+game\+\_\+state\+\_\+values} & The struct with the current game state values \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the timer was incremented, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 18
+\Hypertarget{game__state_8c_a964b6f534e78e2901dc7dc7939f57356}\label{game__state_8c_a964b6f534e78e2901dc7dc7939f57356} 
+\index{game\_state.c@{game\_state.c}!load\_game\_state\_to\_game\_buffer@{load\_game\_state\_to\_game\_buffer}}
+\index{load\_game\_state\_to\_game\_buffer@{load\_game\_state\_to\_game\_buffer}!game\_state.c@{game\_state.c}}
+\doxysubsubsection{\texorpdfstring{load\_game\_state\_to\_game\_buffer()}{load\_game\_state\_to\_game\_buffer()}}
+{\footnotesize\ttfamily int load\+\_\+game\+\_\+state\+\_\+to\+\_\+game\+\_\+buffer (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structgame__entities__position}{game\+\_\+entities\+\_\+position}} \texorpdfstring{$\ast$}{*}}]{all\+\_\+game\+\_\+state\+\_\+entities\+\_\+position,  }\item[{struct \mbox{\hyperlink{structgame__values}{game\+\_\+values}} \texorpdfstring{$\ast$}{*}}]{current\+\_\+game\+\_\+state\+\_\+values,  }\item[{struct \mbox{\hyperlink{structgame__images}{game\+\_\+images}} \texorpdfstring{$\ast$}{*}}]{all\+\_\+game\+\_\+images,  }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{video\+\_\+mem }\end{DoxyParamCaption})}
+
+
+
+Loads game state to the frame buffer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em all\+\_\+game\+\_\+state\+\_\+entities\+\_\+position} & The struct with all the game state entities positions \\
+\hline
+{\em current\+\_\+game\+\_\+state\+\_\+values} & The struct with the current game state values \\
+\hline
+{\em all\+\_\+game\+\_\+images} & The struct with all the game images \\
+\hline
+{\em video\+\_\+mem} & The frame buffer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the game state was loaded, 1 otherwise 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+% FIG 19
+Here is the caller graph for this function\+:
+% FIG 20
+\Hypertarget{game__state_8c_aa80e2dc7bf857262fe4aa6c89179eca0}\label{game__state_8c_aa80e2dc7bf857262fe4aa6c89179eca0} 
+\index{game\_state.c@{game\_state.c}!load\_high\_scores\_to\_game\_buffer@{load\_high\_scores\_to\_game\_buffer}}
+\index{load\_high\_scores\_to\_game\_buffer@{load\_high\_scores\_to\_game\_buffer}!game\_state.c@{game\_state.c}}
+\doxysubsubsection{\texorpdfstring{load\_high\_scores\_to\_game\_buffer()}{load\_high\_scores\_to\_game\_buffer()}}
+{\footnotesize\ttfamily int load\+\_\+high\+\_\+scores\+\_\+to\+\_\+game\+\_\+buffer (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structhigh__score__images}{high\+\_\+score\+\_\+images}} \texorpdfstring{$\ast$}{*}}]{all\+\_\+high\+\_\+score\+\_\+images,  }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{video\+\_\+mem }\end{DoxyParamCaption})}
+
+
+
+Loads the high scores to the game buffer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em all\+\_\+high\+\_\+score\+\_\+images} & The struct with all the high score images \\
+\hline
+{\em video\+\_\+mem} & The frame buffer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the high scores were loaded, 1 otherwise 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+% FIG 21
+Here is the caller graph for this function\+:
+% FIG 22
+\Hypertarget{game__state_8c_ae6dd3d09c8c75ed82cd5bb3f7df932c5}\label{game__state_8c_ae6dd3d09c8c75ed82cd5bb3f7df932c5} 
+\index{game\_state.c@{game\_state.c}!read\_high\_scores@{read\_high\_scores}}
+\index{read\_high\_scores@{read\_high\_scores}!game\_state.c@{game\_state.c}}
+\doxysubsubsection{\texorpdfstring{read\_high\_scores()}{read\_high\_scores()}}
+{\footnotesize\ttfamily int read\+\_\+high\+\_\+scores (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structhigh__score}{high\+\_\+score}}}]{high\+\_\+scores\mbox{[}5\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Reads the high scores from the file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em high\+\_\+scores} & The array with the high scores \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the high scores were read, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 23
+\Hypertarget{game__state_8c_a41940fffd827d8d90ce4b34e4c1eef52}\label{game__state_8c_a41940fffd827d8d90ce4b34e4c1eef52} 
+\index{game\_state.c@{game\_state.c}!spawn\_monsters@{spawn\_monsters}}
+\index{spawn\_monsters@{spawn\_monsters}!game\_state.c@{game\_state.c}}
+\doxysubsubsection{\texorpdfstring{spawn\_monsters()}{spawn\_monsters()}}
+{\footnotesize\ttfamily int spawn\+\_\+monsters (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structgame__entities__position}{game\+\_\+entities\+\_\+position}} \texorpdfstring{$\ast$}{*}}]{all\+\_\+game\+\_\+state\+\_\+entities\+\_\+position }\end{DoxyParamCaption})}
+
+
+
+Sees if monsters can be spawned and spawns them. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em all\+\_\+game\+\_\+state\+\_\+entities\+\_\+position} & The struct with all the game state entities positions \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the monsters were spawned, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 24
+\Hypertarget{game__state_8c_ac05b2eb6acb6c4f562706b860b367919}\label{game__state_8c_ac05b2eb6acb6c4f562706b860b367919} 
+\index{game\_state.c@{game\_state.c}!store\_high\_score\_at\_this\_time@{store\_high\_score\_at\_this\_time}}
+\index{store\_high\_score\_at\_this\_time@{store\_high\_score\_at\_this\_time}!game\_state.c@{game\_state.c}}
+\doxysubsubsection{\texorpdfstring{store\_high\_score\_at\_this\_time()}{store\_high\_score\_at\_this\_time()}}
+{\footnotesize\ttfamily int store\+\_\+high\+\_\+score\+\_\+at\+\_\+this\+\_\+time (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structgame__values}{game\+\_\+values}} \texorpdfstring{$\ast$}{*}}]{game\+\_\+value }\end{DoxyParamCaption})}
+
+
+
+Stores the high score at the current time. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em game\+\_\+value} & The struct with the current game values \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the high score was stored, 1 otherwise 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+% FIG 25
+Here is the caller graph for this function\+:
+% FIG 26
+\Hypertarget{game__state_8c_ab3dd64187b0a968fbd8302e924455e77}\label{game__state_8c_ab3dd64187b0a968fbd8302e924455e77} 
+\index{game\_state.c@{game\_state.c}!write\_high\_scores@{write\_high\_scores}}
+\index{write\_high\_scores@{write\_high\_scores}!game\_state.c@{game\_state.c}}
+\doxysubsubsection{\texorpdfstring{write\_high\_scores()}{write\_high\_scores()}}
+{\footnotesize\ttfamily int write\+\_\+high\+\_\+scores (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structhigh__score}{high\+\_\+score}}}]{high\+\_\+scores\mbox{[}5\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Writes the high scores to the file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em high\+\_\+scores} & The array with the high scores \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the high scores were written, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 27
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{game__state_8c_a15ba364a5ba8c36047e87f0f387bfd40}\label{game__state_8c_a15ba364a5ba8c36047e87f0f387bfd40} 
+\index{game\_state.c@{game\_state.c}!rtc@{rtc}}
+\index{rtc@{rtc}!game\_state.c@{game\_state.c}}
+\doxysubsubsection{\texorpdfstring{rtc}{rtc}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structrtc__info__t}{rtc\+\_\+info\+\_\+t}} rtc\hspace{0.3cm}{\ttfamily [extern]}}
+

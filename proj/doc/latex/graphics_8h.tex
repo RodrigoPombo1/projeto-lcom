@@ -1,0 +1,187 @@
+\doxysection{src/devices/graphics/graphics.h File Reference}
+\hypertarget{graphics_8h}{}\label{graphics_8h}\index{src/devices/graphics/graphics.h@{src/devices/graphics/graphics.h}}
+{\ttfamily \#include $<$lcom/lcf.\+h$>$}\newline
+Include dependency graph for graphics.\+h\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structimage__struct}{image\+\_\+struct}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{graphics_8h_a66653ee4d333c6e625b19ecdee6cb9ac}{TRANSPARENT\+\_\+\+COLOR}}~0x\+FEFFFF
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int() \mbox{\hyperlink{graphics_8h_a82f8da2c0f2973010eb5b1e8c1949fb3}{set\+\_\+video\+\_\+mode}} (uint16\+\_\+t mode)
+\begin{DoxyCompactList}\small\item\em Sets the video mode. \end{DoxyCompactList}\item 
+int() \mbox{\hyperlink{graphics_8h_a3b0ecdb3468ef0a8969582e1e5d65f46}{build\+\_\+frame\+\_\+buffer}} (uint16\+\_\+t mode, uint8\+\_\+t \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}video\+\_\+mem)
+\begin{DoxyCompactList}\small\item\em Changes the pointer to the address of the frame buffer for the specified video mode. \end{DoxyCompactList}\item 
+int() \mbox{\hyperlink{graphics_8h_ad04aa86658ec8933ee0ba9b2fff1710a}{get\+\_\+length\+\_\+frame\+\_\+buffer}} (void)
+\begin{DoxyCompactList}\small\item\em Gets the length of the frame buffer. \end{DoxyCompactList}\item 
+int() \mbox{\hyperlink{graphics_8h_a0dd9fd60769d833880394369bf7a2b9d}{vg\+\_\+draw\+\_\+pixel}} (uint16\+\_\+t x, uint16\+\_\+t y, uint32\+\_\+t color, uint8\+\_\+t \texorpdfstring{$\ast$}{*}video\+\_\+mem)
+\begin{DoxyCompactList}\small\item\em Draws the pixel at the specified coordinates in specified frame buffer. \end{DoxyCompactList}\item 
+int() \mbox{\hyperlink{graphics_8h_a59503ab36746f044b30a411846fc94a5}{xpm\+\_\+print}} (xpm\+\_\+map\+\_\+t xpm, uint16\+\_\+t x, uint16\+\_\+t y, uint8\+\_\+t \texorpdfstring{$\ast$}{*}video\+\_\+mem)
+\item 
+int() \mbox{\hyperlink{graphics_8h_a8d182ed9ecb158895701056a6a493d21}{xpm\+\_\+load\+\_\+to\+\_\+image}} (xpm\+\_\+map\+\_\+t, struct \mbox{\hyperlink{structimage__struct}{image\+\_\+struct}} \texorpdfstring{$\ast$}{*}image)
+\begin{DoxyCompactList}\small\item\em Loads xpm file to image struct. \end{DoxyCompactList}\item 
+int() \mbox{\hyperlink{graphics_8h_a56a80dfd4a94acac7652a32deb46f405}{image\+\_\+load\+\_\+to\+\_\+frame\+\_\+buffer}} (struct \mbox{\hyperlink{structimage__struct}{image\+\_\+struct}} \texorpdfstring{$\ast$}{*}image, uint16\+\_\+t x, uint16\+\_\+t y, uint8\+\_\+t \texorpdfstring{$\ast$}{*}video\+\_\+mem)
+\begin{DoxyCompactList}\small\item\em Loads image struct to frame buffer. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{graphics_8h_a66653ee4d333c6e625b19ecdee6cb9ac}\label{graphics_8h_a66653ee4d333c6e625b19ecdee6cb9ac} 
+\index{graphics.h@{graphics.h}!TRANSPARENT\_COLOR@{TRANSPARENT\_COLOR}}
+\index{TRANSPARENT\_COLOR@{TRANSPARENT\_COLOR}!graphics.h@{graphics.h}}
+\doxysubsubsection{\texorpdfstring{TRANSPARENT\_COLOR}{TRANSPARENT\_COLOR}}
+{\footnotesize\ttfamily \#define TRANSPARENT\+\_\+\+COLOR~0x\+FEFFFF}
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{graphics_8h_a3b0ecdb3468ef0a8969582e1e5d65f46}\label{graphics_8h_a3b0ecdb3468ef0a8969582e1e5d65f46} 
+\index{graphics.h@{graphics.h}!build\_frame\_buffer@{build\_frame\_buffer}}
+\index{build\_frame\_buffer@{build\_frame\_buffer}!graphics.h@{graphics.h}}
+\doxysubsubsection{\texorpdfstring{build\_frame\_buffer()}{build\_frame\_buffer()}}
+{\footnotesize\ttfamily int() build\+\_\+frame\+\_\+buffer (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{mode,  }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{video\+\_\+mem }\end{DoxyParamCaption})}
+
+
+
+Changes the pointer to the address of the frame buffer for the specified video mode. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mode} & The mode to set \\
+\hline
+{\em video\+\_\+mem} & The pointer to the address of the frame buffer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if successful, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 2
+\Hypertarget{graphics_8h_ad04aa86658ec8933ee0ba9b2fff1710a}\label{graphics_8h_ad04aa86658ec8933ee0ba9b2fff1710a} 
+\index{graphics.h@{graphics.h}!get\_length\_frame\_buffer@{get\_length\_frame\_buffer}}
+\index{get\_length\_frame\_buffer@{get\_length\_frame\_buffer}!graphics.h@{graphics.h}}
+\doxysubsubsection{\texorpdfstring{get\_length\_frame\_buffer()}{get\_length\_frame\_buffer()}}
+{\footnotesize\ttfamily int() get\+\_\+length\+\_\+frame\+\_\+buffer (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Gets the length of the frame buffer. 
+
+\begin{DoxyReturn}{Returns}
+The length of the frame buffer 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 3
+\Hypertarget{graphics_8h_a56a80dfd4a94acac7652a32deb46f405}\label{graphics_8h_a56a80dfd4a94acac7652a32deb46f405} 
+\index{graphics.h@{graphics.h}!image\_load\_to\_frame\_buffer@{image\_load\_to\_frame\_buffer}}
+\index{image\_load\_to\_frame\_buffer@{image\_load\_to\_frame\_buffer}!graphics.h@{graphics.h}}
+\doxysubsubsection{\texorpdfstring{image\_load\_to\_frame\_buffer()}{image\_load\_to\_frame\_buffer()}}
+{\footnotesize\ttfamily int() image\+\_\+load\+\_\+to\+\_\+frame\+\_\+buffer (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structimage__struct}{image\+\_\+struct}} \texorpdfstring{$\ast$}{*}}]{image,  }\item[{uint16\+\_\+t}]{x,  }\item[{uint16\+\_\+t}]{y,  }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{video\+\_\+mem }\end{DoxyParamCaption})}
+
+
+
+Loads image struct to frame buffer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em image} & The image struct to load \\
+\hline
+{\em x} & The x coordinate of the image \\
+\hline
+{\em y} & The y coordinate of the image \\
+\hline
+{\em video\+\_\+mem} & The address of the frame buffer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if successful, 1 otherwise 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+% FIG 4
+Here is the caller graph for this function\+:
+% FIG 5
+\Hypertarget{graphics_8h_a82f8da2c0f2973010eb5b1e8c1949fb3}\label{graphics_8h_a82f8da2c0f2973010eb5b1e8c1949fb3} 
+\index{graphics.h@{graphics.h}!set\_video\_mode@{set\_video\_mode}}
+\index{set\_video\_mode@{set\_video\_mode}!graphics.h@{graphics.h}}
+\doxysubsubsection{\texorpdfstring{set\_video\_mode()}{set\_video\_mode()}}
+{\footnotesize\ttfamily int() set\+\_\+video\+\_\+mode (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{mode }\end{DoxyParamCaption})}
+
+
+
+Sets the video mode. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mode} & The mode to set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if successful, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 6
+\Hypertarget{graphics_8h_a0dd9fd60769d833880394369bf7a2b9d}\label{graphics_8h_a0dd9fd60769d833880394369bf7a2b9d} 
+\index{graphics.h@{graphics.h}!vg\_draw\_pixel@{vg\_draw\_pixel}}
+\index{vg\_draw\_pixel@{vg\_draw\_pixel}!graphics.h@{graphics.h}}
+\doxysubsubsection{\texorpdfstring{vg\_draw\_pixel()}{vg\_draw\_pixel()}}
+{\footnotesize\ttfamily int() vg\+\_\+draw\+\_\+pixel (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{x,  }\item[{uint16\+\_\+t}]{y,  }\item[{uint32\+\_\+t}]{color,  }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{video\+\_\+mem }\end{DoxyParamCaption})}
+
+
+
+Draws the pixel at the specified coordinates in specified frame buffer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & The x coordinate of the pixel \\
+\hline
+{\em y} & The y coordinate of the pixel \\
+\hline
+{\em color} & The color of the pixel \\
+\hline
+{\em video\+\_\+mem} & The address of the frame buffer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if successful, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 7
+\Hypertarget{graphics_8h_a8d182ed9ecb158895701056a6a493d21}\label{graphics_8h_a8d182ed9ecb158895701056a6a493d21} 
+\index{graphics.h@{graphics.h}!xpm\_load\_to\_image@{xpm\_load\_to\_image}}
+\index{xpm\_load\_to\_image@{xpm\_load\_to\_image}!graphics.h@{graphics.h}}
+\doxysubsubsection{\texorpdfstring{xpm\_load\_to\_image()}{xpm\_load\_to\_image()}}
+{\footnotesize\ttfamily int() xpm\+\_\+load\+\_\+to\+\_\+image (\begin{DoxyParamCaption}\item[{xpm\+\_\+map\+\_\+t}]{xpm,  }\item[{struct \mbox{\hyperlink{structimage__struct}{image\+\_\+struct}} \texorpdfstring{$\ast$}{*}}]{image }\end{DoxyParamCaption})}
+
+
+
+Loads xpm file to image struct. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em xpm} & The xpm file to load \\
+\hline
+{\em image} & The image struct to store the xpm file \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if successful, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 8
+\Hypertarget{graphics_8h_a59503ab36746f044b30a411846fc94a5}\label{graphics_8h_a59503ab36746f044b30a411846fc94a5} 
+\index{graphics.h@{graphics.h}!xpm\_print@{xpm\_print}}
+\index{xpm\_print@{xpm\_print}!graphics.h@{graphics.h}}
+\doxysubsubsection{\texorpdfstring{xpm\_print()}{xpm\_print()}}
+{\footnotesize\ttfamily int() xpm\+\_\+print (\begin{DoxyParamCaption}\item[{xpm\+\_\+map\+\_\+t}]{xpm,  }\item[{uint16\+\_\+t}]{x,  }\item[{uint16\+\_\+t}]{y,  }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{video\+\_\+mem }\end{DoxyParamCaption})}
+
+Here is the call graph for this function\+:
+% FIG 9

@@ -1,0 +1,116 @@
+\doxysection{src/devices/mouse/\+KBC\+\_\+mouse.h File Reference}
+\hypertarget{_k_b_c__mouse_8h}{}\label{_k_b_c__mouse_8h}\index{src/devices/mouse/KBC\_mouse.h@{src/devices/mouse/KBC\_mouse.h}}
+{\ttfamily \#include "{}../../controllers/i8042.\+h"{}}\newline
+{\ttfamily \#include "{}../common\+\_\+keyboard\+\_\+and\+\_\+mouse/keyboard\+\_\+and\+\_\+mouse.\+h"{}}\newline
+Include dependency graph for KBC\+\_\+mouse.\+h\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int() \mbox{\hyperlink{_k_b_c__mouse_8h_a56719b09e2356fcd9d79e6fcf59f15fd}{mouse\+\_\+subscribe}} (uint8\+\_\+t \texorpdfstring{$\ast$}{*}bit\+\_\+no)
+\begin{DoxyCompactList}\small\item\em Subscribes and enables Mouse interrupts. \end{DoxyCompactList}\item 
+int() \mbox{\hyperlink{_k_b_c__mouse_8h_aab5e1dc43daf2cc458f26d87211b994f}{mouse\+\_\+unsubscribe}} ()
+\begin{DoxyCompactList}\small\item\em Unsubscribes Mouse interrupts. \end{DoxyCompactList}\item 
+int() \mbox{\hyperlink{_k_b_c__mouse_8h_af9e4aed53107bfa8e9d9ff1c2f308512}{mouse\+\_\+build\+\_\+packet}} ()
+\begin{DoxyCompactList}\small\item\em Builds the mouse packet. \end{DoxyCompactList}\item 
+int() \mbox{\hyperlink{_k_b_c__mouse_8h_a38d52a9770ba9b635e98e4968ae7c330}{mouse\+\_\+write\+\_\+command}} (uint8\+\_\+t command)
+\begin{DoxyCompactList}\small\item\em Writes a command byte to the Mouse. \end{DoxyCompactList}\item 
+struct mouse\+\_\+ev \texorpdfstring{$\ast$}{*}() \mbox{\hyperlink{_k_b_c__mouse_8h_ac739ce487d0d16b6f8ac5153adbc5ee9}{mouse\+\_\+detect\+\_\+events}} (struct \mbox{\hyperlink{_k_b_c__mouse_8c_ab234504ae156fa5b250e34cbb65a7807}{packet}} \texorpdfstring{$\ast$}{*}pp)
+\begin{DoxyCompactList}\small\item\em Detects the mouse events. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{_k_b_c__mouse_8h_af9e4aed53107bfa8e9d9ff1c2f308512}\label{_k_b_c__mouse_8h_af9e4aed53107bfa8e9d9ff1c2f308512} 
+\index{KBC\_mouse.h@{KBC\_mouse.h}!mouse\_build\_packet@{mouse\_build\_packet}}
+\index{mouse\_build\_packet@{mouse\_build\_packet}!KBC\_mouse.h@{KBC\_mouse.h}}
+\doxysubsubsection{\texorpdfstring{mouse\_build\_packet()}{mouse\_build\_packet()}}
+{\footnotesize\ttfamily int() mouse\+\_\+build\+\_\+packet (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Builds the mouse packet. 
+
+\begin{DoxyReturn}{Returns}
+0 if the packet is not complete, 1 if the packet is invalid, 2 if the packet is complete 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 2
+\Hypertarget{_k_b_c__mouse_8h_ac739ce487d0d16b6f8ac5153adbc5ee9}\label{_k_b_c__mouse_8h_ac739ce487d0d16b6f8ac5153adbc5ee9} 
+\index{KBC\_mouse.h@{KBC\_mouse.h}!mouse\_detect\_events@{mouse\_detect\_events}}
+\index{mouse\_detect\_events@{mouse\_detect\_events}!KBC\_mouse.h@{KBC\_mouse.h}}
+\doxysubsubsection{\texorpdfstring{mouse\_detect\_events()}{mouse\_detect\_events()}}
+{\footnotesize\ttfamily struct mouse\+\_\+ev \texorpdfstring{$\ast$}{*}() mouse\+\_\+detect\+\_\+events (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{_k_b_c__mouse_8c_ab234504ae156fa5b250e34cbb65a7807}{packet}} \texorpdfstring{$\ast$}{*}}]{pp }\end{DoxyParamCaption})}
+
+
+
+Detects the mouse events. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pp} & The packet to detect the events from \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The mouse event 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+% FIG 3
+Here is the caller graph for this function\+:
+% FIG 4
+\Hypertarget{_k_b_c__mouse_8h_a56719b09e2356fcd9d79e6fcf59f15fd}\label{_k_b_c__mouse_8h_a56719b09e2356fcd9d79e6fcf59f15fd} 
+\index{KBC\_mouse.h@{KBC\_mouse.h}!mouse\_subscribe@{mouse\_subscribe}}
+\index{mouse\_subscribe@{mouse\_subscribe}!KBC\_mouse.h@{KBC\_mouse.h}}
+\doxysubsubsection{\texorpdfstring{mouse\_subscribe()}{mouse\_subscribe()}}
+{\footnotesize\ttfamily int() mouse\+\_\+subscribe (\begin{DoxyParamCaption}\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{bit\+\_\+no }\end{DoxyParamCaption})}
+
+
+
+Subscribes and enables Mouse interrupts. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bit\+\_\+no} & The bit number to be set in the mask \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if successful, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 5
+\Hypertarget{_k_b_c__mouse_8h_aab5e1dc43daf2cc458f26d87211b994f}\label{_k_b_c__mouse_8h_aab5e1dc43daf2cc458f26d87211b994f} 
+\index{KBC\_mouse.h@{KBC\_mouse.h}!mouse\_unsubscribe@{mouse\_unsubscribe}}
+\index{mouse\_unsubscribe@{mouse\_unsubscribe}!KBC\_mouse.h@{KBC\_mouse.h}}
+\doxysubsubsection{\texorpdfstring{mouse\_unsubscribe()}{mouse\_unsubscribe()}}
+{\footnotesize\ttfamily int() mouse\+\_\+unsubscribe (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Unsubscribes Mouse interrupts. 
+
+\begin{DoxyReturn}{Returns}
+0 if successful, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 6
+\Hypertarget{_k_b_c__mouse_8h_a38d52a9770ba9b635e98e4968ae7c330}\label{_k_b_c__mouse_8h_a38d52a9770ba9b635e98e4968ae7c330} 
+\index{KBC\_mouse.h@{KBC\_mouse.h}!mouse\_write\_command@{mouse\_write\_command}}
+\index{mouse\_write\_command@{mouse\_write\_command}!KBC\_mouse.h@{KBC\_mouse.h}}
+\doxysubsubsection{\texorpdfstring{mouse\_write\_command()}{mouse\_write\_command()}}
+{\footnotesize\ttfamily int() mouse\+\_\+write\+\_\+command (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{command }\end{DoxyParamCaption})}
+
+
+
+Writes a command byte to the Mouse. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em command} & The command byte to write \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if successful, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 7

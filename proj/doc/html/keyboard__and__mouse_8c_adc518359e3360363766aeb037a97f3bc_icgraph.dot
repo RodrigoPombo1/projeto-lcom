@@ -1,0 +1,15 @@
+digraph "kbc_write_command"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="RL";
+  Node1 [id="Node000001",label="kbc_write_command",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Writes a command byte to the KBC."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="mouse_detect_events",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$_k_b_c__mouse_8c.html#ac739ce487d0d16b6f8ac5153adbc5ee9",tooltip="Detects the mouse events."];
+  Node2 -> Node3 [id="edge2_Node000002_Node000003",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="proj_main_loop",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$main_8c.html#a2a16f651eccbd248e1ad3b3b924b143b",tooltip="Main loop of the game."];
+  Node1 -> Node4 [id="edge3_Node000001_Node000004",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="restore_keyboard",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$_k_b_c__keyboard_8c.html#a15b3b00c968c59ddb1c7f4b29eb75b6e",tooltip="Restores the keyboard to default configuration."];
+}

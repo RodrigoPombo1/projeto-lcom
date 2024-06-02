@@ -1,0 +1,6 @@
+var searchData=
+[
+  ['get_5fimage_5ffrom_5fnumber_5fgame_0',['get_image_from_number_game',['../game__state_8c.html#a87a5a47ecd43a6382ee4da8ac785fa15',1,'get_image_from_number_game(struct image_struct **result_image, struct game_images *all_game_images, int number):&#160;game_state.c'],['../game__state_8h.html#a87a5a47ecd43a6382ee4da8ac785fa15',1,'get_image_from_number_game(struct image_struct **result_image, struct game_images *all_game_images, int number):&#160;game_state.c']]],
+  ['get_5fimage_5ffrom_5fnumber_5fhigh_5fscore_1',['get_image_from_number_high_score',['../game__state_8c.html#a3d5e2403682e61915d0ca62040839170',1,'get_image_from_number_high_score(struct image_struct **result_image, struct high_score_images *all_high_score_images, int number):&#160;game_state.c'],['../game__state_8h.html#a3d5e2403682e61915d0ca62040839170',1,'get_image_from_number_high_score(struct image_struct **result_image, struct high_score_images *all_high_score_images, int number):&#160;game_state.c']]],
+  ['get_5flength_5fframe_5fbuffer_2',['get_length_frame_buffer',['../graphics_8c.html#ad04aa86658ec8933ee0ba9b2fff1710a',1,'get_length_frame_buffer(void):&#160;graphics.c'],['../graphics_8h.html#ad04aa86658ec8933ee0ba9b2fff1710a',1,'get_length_frame_buffer(void):&#160;graphics.c']]]
+];

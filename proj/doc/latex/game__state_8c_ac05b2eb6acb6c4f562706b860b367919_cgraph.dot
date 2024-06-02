@@ -1,0 +1,24 @@
+digraph "store_high_score_at_this_time"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="store_high_score_at\l_this_time",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Stores the high score at the current time."];
+  Node1 -> Node2 [id="edge9_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="read_high_scores",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$game__state_8c.html#ae6dd3d09c8c75ed82cd5bb3f7df932c5",tooltip="Reads the high scores from the file."];
+  Node1 -> Node3 [id="edge10_Node000001_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="rtc_read_date_time",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$rtc_8c.html#ad729e25c57b33567133bb039c8849184",tooltip="Reads the date and time from the RTC."];
+  Node3 -> Node4 [id="edge11_Node000003_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="rtc_read_output",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$rtc_8c.html#a8a8c176caf1a14755a4813b5fe4849ad",tooltip="Subscribes and enables RTC interrupts."];
+  Node4 -> Node5 [id="edge12_Node000004_Node000005",color="steelblue1",style="solid",tooltip=" "];
+  Node5 [id="Node000005",label="rtc_write_command",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$rtc_8c.html#a7ea330c66482cd8560b44c1bc502ba7f",tooltip="Writes a command to the RTC."];
+  Node4 -> Node6 [id="edge13_Node000004_Node000006",color="steelblue1",style="solid",tooltip=" "];
+  Node6 [id="Node000006",label="util_sys_inb",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$utils_8c.html#a79a031a8611f5b2d6afa4158e92b0fb4",tooltip="Function that reads a byte from a given port."];
+  Node3 -> Node7 [id="edge14_Node000003_Node000007",color="steelblue1",style="solid",tooltip=" "];
+  Node7 [id="Node000007",label="rtc_read_update_status",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$rtc_8c.html#a3c1c44bff75e5f869f0a2d046ec447c4",tooltip="Reads the update status of the RTC."];
+  Node7 -> Node4 [id="edge15_Node000007_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node1 -> Node8 [id="edge16_Node000001_Node000008",color="steelblue1",style="solid",tooltip=" "];
+  Node8 [id="Node000008",label="write_high_scores",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$game__state_8c.html#ab3dd64187b0a968fbd8302e924455e77",tooltip="Writes the high scores to the file."];
+}

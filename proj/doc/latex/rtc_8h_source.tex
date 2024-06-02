@@ -1,0 +1,31 @@
+\doxysection{rtc.\+h}
+\hypertarget{rtc_8h_source}{}\label{rtc_8h_source}\index{src/devices/rtc/rtc.h@{src/devices/rtc/rtc.h}}
+\mbox{\hyperlink{rtc_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ \_LCOM\_RTC\_H\_}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ \_LCOM\_RTC\_H\_}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <lcom/lcf.h>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ RTC\_IRQ\ 8}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00009\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structrtc__info__t_a46729a903be1a03cdb248fb48d84d4f5}{seconds}};}
+\DoxyCodeLine{00010\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structrtc__info__t_a7acca8be0094a19be6e308ac05924c4f}{minutes}};}
+\DoxyCodeLine{00011\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structrtc__info__t_a00a531a34a1d603329df5778f1203ab6}{hours}};}
+\DoxyCodeLine{00012\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structrtc__info__t_a72369a1087b2aeffe374bb054cb97c12}{day}};}
+\DoxyCodeLine{00013\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structrtc__info__t_a3e00faf7fbf9805e9ec4d2edd6339050}{month}};}
+\DoxyCodeLine{00014\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structrtc__info__t_a7af2065789bc84419b8d5fe109be83b5}{year}};}
+\DoxyCodeLine{00015\ \}\ \mbox{\hyperlink{structrtc__info__t}{rtc\_info\_t}};}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ int\ (\mbox{\hyperlink{rtc_8h_a8a8c176caf1a14755a4813b5fe4849ad}{rtc\_read\_output}})(uint8\_t\ command,\ uint8\_t\ *output);}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ int\ (\mbox{\hyperlink{rtc_8h_a7ea330c66482cd8560b44c1bc502ba7f}{rtc\_write\_command}})(uint8\_t\ port,\ uint8\_t\ command);}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ int\ (\mbox{\hyperlink{rtc_8h_a3c1c44bff75e5f869f0a2d046ec447c4}{rtc\_read\_update\_status}})();}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ int\ (\mbox{\hyperlink{rtc_8h_ad729e25c57b33567133bb039c8849184}{rtc\_read\_date\_time}})();}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,173 @@
+\doxysection{src/main.c File Reference}
+\hypertarget{main_8c}{}\label{main_8c}\index{src/main.c@{src/main.c}}
+{\ttfamily \#include $<$lcom/lcf.\+h$>$}\newline
+{\ttfamily \#include $<$lcom/timer.\+h$>$}\newline
+{\ttfamily \#include "{}xpm\+\_\+files/\+LCOM\+\_\+0.\+xpm"{}}\newline
+{\ttfamily \#include "{}xpm\+\_\+files/\+LCOM\+\_\+1.\+xpm"{}}\newline
+{\ttfamily \#include "{}xpm\+\_\+files/\+LCOM\+\_\+2.\+xpm"{}}\newline
+{\ttfamily \#include "{}xpm\+\_\+files/\+LCOM\+\_\+3.\+xpm"{}}\newline
+{\ttfamily \#include "{}xpm\+\_\+files/\+LCOM\+\_\+4.\+xpm"{}}\newline
+{\ttfamily \#include "{}xpm\+\_\+files/\+LCOM\+\_\+5.\+xpm"{}}\newline
+{\ttfamily \#include "{}xpm\+\_\+files/\+LCOM\+\_\+6.\+xpm"{}}\newline
+{\ttfamily \#include "{}xpm\+\_\+files/\+LCOM\+\_\+7.\+xpm"{}}\newline
+{\ttfamily \#include "{}xpm\+\_\+files/\+LCOM\+\_\+8.\+xpm"{}}\newline
+{\ttfamily \#include "{}xpm\+\_\+files/\+LCOM\+\_\+9.\+xpm"{}}\newline
+{\ttfamily \#include "{}xpm\+\_\+files/\+LCOM\+\_\+-\/.\+xpm"{}}\newline
+{\ttfamily \#include "{}xpm\+\_\+files/\+LCOM\+\_\+2\+\_\+pontos.\+xpm"{}}\newline
+{\ttfamily \#include "{}xpm\+\_\+files/\+LCOM\+\_\+character.\+xpm"{}}\newline
+{\ttfamily \#include "{}xpm\+\_\+files/\+LCOM\+\_\+cursor.\+xpm"{}}\newline
+{\ttfamily \#include "{}xpm\+\_\+files/\+LCOM\+\_\+game\+\_\+over.\+xpm"{}}\newline
+{\ttfamily \#include "{}xpm\+\_\+files/\+LCOM\+\_\+high\+\_\+scores.\+xpm"{}}\newline
+{\ttfamily \#include "{}xpm\+\_\+files/\+LCOM\+\_\+mapa.\+xpm"{}}\newline
+{\ttfamily \#include "{}xpm\+\_\+files/\+LCOM\+\_\+menu.\+xpm"{}}\newline
+{\ttfamily \#include "{}xpm\+\_\+files/\+LCOM\+\_\+monster.\+xpm"{}}\newline
+{\ttfamily \#include "{}devices/keyboard/\+KBC\+\_\+keyboard.\+h"{}}\newline
+{\ttfamily \#include "{}devices/mouse/\+KBC\+\_\+mouse.\+h"{}}\newline
+{\ttfamily \#include "{}devices/graphics/graphics.\+h"{}}\newline
+{\ttfamily \#include "{}game\+\_\+state/game\+\_\+state.\+h"{}}\newline
+Include dependency graph for main.\+c\+:
+% FIG 0
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{main_8c_a0ddf1224851353fc92bfbff6f499fa97}{main}} (int argc, char \texorpdfstring{$\ast$}{*}argv\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em Main function of the game. \end{DoxyCompactList}\item 
+int() \mbox{\hyperlink{main_8c_acf53638c4a73e2538b85cfd779995240}{setup\+\_\+game}} ()
+\begin{DoxyCompactList}\small\item\em Sets video mode and subscribes interruptions of all necessary devices. \end{DoxyCompactList}\item 
+int() \mbox{\hyperlink{main_8c_aec81fd31e07113d391f595044e270b4f}{close\+\_\+game}} ()
+\begin{DoxyCompactList}\small\item\em Unsubscribes interruptions of all used devices and closes video mode. \end{DoxyCompactList}\item 
+int() \mbox{\hyperlink{main_8c_a2a16f651eccbd248e1ad3b3b924b143b}{proj\+\_\+main\+\_\+loop}} (int argc, char \texorpdfstring{$\ast$}{*}argv\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em Main loop of the game. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{main_8c_a8be64d00347cadbd31bf44162c2954eb}{irq\+\_\+set\+\_\+timer}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{main_8c_a6a108922167e076916055b86b8566dac}{irq\+\_\+set\+\_\+keyboard}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{main_8c_ac6dcbbdfd0e6816c7d375f5a8ad6dd41}{irq\+\_\+set\+\_\+mouse}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{main_8c_ade818037fd6c985038ff29656089758d}{status}} = 0
+\item 
+struct \mbox{\hyperlink{_k_b_c__mouse_8c_ab234504ae156fa5b250e34cbb65a7807}{packet}} \mbox{\hyperlink{main_8c_a4e1955f357cbafec5d9b391e5f5a3e77}{final\+\_\+packet}}
+\item 
+struct mouse\+\_\+ev \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{main_8c_af9d49ed53c30924e446c36c153dad85b}{mouse}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{main_8c_aec81fd31e07113d391f595044e270b4f}\label{main_8c_aec81fd31e07113d391f595044e270b4f} 
+\index{main.c@{main.c}!close\_game@{close\_game}}
+\index{close\_game@{close\_game}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{close\_game()}{close\_game()}}
+{\footnotesize\ttfamily int() close\+\_\+game (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Unsubscribes interruptions of all used devices and closes video mode. 
+
+\begin{DoxyReturn}{Returns}
+0 if the game was successful, 1 if there was an error 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+% FIG 1
+Here is the caller graph for this function\+:
+% FIG 2
+\Hypertarget{main_8c_a0ddf1224851353fc92bfbff6f499fa97}\label{main_8c_a0ddf1224851353fc92bfbff6f499fa97} 
+\index{main.c@{main.c}!main@{main}}
+\index{main@{main}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char \texorpdfstring{$\ast$}{*}}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Main function of the game. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em argc} & number of arguments \\
+\hline
+{\em argv} & arguments \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the game was successful, 1 if there was an error 
+\end{DoxyReturn}
+\Hypertarget{main_8c_a2a16f651eccbd248e1ad3b3b924b143b}\label{main_8c_a2a16f651eccbd248e1ad3b3b924b143b} 
+\index{main.c@{main.c}!proj\_main\_loop@{proj\_main\_loop}}
+\index{proj\_main\_loop@{proj\_main\_loop}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{proj\_main\_loop()}{proj\_main\_loop()}}
+{\footnotesize\ttfamily int() proj\+\_\+main\+\_\+loop (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char \texorpdfstring{$\ast$}{*}}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Main loop of the game. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em argc} & number of arguments \\
+\hline
+{\em argv} & arguments \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the game was successful, 1 if there was an error 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+% FIG 3
+\Hypertarget{main_8c_acf53638c4a73e2538b85cfd779995240}\label{main_8c_acf53638c4a73e2538b85cfd779995240} 
+\index{main.c@{main.c}!setup\_game@{setup\_game}}
+\index{setup\_game@{setup\_game}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{setup\_game()}{setup\_game()}}
+{\footnotesize\ttfamily int() setup\+\_\+game (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Sets video mode and subscribes interruptions of all necessary devices. 
+
+\begin{DoxyReturn}{Returns}
+0 if the game was successful, 1 if there was an error 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+% FIG 4
+Here is the caller graph for this function\+:
+% FIG 5
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{main_8c_a4e1955f357cbafec5d9b391e5f5a3e77}\label{main_8c_a4e1955f357cbafec5d9b391e5f5a3e77} 
+\index{main.c@{main.c}!final\_packet@{final\_packet}}
+\index{final\_packet@{final\_packet}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{final\_packet}{final\_packet}}
+{\footnotesize\ttfamily struct \mbox{\hyperlink{_k_b_c__mouse_8c_ab234504ae156fa5b250e34cbb65a7807}{packet}} final\+\_\+packet\hspace{0.3cm}{\ttfamily [extern]}}
+
+\Hypertarget{main_8c_a6a108922167e076916055b86b8566dac}\label{main_8c_a6a108922167e076916055b86b8566dac} 
+\index{main.c@{main.c}!irq\_set\_keyboard@{irq\_set\_keyboard}}
+\index{irq\_set\_keyboard@{irq\_set\_keyboard}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{irq\_set\_keyboard}{irq\_set\_keyboard}}
+{\footnotesize\ttfamily uint8\+\_\+t irq\+\_\+set\+\_\+keyboard}
+
+\Hypertarget{main_8c_ac6dcbbdfd0e6816c7d375f5a8ad6dd41}\label{main_8c_ac6dcbbdfd0e6816c7d375f5a8ad6dd41} 
+\index{main.c@{main.c}!irq\_set\_mouse@{irq\_set\_mouse}}
+\index{irq\_set\_mouse@{irq\_set\_mouse}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{irq\_set\_mouse}{irq\_set\_mouse}}
+{\footnotesize\ttfamily uint8\+\_\+t irq\+\_\+set\+\_\+mouse}
+
+\Hypertarget{main_8c_a8be64d00347cadbd31bf44162c2954eb}\label{main_8c_a8be64d00347cadbd31bf44162c2954eb} 
+\index{main.c@{main.c}!irq\_set\_timer@{irq\_set\_timer}}
+\index{irq\_set\_timer@{irq\_set\_timer}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{irq\_set\_timer}{irq\_set\_timer}}
+{\footnotesize\ttfamily uint8\+\_\+t irq\+\_\+set\+\_\+timer}
+
+\Hypertarget{main_8c_af9d49ed53c30924e446c36c153dad85b}\label{main_8c_af9d49ed53c30924e446c36c153dad85b} 
+\index{main.c@{main.c}!mouse@{mouse}}
+\index{mouse@{mouse}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{mouse}{mouse}}
+{\footnotesize\ttfamily struct mouse\+\_\+ev\texorpdfstring{$\ast$}{*} mouse}
+
+\Hypertarget{main_8c_ade818037fd6c985038ff29656089758d}\label{main_8c_ade818037fd6c985038ff29656089758d} 
+\index{main.c@{main.c}!status@{status}}
+\index{status@{status}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{status}{status}}
+{\footnotesize\ttfamily uint8\+\_\+t status = 0}
+

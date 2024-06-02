@@ -1,0 +1,113 @@
+\doxysection{src/devices/rtc/rtc.h File Reference}
+\hypertarget{rtc_8h}{}\label{rtc_8h}\index{src/devices/rtc/rtc.h@{src/devices/rtc/rtc.h}}
+{\ttfamily \#include $<$lcom/lcf.\+h$>$}\newline
+Include dependency graph for rtc.\+h\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structrtc__info__t}{rtc\+\_\+info\+\_\+t}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{rtc_8h_a4e22feb6ffbc1cda32fadff5c740dc51}{RTC\+\_\+\+IRQ}}~8
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int() \mbox{\hyperlink{rtc_8h_a8a8c176caf1a14755a4813b5fe4849ad}{rtc\+\_\+read\+\_\+output}} (uint8\+\_\+t command, uint8\+\_\+t \texorpdfstring{$\ast$}{*}output)
+\begin{DoxyCompactList}\small\item\em Subscribes and enables RTC interrupts. \end{DoxyCompactList}\item 
+int() \mbox{\hyperlink{rtc_8h_a7ea330c66482cd8560b44c1bc502ba7f}{rtc\+\_\+write\+\_\+command}} (uint8\+\_\+t port, uint8\+\_\+t command)
+\begin{DoxyCompactList}\small\item\em Writes a command to the RTC. \end{DoxyCompactList}\item 
+int() \mbox{\hyperlink{rtc_8h_a3c1c44bff75e5f869f0a2d046ec447c4}{rtc\+\_\+read\+\_\+update\+\_\+status}} ()
+\begin{DoxyCompactList}\small\item\em Reads the update status of the RTC. \end{DoxyCompactList}\item 
+int() \mbox{\hyperlink{rtc_8h_ad729e25c57b33567133bb039c8849184}{rtc\+\_\+read\+\_\+date\+\_\+time}} ()
+\begin{DoxyCompactList}\small\item\em Reads the date and time from the RTC. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{rtc_8h_a4e22feb6ffbc1cda32fadff5c740dc51}\label{rtc_8h_a4e22feb6ffbc1cda32fadff5c740dc51} 
+\index{rtc.h@{rtc.h}!RTC\_IRQ@{RTC\_IRQ}}
+\index{RTC\_IRQ@{RTC\_IRQ}!rtc.h@{rtc.h}}
+\doxysubsubsection{\texorpdfstring{RTC\_IRQ}{RTC\_IRQ}}
+{\footnotesize\ttfamily \#define RTC\+\_\+\+IRQ~8}
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{rtc_8h_ad729e25c57b33567133bb039c8849184}\label{rtc_8h_ad729e25c57b33567133bb039c8849184} 
+\index{rtc.h@{rtc.h}!rtc\_read\_date\_time@{rtc\_read\_date\_time}}
+\index{rtc\_read\_date\_time@{rtc\_read\_date\_time}!rtc.h@{rtc.h}}
+\doxysubsubsection{\texorpdfstring{rtc\_read\_date\_time()}{rtc\_read\_date\_time()}}
+{\footnotesize\ttfamily int() rtc\+\_\+read\+\_\+date\+\_\+time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Reads the date and time from the RTC. 
+
+\begin{DoxyReturn}{Returns}
+0 if the date and time were read successfully, 1 otherwise 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+% FIG 2
+Here is the caller graph for this function\+:
+% FIG 3
+\Hypertarget{rtc_8h_a8a8c176caf1a14755a4813b5fe4849ad}\label{rtc_8h_a8a8c176caf1a14755a4813b5fe4849ad} 
+\index{rtc.h@{rtc.h}!rtc\_read\_output@{rtc\_read\_output}}
+\index{rtc\_read\_output@{rtc\_read\_output}!rtc.h@{rtc.h}}
+\doxysubsubsection{\texorpdfstring{rtc\_read\_output()}{rtc\_read\_output()}}
+{\footnotesize\ttfamily int() rtc\+\_\+read\+\_\+output (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{command,  }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{output }\end{DoxyParamCaption})}
+
+
+
+Subscribes and enables RTC interrupts. 
+
+\begin{DoxyReturn}{Returns}
+0 if the RTC interrupts were successfully subscribed and enabled, 1 otherwise 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+% FIG 4
+Here is the caller graph for this function\+:
+% FIG 5
+\Hypertarget{rtc_8h_a3c1c44bff75e5f869f0a2d046ec447c4}\label{rtc_8h_a3c1c44bff75e5f869f0a2d046ec447c4} 
+\index{rtc.h@{rtc.h}!rtc\_read\_update\_status@{rtc\_read\_update\_status}}
+\index{rtc\_read\_update\_status@{rtc\_read\_update\_status}!rtc.h@{rtc.h}}
+\doxysubsubsection{\texorpdfstring{rtc\_read\_update\_status()}{rtc\_read\_update\_status()}}
+{\footnotesize\ttfamily int() rtc\+\_\+read\+\_\+update\+\_\+status (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Reads the update status of the RTC. 
+
+\begin{DoxyReturn}{Returns}
+0 if the RTC is updating, 1 otherwise 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+% FIG 6
+Here is the caller graph for this function\+:
+% FIG 7
+\Hypertarget{rtc_8h_a7ea330c66482cd8560b44c1bc502ba7f}\label{rtc_8h_a7ea330c66482cd8560b44c1bc502ba7f} 
+\index{rtc.h@{rtc.h}!rtc\_write\_command@{rtc\_write\_command}}
+\index{rtc\_write\_command@{rtc\_write\_command}!rtc.h@{rtc.h}}
+\doxysubsubsection{\texorpdfstring{rtc\_write\_command()}{rtc\_write\_command()}}
+{\footnotesize\ttfamily int() rtc\+\_\+write\+\_\+command (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{port,  }\item[{uint8\+\_\+t}]{command }\end{DoxyParamCaption})}
+
+
+
+Writes a command to the RTC. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em port} & The port to write the command to \\
+\hline
+{\em command} & The command to write \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if the command was written successfully, 1 otherwise 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+% FIG 8

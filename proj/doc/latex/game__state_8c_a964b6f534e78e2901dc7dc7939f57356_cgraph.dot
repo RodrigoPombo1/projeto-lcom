@@ -1,0 +1,17 @@
+digraph "load_game_state_to_game_buffer"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="load_game_state_to\l_game_buffer",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Loads game state to the frame buffer."];
+  Node1 -> Node2 [id="edge5_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="convert_game_position\l_to_frame_buffer_position",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$game__state_8c.html#abc43aedcbe0367f58393cfaa161c11f6",tooltip="Converts a game position to a frame buffer position."];
+  Node1 -> Node3 [id="edge6_Node000001_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="get_image_from_number_game",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$game__state_8c.html#a87a5a47ecd43a6382ee4da8ac785fa15",tooltip="Gets the number image from the image struct."];
+  Node1 -> Node4 [id="edge7_Node000001_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="image_load_to_frame\l_buffer",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$graphics_8c.html#a56a80dfd4a94acac7652a32deb46f405",tooltip="Loads image struct to frame buffer."];
+  Node4 -> Node5 [id="edge8_Node000004_Node000005",color="steelblue1",style="solid",tooltip=" "];
+  Node5 [id="Node000005",label="vg_draw_pixel",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$graphics_8c.html#a0dd9fd60769d833880394369bf7a2b9d",tooltip="Draws the pixel at the specified coordinates in specified frame buffer."];
+}

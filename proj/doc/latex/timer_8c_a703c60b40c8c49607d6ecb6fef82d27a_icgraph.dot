@@ -1,0 +1,11 @@
+digraph "timer_get_conf"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="RL";
+  Node1 [id="Node000001",label="timer_get_conf",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Reads the configuration of the timer."];
+  Node1 -> Node2 [id="edge2_Node000001_Node000002",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="timer_set_frequency",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$timer_8c.html#af2c04fa8e97ffa748fd3f612886a92a7",tooltip="Sets the frequency of the timer."];
+}

@@ -1,0 +1,17 @@
+digraph "load_high_scores_to_game_buffer"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="load_high_scores_to\l_game_buffer",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Loads the high scores to the game buffer."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="get_image_from_number\l_high_score",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$game__state_8c.html#a3d5e2403682e61915d0ca62040839170",tooltip="Gets the number image from the high score images."];
+  Node1 -> Node3 [id="edge2_Node000001_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="image_load_to_frame\l_buffer",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$graphics_8c.html#a56a80dfd4a94acac7652a32deb46f405",tooltip="Loads image struct to frame buffer."];
+  Node3 -> Node4 [id="edge3_Node000003_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="vg_draw_pixel",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$graphics_8c.html#a0dd9fd60769d833880394369bf7a2b9d",tooltip="Draws the pixel at the specified coordinates in specified frame buffer."];
+  Node1 -> Node5 [id="edge4_Node000001_Node000005",color="steelblue1",style="solid",tooltip=" "];
+  Node5 [id="Node000005",label="read_high_scores",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$game__state_8c.html#ae6dd3d09c8c75ed82cd5bb3f7df932c5",tooltip="Reads the high scores from the file."];
+}

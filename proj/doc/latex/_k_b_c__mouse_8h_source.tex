@@ -1,0 +1,23 @@
+\doxysection{KBC\+\_\+mouse.\+h}
+\hypertarget{_k_b_c__mouse_8h_source}{}\label{_k_b_c__mouse_8h_source}\index{src/devices/mouse/KBC\_mouse.h@{src/devices/mouse/KBC\_mouse.h}}
+\mbox{\hyperlink{_k_b_c__mouse_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ \_LCOM\_KBC\_MOUSE\_H\_}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ \_LCOM\_KBC\_MOUSE\_H\_}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}../../controllers/i8042.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}../common\_keyboard\_and\_mouse/keyboard\_and\_mouse.h"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ int\ (\mbox{\hyperlink{_k_b_c__mouse_8h_a56719b09e2356fcd9d79e6fcf59f15fd}{mouse\_subscribe}})(uint8\_t\ *bit\_no);}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ int\ (\mbox{\hyperlink{_k_b_c__mouse_8h_aab5e1dc43daf2cc458f26d87211b994f}{mouse\_unsubscribe}})();}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ int\ (\mbox{\hyperlink{_k_b_c__mouse_8h_af9e4aed53107bfa8e9d9ff1c2f308512}{mouse\_build\_packet}})();}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ int\ (\mbox{\hyperlink{_k_b_c__mouse_8h_a38d52a9770ba9b635e98e4968ae7c330}{mouse\_write\_command}})(uint8\_t\ command);}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{struct\ }mouse\_ev\ *(\mbox{\hyperlink{_k_b_c__mouse_8h_ac739ce487d0d16b6f8ac5153adbc5ee9}{mouse\_detect\_events}})(\textcolor{keyword}{struct}\ \mbox{\hyperlink{_k_b_c__mouse_8c_ab234504ae156fa5b250e34cbb65a7807}{packet}}\ *pp);}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}
