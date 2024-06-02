@@ -3,6 +3,7 @@
 LCOM Project for group T13G5.
 
 Atenção!!!
+
 Para o funcionamento dos high scores e do game over é necessário criar um ficheiro de texto e o path desse ficheiro tem de ser definido dentro do ficheiro “game_state/game_state.h” com o nome “HIGH_SCORES_FILE_PATH_NAME”.
 O ficheiro de texto pode estar vazio e só guarda até 5 linhas, cada linha correspondendo a um high score no leaderboard.
 
