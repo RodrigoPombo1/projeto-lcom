@@ -2,9 +2,15 @@
 
 extern rtc_info_t rtc;
 
+/// @brief Handles the main menu
+/// @param mouse_position_x The x position of the mouse
+/// @param mouse_position_y The y position of the mouse
+/// @param game_state The current game state
+/// @param is_start_of_game_state If the game state is the start of the game state
+/// @param close_application If the application should be closed
+/// @return 0 if the game state was changed, 1 otherwise
 // this handle only happens when m1 is pressed
-int
-handle_main_menu(int mouse_position_x, int mouse_position_y, enum game_state *game_state, bool *is_start_of_game_state,
+int handle_main_menu(int mouse_position_x, int mouse_position_y, enum game_state *game_state, bool *is_start_of_game_state,
                  bool *close_application) {
     // check if the mouse is over the play button
     if (224 <= mouse_position_x && mouse_position_x <= 576 && 144 <= mouse_position_y && mouse_position_y <= 208) {
@@ -26,14 +32,24 @@ handle_main_menu(int mouse_position_x, int mouse_position_y, enum game_state *ga
     return 1;
 }
 
-int
-convert_game_position_to_frame_buffer_position(int game_position_x, int game_position_y, int *frame_buffer_position_x,
+/// @brief Converts a game position to a frame buffer position
+/// @param game_position_x The x position in the game
+/// @param game_position_y The y position in the game
+/// @param frame_buffer_position_x The x position in the frame buffer
+/// @param frame_buffer_position_y The y position in the frame buffer
+/// @return 0 if the conversion was successful, 1 otherwise
+int convert_game_position_to_frame_buffer_position(int game_position_x, int game_position_y, int *frame_buffer_position_x,
                                                int *frame_buffer_position_y) {
     *frame_buffer_position_x = 32 + 32 * game_position_x;
     *frame_buffer_position_y = 112 + 32 * game_position_y;
     return 0;
 }
 
+/// @brief Gets the number image from the image struct
+/// @param result_image The image struct that will be returned
+/// @param all_game_images The struct with all the game images
+/// @param number The number to get the image for
+/// @return 0 if the image was found, 1 otherwise
 int get_image_from_number_game(struct image_struct **result_image, struct game_images *all_game_images, int number) {
     switch (number) {
         case 0:
@@ -71,6 +87,12 @@ int get_image_from_number_game(struct image_struct **result_image, struct game_i
     }
 }
 
+/// @brief Loads game state to the frame buffer
+/// @param all_game_state_entities_position The struct with all the game state entities positions
+/// @param current_game_state_values The struct with the current game state values
+/// @param all_game_images The struct with all the game images
+/// @param video_mem The frame buffer
+/// @return 0 if the game state was loaded, 1 otherwise
 int load_game_state_to_game_buffer(struct game_entities_position *all_game_state_entities_position,
                                    struct game_values *current_game_state_values, struct game_images *all_game_images,
                                    uint8_t *video_mem) {
@@ -127,6 +149,9 @@ int load_game_state_to_game_buffer(struct game_entities_position *all_game_state
     return 0;
 }
 
+/// @brief Sees if monsters can be spawned and spawns them
+/// @param all_game_state_entities_position The struct with all the game state entities positions
+/// @return 0 if the monsters were spawned, 1 otherwise
 int spawn_monsters(struct game_entities_position *all_game_state_entities_position) {
     // find a spawn
     for (int _ = 0; _ < 4; _++) {
@@ -164,6 +189,12 @@ int spawn_monsters(struct game_entities_position *all_game_state_entities_positi
     return 0;
 }
 
+/// @brief Converts a frame buffer position to a game position
+/// @param frame_buffer_position_x The x position in the frame buffer
+/// @param frame_buffer_position_y The y position in the frame buffer
+/// @param game_position_x The x position in the game
+/// @param game_position_y The y position in the game
+/// @return 0 if the conversion was successful, 1 otherwise
 int convert_frame_buffer_position_to_game_position(int frame_buffer_position_x, int frame_buffer_position_y,
                                                    int *game_position_x, int *game_position_y) {
     if (frame_buffer_position_x < 32 || frame_buffer_position_x > 768 || frame_buffer_position_y < 112 ||
@@ -177,6 +208,9 @@ int convert_frame_buffer_position_to_game_position(int frame_buffer_position_x, 
     return 0;
 }
 
+/// @brief Fills the spawns with walls
+/// @param all_game_state_entities_position The struct with all the game state entities positions
+/// @return 0 if the spawns were filled, 1 otherwise
 int fill_spawns(struct game_entities_position *all_game_state_entities_position) {
     for (int i = 0; i < 4; i++) {
         int x_of_spawn = all_game_state_entities_position->spawners_positions[i].x;
@@ -188,6 +222,9 @@ int fill_spawns(struct game_entities_position *all_game_state_entities_position)
     return 0;
 }
 
+/// @brief Increments the score
+/// @param current_game_state_values The struct with the current game state values
+/// @return 0 if the score was incremented, 1 otherwise
 int increment_score(struct game_values *current_game_state_values) {
     current_game_state_values->score++;
     int score = current_game_state_values->score;
@@ -201,6 +238,9 @@ int increment_score(struct game_values *current_game_state_values) {
     return 0;
 }
 
+/// @brief Increments the timer
+/// @param current_game_state_values The struct with the current game state values
+/// @return 0 if the timer was incremented, 1 otherwise
 int increment_timer(struct game_values *current_game_state_values) {
     current_game_state_values->time_in_seconds++;
     int time = current_game_state_values->time_in_seconds;
@@ -218,6 +258,14 @@ int increment_timer(struct game_values *current_game_state_values) {
     return 0;
 }
 
+/// @brief Handles the game state interrupts when the left mouse button is pressed
+/// @param all_game_state_entities_position The struct with all the game state entities positions
+/// @param current_game_state_values The struct with the current game state values
+/// @param mouse_position_x The x position of the mouse
+/// @param mouse_position_y The y position of the mouse
+/// @param was_game_state_changed If the game state was changed
+/// @param is_game_quit If the game should be quit
+/// @return 0 if the game state was changed, 1 otherwise
 int handle_game_m1_interrupt(struct game_entities_position *all_game_state_entities_position,
                              struct game_values *current_game_state_values, int mouse_position_x, int mouse_position_y,
                              bool *was_game_state_changed, bool *is_game_quit) {
@@ -294,6 +342,13 @@ int handle_game_m1_interrupt(struct game_entities_position *all_game_state_entit
     return 0;
 }
 
+/// @brief Checks if a monster can move into a space
+/// @param all_game_state_entities_position The struct with all the game state entities positions
+/// @param x The x position of the space
+/// @param y The y position of the space
+/// @param can_move If the monster can move into the space
+/// @param killed_player If the player was killed
+/// @return 0 if the space was checked, 1 otherwise
 int check_monster_if_the_space_can_be_moved_into(struct game_entities_position *all_game_state_entities_position, int x,
                                                  int y, bool *can_move, bool *killed_player) {
     *can_move = false;
@@ -317,6 +372,11 @@ int check_monster_if_the_space_can_be_moved_into(struct game_entities_position *
     return 0;
 }
 
+/// @brief Handles the interrupts of the game timer ticks
+/// @param all_game_state_entities_position The struct with all the game state entities positions
+/// @param current_game_state_values The struct with the current game state values
+/// @param was_game_state_changed If the game state was changed
+/// @param is_game_over If the game is over
 int handle_game_timer_tick_interrupt(struct game_entities_position *all_game_state_entities_position,
                                      struct game_values *current_game_state_values, bool *was_game_state_changed,
                                      bool *is_game_over) {
@@ -422,6 +482,12 @@ int handle_game_timer_tick_interrupt(struct game_entities_position *all_game_sta
     return 0;
 }
 
+/// @brief Checks if the player can move into a space
+/// @param all_game_state_entities_position The struct with all the game state entities positions
+/// @param x The x position of the space
+/// @param y The y position of the space
+/// @param can_move If the player can move into the space
+/// @return 0 if the space was checked, 1 otherwise
 int check_player_if_the_space_can_be_moved_into(struct game_entities_position *all_game_state_entities_position, int x,
                                                 int y, bool *can_move) {
     *can_move = false;
@@ -438,6 +504,12 @@ int check_player_if_the_space_can_be_moved_into(struct game_entities_position *a
     return 0;
 }
 
+/// @brief Handles the interrupts of the game timer seconds
+/// @param all_game_state_entities_position The struct with all the game state entities positions
+/// @param current_game_state_values The struct with the current game state values
+/// @param last_key_pressed The last key pressed
+/// @param was_game_state_changed If the game state was changed
+/// @return 0 if the game state was changed, 1 otherwise
 int handle_game_timer_second_interrupt(struct game_entities_position *all_game_state_entities_position,
                                        struct game_values *current_game_state_values,
                                        enum letter_pressed *last_key_pressed, bool *was_game_state_changed) {
@@ -481,6 +553,12 @@ int handle_game_timer_second_interrupt(struct game_entities_position *all_game_s
     return 0;
 }
 
+/// @brief Handles the game over interrupts
+/// @param mouse_position_x The x position of the mouse
+/// @param mouse_position_y The y position of the mouse
+/// @param game_state The current game state
+/// @param is_start_of_screen If the game state is the start of the screen
+/// @return 0 if the game state was changed, 1 otherwise
 int handle_game_over_interrupt(int mouse_position_x, int mouse_position_y, enum game_state *game_state,
                                bool *is_start_of_screen) {
     // check if the mouse is over the quit button
@@ -491,6 +569,9 @@ int handle_game_over_interrupt(int mouse_position_x, int mouse_position_y, enum 
     return 0;
 }
 
+/// @brief Stores the high score at the current time
+/// @param game_value The struct with the current game values
+/// @return 0 if the high score was stored, 1 otherwise
 int store_high_score_at_this_time(struct game_values *game_value) {
     int decimal = 0;
     int base = 1;
@@ -727,6 +808,9 @@ int store_high_score_at_this_time(struct game_values *game_value) {
     return 0;
 }
 
+/// @brief Writes the high scores to the file
+/// @param high_scores The array with the high scores
+/// @return 0 if the high scores were written, 1 otherwise
 int write_high_scores(struct high_score high_scores[5]) {
 //    printf("Writing high scores\n");
     FILE *file = fopen(HIGH_SCORES_FILE_PATH_NAME, "w");
@@ -754,6 +838,9 @@ int write_high_scores(struct high_score high_scores[5]) {
     return 0;
 }
 
+/// @brief Reads the high scores from the file
+/// @param high_scores The array with the high scores
+/// @return 0 if the high scores were read, 1 otherwise
 int read_high_scores(struct high_score high_scores[5]) {
     FILE *file = fopen(HIGH_SCORES_FILE_PATH_NAME, "r");
     if (file == NULL) {
@@ -807,6 +894,12 @@ int read_high_scores(struct high_score high_scores[5]) {
     return 0;
 }
 
+/// @brief Handles the high score interrupts
+/// @param mouse_position_x The x position of the mouse
+/// @param mouse_position_y The y position of the mouse
+/// @param game_state The current game state
+/// @param is_start_of_screen If the game state is the start of the screen
+/// @return 0 if the game state was changed, 1 otherwise
 int handle_high_score_interrupt(int mouse_position_x, int mouse_position_y, enum game_state *game_state,
                                 bool *is_start_of_screen) {
     // check if the mouse is over the quit button
@@ -817,9 +910,12 @@ int handle_high_score_interrupt(int mouse_position_x, int mouse_position_y, enum
     return 0;
 }
 
-
-int
-get_image_from_number_high_score(struct image_struct **result_image, struct high_score_images *all_high_score_images,
+/// @brief Gets the number image from the high score images
+/// @param result_image The image to be returned
+/// @param all_high_score_images The struct with all the high score images
+/// @param number The number to get the image from
+/// @return 0 if the image was gotten, 1 otherwise
+int get_image_from_number_high_score(struct image_struct **result_image, struct high_score_images *all_high_score_images,
                                  int number) {
     switch (number) {
         case 0:
@@ -857,6 +953,10 @@ get_image_from_number_high_score(struct image_struct **result_image, struct high
     }
 }
 
+/// @brief Loads the high scores to the game buffer
+/// @param all_high_score_images The struct with all the high score images
+/// @param video_mem The frame buffer
+/// @return 0 if the high scores were loaded, 1 otherwise
 int load_high_scores_to_game_buffer(struct high_score_images *all_high_score_images, uint8_t *video_mem) {
     // create the array to read the high_scores
     struct high_score high_scores[5] = {

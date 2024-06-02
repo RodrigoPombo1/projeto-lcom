@@ -8,15 +8,22 @@ struct mouse_ev *mouse = &mouse_struct;
 
 bool was_left_button_pressed = false;
 
+/// @brief Subscribes and enables Mouse interrupts
+/// @param bit_no The bit number to be set in the mask
+/// @return 0 if successful, 1 otherwise
 int (mouse_subscribe)(uint8_t *bit_no) { // Put the mask on, it's (C)arnival time!
     *bit_no = BIT(mouse_hook_id);
     return sys_irqsetpolicy(MOUSE_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &mouse_hook_id);
 }
 
+/// @brief Unsubscribes Mouse interrupts
+/// @return 0 if successful, 1 otherwise
 int (mouse_unsubscribe)() { // (C)arnival is over
     return sys_irqrmpolicy(&mouse_hook_id);
 }
 
+/// @brief Builds the mouse packet
+/// @return 0 if the packet is not complete, 1 if the packet is invalid, 2 if the packet is complete
 int (mouse_build_packet)() {
 //  printf("Byte: %u\n", byte);
 //  printf("Byte count: %d\n", byte_count);
@@ -55,12 +62,16 @@ int (mouse_build_packet)() {
     return 0;
 }
 
+/// @brief Handles the Mouse Interrupts
 void (mouse_ih)() {
     if (kbc_read_output(KBC_OUT_BUFFER, &byte) != 0) {
         printf("Error: Could not read byte!\n");
     }
 }
 
+/// @brief Writes a command byte to the Mouse
+/// @param command The command byte to write
+/// @return 0 if successful, 1 otherwise
 int (mouse_write_command)(uint8_t command) {
     uint8_t request_report = 0;
     uint8_t attempts = 10;
@@ -94,6 +105,9 @@ int (mouse_write_command)(uint8_t command) {
     return 1;
 }
 
+/// @brief Detects the mouse events
+/// @param pp The packet to detect the events from
+/// @return The mouse event
 struct mouse_ev *(mouse_detect_events)(struct packet *pp) {
     mouse->type = MOUSE_MOV;
 //  printf("Breakpoint 30\n");

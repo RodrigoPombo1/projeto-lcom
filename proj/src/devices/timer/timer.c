@@ -8,6 +8,10 @@
 int hook_id = 0; // We want to mask Timer 0 interruptions
 int counter = 0; // Counter to be incremented on every Timer 0 interrupt 
 
+/// @brief Sets the frequency of the timer
+/// @param timer The timer to set the frequency of
+/// @param freq The frequency to set
+/// @return 0 if the timer frequency was successfully set, 1 otherwise
 int (timer_set_frequency)(uint8_t timer, uint32_t freq) {
     uint8_t controlWord; // This variable will store the control word
     timer_get_conf(timer,
@@ -35,6 +39,9 @@ int (timer_set_frequency)(uint8_t timer, uint32_t freq) {
     return 0;
 }
 
+/// @brief Subscribes and enables Timer interrupts
+/// @param bit_no The bit number to be set in the mask
+/// @return 0 if the Timer interrupts were successfully subscribed and enabled, 1 otherwise
 int (timer_subscribe_int)(uint8_t *bit_no) {
     *bit_no = BIT(hook_id); // We prepare to mask the Timer 0 interrupt
     if (sys_irqsetpolicy(TIMER0_IRQ, IRQ_REENABLE, &hook_id) != 0) { // Interruption masked, can go to (C)arnival now
@@ -43,6 +50,8 @@ int (timer_subscribe_int)(uint8_t *bit_no) {
     return 0;
 }
 
+/// @brief Unsubscribes Timer interrupts
+/// @return 0 if the Timer interrupts were successfully unsubscribed, 1 otherwise
 int (timer_unsubscribe_int)() {
     if (sys_irqrmpolicy(&hook_id) != 0) { // (C)arnival is over, let's take off the mask
         return 1;
@@ -50,10 +59,15 @@ int (timer_unsubscribe_int)() {
     return 0;
 }
 
+/// @brief Handles Timer interrupts
 void (timer_int_handler)() { // Yes, this function was created only to do this...
     counter++;
 }
 
+/// @brief Reads the configuration of the timer
+/// @param timer The timer to read the configuration from
+/// @param st The configuration to be read
+/// @return 0 if the timer configuration was successfully read, 1 otherwise
 int (timer_get_conf)(uint8_t timer, uint8_t *st) {
     u_int8_t RBC = (TIMER_RB_CMD | TIMER_RB_COUNT_ | TIMER_RB_SEL(
             timer)); //The read-back command specifies itself. Reads the programmed mode and makes the selection of the counter 'timer'
@@ -66,6 +80,11 @@ int (timer_get_conf)(uint8_t timer, uint8_t *st) {
     return 0;
 }
 
+/// @brief Prints the configuration of the timer
+/// @param timer The timer to print the configuration from
+/// @param st The configuration to be printed
+/// @param field The field to be printed
+/// @return 0 if the timer configuration was successfully printed, 1 otherwise
 int (timer_display_conf)(uint8_t timer, uint8_t st, enum timer_status_field field) {
     union timer_status_field_val timer_data; // Variable to be analyzed
 

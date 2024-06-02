@@ -1,5 +1,9 @@
 #include "keyboard_and_mouse.h"
 
+/// @brief Reads the output buffer of the KBC
+/// @param port The port to read the output buffer from
+/// @param output The variable to store the output buffer
+/// @return 0 if successful, 1 otherwise
 int (kbc_read_output)(uint8_t port, uint8_t *output) {
     extern uint8_t status; // Status is defined on lab3.c
     uint8_t attempts = 10;
@@ -28,6 +32,10 @@ int (kbc_read_output)(uint8_t port, uint8_t *output) {
     return 1;
 }
 
+/// @brief Writes a command byte to the KBC
+/// @param port The port to write the command byte to
+/// @param commandByte The command byte to write
+/// @return 0 if successful, 1 otherwise
 int (kbc_write_command)(uint8_t port, uint8_t commandByte) {
     extern uint8_t status; // Status is defined on lab3.c
 

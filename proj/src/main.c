@@ -36,6 +36,10 @@ uint8_t status = 0;
 extern struct packet final_packet;
 struct mouse_ev *mouse;
 
+/// @brief Main function of the game
+/// @param argc number of arguments
+/// @param argv arguments
+/// @return 0 if the game was successful, 1 if there was an error
 int main(int argc, char *argv[]) {
     // sets the language of LCF messages (can be either EN-US or PT-PT)
     lcf_set_language("EN-US");
@@ -62,6 +66,8 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
+/// @brief Sets video mode and subscribes interruptions of all necessary devices
+/// @return 0 if the game was successful, 1 if there was an error
 int (setup_game)() {
 //  printf("Break point 0\n");
     // Initiate 32 bits per pixel video mode
@@ -93,6 +99,8 @@ int (setup_game)() {
     return 0;
 }
 
+/// @brief Unsubscribes interruptions of all used devices and closes video mode
+/// @return 0 if the game was successful, 1 if there was an error
 int (close_game)() {
     // Close video mode
     if (vg_exit() != 0) {
@@ -120,6 +128,10 @@ int (close_game)() {
     return 0;
 }
 
+/// @brief Main loop of the game
+/// @param argc number of arguments
+/// @param argv arguments
+/// @return 0 if the game was successful, 1 if there was an error
 int (proj_main_loop)(int argc, char *argv[]) {
     enum game_state current_game_state = MAIN_MENU;
     if (setup_game() != 0) {
