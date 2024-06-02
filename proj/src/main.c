@@ -229,8 +229,8 @@ int (proj_main_loop)(int argc, char *argv[]) {
   struct image_struct high_scores = {800, 600, high_scores_color_array};
   xpm_load_to_image((xpm_map_t) high_scores_xpm, &high_scores);
 
-  struct game_images game_loaded_images = {&game, &character, &monster, &cursor, &game_over, &character_2_pontos, &number_0, &number_1, &number_2, &number_3, &number_4, &number_5, &number_6, &number_7, &number_8, &number_9};
-  struct high_score_images high_score_loaded_images = {&high_scores, &cursor, &character_2_pontos, &character_tracinho, &number_0, &number_1, &number_2, &number_3, &number_4, &number_5, &number_6, &number_7, &number_8, &number_9};
+  struct game_images game_loaded_images = {&game, &character, &monster, &game_over, &character_2_pontos, &number_0, &number_1, &number_2, &number_3, &number_4, &number_5, &number_6, &number_7, &number_8, &number_9};
+  struct high_score_images high_score_loaded_images = {&character_2_pontos, &character_tracinho, &number_0, &number_1, &number_2, &number_3, &number_4, &number_5, &number_6, &number_7, &number_8, &number_9};
 
 //  printf("Break point 7\n");
   uint8_t *frame_buffer = NULL;
@@ -280,52 +280,36 @@ int (proj_main_loop)(int argc, char *argv[]) {
           .player_position = player_position,
           .enemy_structs= {
                   {
-                      .id = 0,
                       .position = {0, 0},
                       .is_alive = false,
-                      .move_horizontally = false
                   },
                   {
-                      .id = 1,
                       .position = {0, 0},
                       .is_alive = false,
-                      .move_horizontally = true
                   },
                   {
-                      .id = 2,
                       .position = {0, 0},
                       .is_alive = false,
-                      .move_horizontally = false
                   },
                   {
-                      .id = 3,
                       .position = {0, 0},
                       .is_alive = false,
-                      .move_horizontally = true
                   },
                   {
-                      .id = 4,
                       .position = {0, 0},
                       .is_alive = false,
-                      .move_horizontally = false
                   },
                   {
-                      .id = 5,
                       .position = {0, 0},
                       .is_alive = false,
-                      .move_horizontally = true
                   },
                   {
-                      .id = 6,
                       .position = {0, 0},
                       .is_alive = false,
-                      .move_horizontally = false
                   },
                   {
-                      .id = 7,
                       .position = {0, 0},
                       .is_alive = false,
-                      .move_horizontally = true
                   },
           },
           .spawners_positions = {

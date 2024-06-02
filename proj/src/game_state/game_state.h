@@ -38,9 +38,7 @@ enum type_of_entity {
 
 struct enemy {
     struct position position;
-    int id;
     bool is_alive;
-    bool move_horizontally;
 };
 
 struct game_entities_position {
@@ -75,7 +73,6 @@ struct game_images {
     struct image_struct* background;
     struct image_struct* player;
     struct image_struct* enemy;
-    struct image_struct* cursor;
     struct image_struct* game_over;
     struct image_struct* character_2_pontos;
     struct image_struct* number_0;
@@ -91,8 +88,6 @@ struct game_images {
 };
 
 struct high_score_images {
-    struct image_struct* background;
-    struct image_struct* cursor;
     struct image_struct* character_2_pontos;
     struct image_struct* character_tracinho;
     struct image_struct* number_0;

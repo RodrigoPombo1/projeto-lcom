@@ -472,7 +472,7 @@ int store_high_score_at_this_time(struct game_values *game_value) {
         rtc.seconds >>= 4;
     }
     rtc.seconds = decimal;
-    printf("Seconds: %d\n", rtc.seconds);
+//    printf("Seconds: %d\n", rtc.seconds);
     decimal = 0;
     base = 1;
 
@@ -483,7 +483,7 @@ int store_high_score_at_this_time(struct game_values *game_value) {
         rtc.minutes >>= 4;
     }
     rtc.minutes = decimal;
-    printf("Minutes: %d\n", rtc.minutes);
+//    printf("Minutes: %d\n", rtc.minutes);
 
     decimal = 0;
     base = 1;
@@ -495,7 +495,7 @@ int store_high_score_at_this_time(struct game_values *game_value) {
         rtc.hours >>= 4;
     }
     rtc.hours = decimal;
-    printf("Hours: %d\n", rtc.hours);
+//    printf("Hours: %d\n", rtc.hours);
 
     decimal = 0;
     base = 1;
@@ -550,7 +550,7 @@ int store_high_score_at_this_time(struct game_values *game_value) {
             .year = rtc.year
         }
     };
-    printf("Score: %d\n", high_score_of_the_game.game_values.score);
+//    printf("Score: %d\n", high_score_of_the_game.game_values.score);
     // create the array to read the high_scores
     struct high_score high_scores[5] = {
             {
@@ -652,7 +652,7 @@ int store_high_score_at_this_time(struct game_values *game_value) {
         if (!high_scores[i].is_active) {
             break;
         }
-        printf("Incrementing last active score\n");
+//        printf("Incrementing last active score\n");
         // don't increment the final time
         if (i == 4) {
             continue;
@@ -660,24 +660,15 @@ int store_high_score_at_this_time(struct game_values *game_value) {
         last_active_score++;
     }
 
-    printf("Last active score: %d\n", last_active_score);
+//    printf("Last active score: %d\n", last_active_score);
     // if there are 0 high scores in the file
     if (last_active_score == 0) {
         // put the score in the last active score (in the empty score position)
         high_scores[last_active_score] = high_score_of_the_game;
-        printf("putting the recent game score has the only score Score: %d\n", high_scores[0].game_values.score);
+//        printf("putting the recent game score has the only score Score: %d\n", high_scores[0].game_values.score);
         write_high_scores(high_scores);
         return 0;
     }
-
-//    // check if there are less than 5 high scores, but more than 0
-//    if (last_active_score != 4) {
-//        // put the score in the last active score (in the empty score position)
-//        high_scores[last_active_score] = high_score_of_the_game;
-//        printf("putting the recent game score has the only score Score: %d\n", high_scores[0].game_values.score);
-//        write_high_scores(high_scores);
-//        return 0;
-//    }
 
     // check if the score is higher than the lowest high score
     if (high_score_of_the_game.game_values.score > high_scores[last_active_score].game_values.score || last_active_score < 4) {
@@ -693,11 +684,7 @@ int store_high_score_at_this_time(struct game_values *game_value) {
                 }
             }
         }
-        /// [TODO] REMOVE THIS FOR TEST PURPOSES ONLY
-        for (int i = 0; i < 5; i++) {
-            printf("Score: %d\n", high_scores[i].game_values.score);
-            printf("Is active: %d\n", high_scores[i].is_active);
-        }
+
         // write the sorted high scores to the file
         if (write_high_scores(high_scores)) {
             printf("Failed to write high scores\n");
@@ -708,7 +695,7 @@ int store_high_score_at_this_time(struct game_values *game_value) {
 }
 
 int write_high_scores(struct high_score high_scores[5]) {
-    printf("Writing high scores\n");
+//    printf("Writing high scores\n");
     FILE *file = fopen(HIGH_SCORES_FILE_PATH_NAME, "w");
     if (file == NULL) {
         fclose(file);
@@ -716,7 +703,7 @@ int write_high_scores(struct high_score high_scores[5]) {
     }
 
     for (int i = 0; i < 5; i++) {
-        printf("Writing high score %d\n", i);
+//        printf("Writing high score %d\n", i);
         if (!high_scores[i].is_active) {
             break;
         }
@@ -738,15 +725,15 @@ int read_high_scores(struct high_score high_scores[5]) {
     }
     char line[100];
     int count = 0;
-    printf("count = %d\n", count);
+//    printf("count = %d\n", count);
 
     while (fgets(line, 100, file) != NULL) {
         if (count >= 5) {
             break;
         }
-        printf("count = %d\n", count);
-        printf("Entrou para aqui para dentro\n");
-        printf("line that just read: %s\n", line);
+//        printf("count = %d\n", count);
+//        printf("Entrou para aqui para dentro\n");
+//        printf("line that just read: %s\n", line);
         high_scores[count].is_active = true;
 
         int score, time_minutes, time_seconds, hour, minute, second, day, month, year;
@@ -778,7 +765,7 @@ int read_high_scores(struct high_score high_scores[5]) {
 
         count++;
     }
-    printf("Read %d high scores\n", count);
+//    printf("Read %d high scores\n", count);
     fclose(file);
     return 0;
 }
@@ -922,7 +909,7 @@ int load_high_scores_to_game_buffer(struct high_score_images *all_high_score_ima
 
     // read the high scores
     if (read_high_scores(high_scores)) {
-        printf("Failed to read high scores\n");
+//        printf("Failed to read high scores\n");
         return 1;
     }
 
